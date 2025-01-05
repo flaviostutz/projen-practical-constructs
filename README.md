@@ -34,4 +34,4 @@ The constructs can be used separately to adapt to your specific needs, but you c
 - Projen quick start: https://projen.io/docs/quick-starts/python/hello-world/
 - Sample code for Python contructs: https://github.com/projen/projen/blob/main/src/python/pip.ts
 - https://kennethwinner.com/2021/03/07/projen-external-module-github/
-
+- Example project type project: https://github.com/kcwinner/projen-github-demo
