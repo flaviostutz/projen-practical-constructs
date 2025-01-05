@@ -1,5 +1,5 @@
 export class Hello {
-  public sayHello() {
+  public sayHello(): string {
     return 'hello, world!';
   }
 }

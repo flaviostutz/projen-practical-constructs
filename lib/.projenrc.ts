@@ -1,4 +1,4 @@
-import { cdk } from 'projen';
+import { cdk, JsonPatch } from 'projen';
 import { NodePackageManager, UpdateSnapshot } from 'projen/lib/javascript';
 
 const project = new cdk.JsiiProject({
@@ -10,10 +10,14 @@ const project = new cdk.JsiiProject({
   projenrcTs: true,
   repositoryUrl: 'https://github.com/flaviostutz/projen-python.git',
   deps: [],
-  devDeps: [],
+  devDeps: [
+    "@stutzlab/eslint-config@^3.1.1",
+    "@typescript-eslint/eslint-plugin@^7.15.0",
+  ],
   description: 'Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures',
   packageName: 'projen-python',
   github: false,
+  typescriptVersion: '5.5.4',
   projenrcTsOptions: {
     swc: true,
   },
@@ -26,14 +30,7 @@ const project = new cdk.JsiiProject({
   //   distName: 'projen-python',
   //   module: 'projen_python',
   // },
-  prettier: true,
-  vscode: true,
-  eslintOptions: {
-    commandOptions: {
-      fix: false,
-    },
-    dirs: ['src', 'test'],
-  },
+  eslint: false,
   jestOptions: {
     updateSnapshot: UpdateSnapshot.NEVER,
     jestConfig: {

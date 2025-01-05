@@ -122,19 +122,6 @@
         }
       ]
     },
-    "eslint": {
-      "name": "eslint",
-      "description": "Runs eslint against the codebase",
-      "env": {
-        "ESLINT_USE_FLAT_CONFIG": "false"
-      },
-      "steps": [
-        {
-          "exec": "eslint --ext .ts,.tsx --no-error-on-unmatched-pattern $@ src test build-tools projenrc .projenrc.ts",
-          "receiveArgs": true
-        }
-      ]
-    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -233,9 +220,6 @@
         {
           "exec": "jest --passWithNoTests --ci",
           "receiveArgs": true
-        },
-        {
-          "spawn": "eslint"
         }
       ]
     },
@@ -283,13 +267,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@swc/core,@types/jest,@types/node,eslint-config-prettier,eslint-import-resolver-typescript,eslint-plugin-import,eslint-plugin-prettier,jest,jsii-diff,jsii-pacmak,prettier,projen,ts-jest,ts-node,typescript"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@swc/core,@types/jest,jest,jsii-diff,jsii-pacmak,projen,ts-jest,ts-node"
         },
         {
           "exec": "npm install"
         },
         {
-          "exec": "npm update @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser commit-and-tag-version constructs eslint-config-prettier eslint-import-resolver-typescript eslint-plugin-import eslint-plugin-prettier eslint jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii prettier projen ts-jest ts-node typescript"
+          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript"
         },
         {
           "exec": "npx projen"

@@ -1,4 +1,5 @@
 build:
+	npm install --no-save ts-node
 	npx projen
 	npx projen install
 	npx projen compile
@@ -9,10 +10,11 @@ test:
 	npx projen test
 
 lint:
-	npx projen eslint
+	npm exec eslint -- ./src --ext .ts
+	npm audit --audit-level high
 
 lint-fix:
-	npx projen eslint --fix
+	npm exec eslint -- ./src --ext .ts --fix
 
 clean:
 	rm -rf node_modules dist lib coverage test-reports .jsii
