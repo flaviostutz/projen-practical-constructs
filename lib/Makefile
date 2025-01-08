@@ -1,21 +1,20 @@
-N = n -q exec auto
 build: prepare-projen
 	# if we use PNPM the jsii packing freezes
-	$(N) npx projen
-	$(N) npx projen install
-	$(N) npx projen compile
-	$(N) npx projen package
+	npx projen
+	npx projen install
+	npx projen compile
+	npx projen package
 
 .PHONY: test
 test: prepare-projen
-	$(N) npx projen test
+	npx projen test
 
 lint: prepare-projen
-	$(N) npm exec eslint -- ./src --ext .ts
-	$(N) npm audit --audit-level high
+	npm exec eslint -- ./src --ext .ts
+	npm audit --audit-level high
 
 lint-fix: prepare-projen
-	$(N) npm exec eslint -- ./src --ext .ts --fix
+	npm exec eslint -- ./src --ext .ts --fix
 
 clean:
 	rm -rf node_modules dist lib coverage test-reports .jsii
@@ -23,9 +22,8 @@ clean:
 all: build test lint
 
 prepare:
-	brew install n
-	sudo n install auto
-	make prepare-projen
+	brew install nvm
+	@echo "Configure your shell following instructions at in https://formulae.brew.sh/formula/nvm"
 
 prepare-projen:
-	$(N) npm install --no-save ts-node@10.9.2 projen@0.91.5
+	npm install --no-save ts-node@10.9.2 projen@0.91.5

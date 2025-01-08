@@ -1,20 +1,22 @@
-N = n -q exec auto
 build: prepare-projen
-	$(N) npx projen
-	$(N) npx projen build
+	npx projen
+	npx projen build
 
 .PHONY: test
 test: prepare-projen
-	$(N) npx projen test
+	npx projen test
 
 lint: prepare-projen
-	$(N) npx projen lint
+	npx projen lint
 
 lint-fix: prepare-projen
-	$(N) npx projen lint-fix
+	npx projen lint-fix
+
+new:
+	npx projen new --from ../lib/dist/js/projen-python@0.0.0.jsii.tgz
 
 clean:
-	$(N) npx projen clean
+	npx projen clean
 
 all: build test lint
 
@@ -24,4 +26,4 @@ prepare:
 	make prepare-projen
 
 prepare-projen:
-	$(N) npm install --no-save ts-node@10.9.2 projen@0.91.5
+	npm install --no-save ts-node@10.9.2 projen@0.91.5
