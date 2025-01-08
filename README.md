@@ -14,7 +14,7 @@ The basic stack supported by this project is:
 - pip-tools: dependencies lock file generation (contrainsts.txt)
 - vs-code plugins: code editor feedback
 
-[This project](https://github.com/flaviostutz/monorepo-template/tree/main/shared/python/hello_world) was used as reference for the target project structure.
+[This project](https://github.com/flaviostutz/monorepo-spikes/tree/main/shared/python/hello_world_reference) was used as reference for the target project structure created by this projen project type.
 
 ## Usage
 
@@ -25,13 +25,10 @@ npx projen new --from projen-python default
 The constructs can be used separately to adapt to your specific needs, but you can use the PythonProject construct with a default configuration of the entire stack to easily have a full project structure with build, test and linting capabilities.
 
 
-## Drafts
-
-`npx projen new python --name=projen_world`
-
 ## Reference
 
 - Projen quick start: https://projen.io/docs/quick-starts/python/hello-world/
 - Sample code for Python contructs: https://github.com/projen/projen/blob/main/src/python/pip.ts
 - https://kennethwinner.com/2021/03/07/projen-external-module-github/
-- Example project type project: https://github.com/kcwinner/projen-github-demo
+- Example project of a Python Projen Type: https://github.com/kcwinner/projen-github-demo
+

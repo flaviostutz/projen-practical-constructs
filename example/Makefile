@@ -1,24 +1,20 @@
 N = n -q exec auto
 build: prepare-projen
-	# if we use PNPM the jsii packing freezes
 	$(N) npx projen
-	$(N) npx projen install
-	$(N) npx projen compile
-	$(N) npx projen package
+	$(N) npx projen build
 
 .PHONY: test
 test: prepare-projen
 	$(N) npx projen test
 
 lint: prepare-projen
-	$(N) npm exec eslint -- ./src --ext .ts
-	$(N) npm audit --audit-level high
+	$(N) npx projen lint
 
 lint-fix: prepare-projen
-	$(N) npm exec eslint -- ./src --ext .ts --fix
+	$(N) npx projen lint-fix
 
 clean:
-	rm -rf node_modules dist lib coverage test-reports .jsii
+	$(N) npx projen clean
 
 all: build test lint
 
