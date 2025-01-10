@@ -1,6 +1,0 @@
-{
-  "devDependencies": {
-    "projen": "^0.91.5",
-    "projen-python": "file:../lib/dist/js/projen-python@0.0.0.jsii.tgz"
-  }
-}

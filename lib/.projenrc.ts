@@ -9,10 +9,20 @@ const project = new cdk.JsiiProject({
   name: 'projen-python',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/flaviostutz/projen-python.git',
-  deps: [],
+  deps: [
+    '@iarna/toml@^2.2.5',
+  ],
+  // every lib that is not jsii needs to be bundled in the final package
+  bundledDeps: [
+    '@iarna/toml'
+  ],
   devDeps: [
     "@stutzlab/eslint-config@^3.1.1",
     "@typescript-eslint/eslint-plugin@^7.15.0",
+  ],
+  peerDeps: [
+    'projen@^0.91.6',
+    'constructs@^10.4.2',
   ],
   description: 'Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures',
   packageName: 'projen-python',

@@ -26,4 +26,4 @@ prepare:
 	@echo "Configure your shell following instructions at in https://formulae.brew.sh/formula/nvm"
 
 prepare-projen:
-	npm install --no-save ts-node@10.9.2 projen@0.91.5
+	npm install --no-save ts-node@10.9.2 projen@0.91.6

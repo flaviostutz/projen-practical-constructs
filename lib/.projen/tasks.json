@@ -267,13 +267,13 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@swc/core,@types/jest,jest,jsii-diff,jsii-pacmak,projen,ts-jest,ts-node"
+          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@swc/core,@types/jest,jest,jsii-diff,jsii-pacmak,projen,ts-jest,ts-node,@iarna/toml"
         },
         {
           "exec": "npm install"
         },
         {
-          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript"
+          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @iarna/toml"
         },
         {
           "exec": "npx projen"
