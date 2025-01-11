@@ -1,19 +1,25 @@
 /* eslint-disable no-new */
-import { InitProject, License, LicenseOptions, Project, ProjectOptions } from 'projen';
+import { License, Project } from 'projen';
+import { Projenrc } from 'projen/lib/python';
 
-// import { PythonBasicOptions } from './types/project-options';
-// import { PyProjectToml } from './constructs/package';
-
-export interface Opts extends ProjectOptions, InitProject {
-  readonly packageName: string;
-  readonly license: LicenseOptions;
-}
+import { PythonBasicOptions } from './types/project-options';
+import { PyProjectToml, resolvePackageName } from './constructs/pyproject';
 
 export class PythonBasicProject extends Project {
-  constructor(opts: Opts) {
-    super(opts);
+  constructor(options: PythonBasicOptions) {
+    super({ ...options, name: resolvePackageName(options.name, options.package) });
 
-    // new PyProjectToml(this, opts);
-    new License(this, opts.license);
+    // create .projenrc.py
+    new Projenrc(this, {});
+
+    // create pyproject.toml
+    new PyProjectToml(this, options.package);
+
+    // create LICENSE
+    if (options.license) {
+      new License(this, options.license);
+    }
+
+    // TODO add py.typed to sample
   }
 }

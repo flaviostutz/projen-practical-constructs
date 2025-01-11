@@ -1,25 +1,22 @@
-export type PyProjectTomlOptions = {
+export interface PyProjectTomlOptions {
   /**
-   * Name of the python package as used in imports and filenames.
+   * Name of the python package. E.g. "my_python_package".
    * Must only consist of alphanumeric characters and underscores.
-   * @required
+   * @default Name of the directory
    */
-  readonly packageName: string;
+  readonly packageName?: string;
   /**
    * Author's name
-   * @required
    */
-  readonly authorName: string;
+  readonly authorName?: string;
   /**
    * Author's e-mail
-   * @required
    */
-  readonly authorEmail: string;
+  readonly authorEmail?: string;
   /**
    * Version of the package.
-   * @required
    */
-  readonly version: string;
+  readonly version?: string;
   /**
    * Keywords to add to the package.
    */
@@ -40,10 +37,6 @@ export type PyProjectTomlOptions = {
    * A short description of the package.
    */
   readonly description?: string;
-  /**
-   * License of this package as an SPDX identifier.
-   */
-  readonly license?: string;
   /**
    * A URL to the website of the project.
    */
@@ -66,27 +59,4 @@ export type PyProjectTomlOptions = {
    * @see https://pypi.org/classifiers/
    */
   readonly classifiers?: string[];
-
-  /**
-   * List of runtime dependencies for this project.
-   *
-   * Dependencies use the format: `<module>@<semver>`
-   *
-   * Additional dependencies can be added via `project.addDependency()`.
-   *
-   * @default []
-   * @featured
-   */
-  readonly deps?: string[];
-  /**
-   * List of dev dependencies for this project.
-   *
-   * Dependencies use the format: `<module>@<semver>`
-   *
-   * Additional dependencies can be added via `project.addDevDependency()`.
-   *
-   * @default []
-   * @featured
-   */
-  readonly devDeps?: string[];
-};
+}
