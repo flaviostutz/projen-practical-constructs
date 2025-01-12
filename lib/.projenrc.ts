@@ -2,13 +2,12 @@ import { cdk, JsonPatch } from 'projen';
 import { NodePackageManager, UpdateSnapshot } from 'projen/lib/javascript';
 
 const project = new cdk.JsiiProject({
+  name: 'projen-python',
+  packageName: 'projen-python',
   author: 'Flavio Stutz',
   authorAddress: 'flaviostutz@gmail.com',
-  defaultReleaseBranch: 'main',
+  description: 'Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures',
   jsiiVersion: '~5.7.0',
-  name: 'projen-python',
-  projenrcTs: true,
-  repositoryUrl: 'https://github.com/flaviostutz/projen-python.git',
   deps: [
     '@iarna/toml@^2.2.5',
   ],
@@ -24,8 +23,13 @@ const project = new cdk.JsiiProject({
     'projen@^0.91.6',
     'constructs@^10.4.2',
   ],
-  description: 'Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures',
-  packageName: 'projen-python',
+  publishToPypi: {
+    distName: "projen_python",
+    module: "projen_python",
+  },
+  defaultReleaseBranch: 'main',
+  projenrcTs: true,
+  repositoryUrl: 'https://github.com/flaviostutz/projen-python.git',
   github: false,
   typescriptVersion: '5.5.4',
   projenrcTsOptions: {
@@ -33,13 +37,9 @@ const project = new cdk.JsiiProject({
   },
   commitGenerated: false,
   license: 'MIT',
-  docgen: true,
+  docgen: false,
   packageManager: NodePackageManager.NPM, // PNPM doesn't work with jsii
   pnpmVersion: '',
-  // publishToPypi: {
-  //   distName: 'projen-python',
-  //   module: 'projen_python',
-  // },
   eslint: false,
   jestOptions: {
     updateSnapshot: UpdateSnapshot.NEVER,

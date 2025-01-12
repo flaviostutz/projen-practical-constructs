@@ -7,7 +7,7 @@ name = "example"
 version = "0.0.1"
 description = ""
 readme = ""
-requires-python = ""
+requires-python = ">=3.12"
 license = { file = "LICENSE" }
 keywords = [ ]
 dependencies = [ ]

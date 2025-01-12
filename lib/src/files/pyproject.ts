@@ -1,7 +1,6 @@
 import { stringify } from '@iarna/toml';
-import { FileBase, Project } from 'projen';
+import { FileBase, IResolver, Project } from 'projen';
 
-import { PyProjectTomlOptions } from '../types/package-options';
 import { WithRequired } from '../types/utils';
 
 /** Package name format as in https://packaging.python.org/en/latest/specifications/name-normalization/ */
@@ -14,15 +13,16 @@ export type OptWithRequired = WithRequired<PyProjectTomlOptions, 'packageName' |
 /**
  * pyproject.toml synthetisation
  */
-export class PyProjectToml extends FileBase {
-  public readonly opts: OptWithRequired;
+export class PyProjectTomlFile extends FileBase {
+  private readonly opts: OptWithRequired;
 
   constructor(project: Project, opts?: PyProjectTomlOptions) {
     super(project, 'pyproject.toml');
     this.opts = getOptionsWithDefaults(project, opts);
   }
 
-  protected synthesizeContent(): string | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected synthesizeContent(_resolver: IResolver): string | undefined {
     const contents = {
       'build-system': {
         requires: ['setuptools'],
@@ -92,3 +92,66 @@ export const resolvePackageName = (
   }
   return packageName;
 };
+
+export interface PyProjectTomlOptions {
+  /**
+   * Name of the python package. E.g. "my_python_package".
+   * Must only consist of alphanumeric characters and underscores.
+   * @default Name of the directory
+   */
+  readonly packageName?: string;
+  /**
+   * Author's name
+   */
+  readonly authorName?: string;
+  /**
+   * Author's e-mail
+   */
+  readonly authorEmail?: string;
+  /**
+   * Version of the package.
+   */
+  readonly version?: string;
+  /**
+   * Keywords to add to the package.
+   */
+  readonly keywords?: string[];
+  /**
+   * List of maintainers of the package.
+   */
+  // readonly maintainers?: { name: string; email: string }[];
+  /**
+   * List of dependencies for this project.
+   */
+  readonly dependencies?: string[];
+  /**
+   * List of dev dependencies for this project.
+   */
+  readonly devDependencies?: string[];
+  /**
+   * A short description of the package.
+   */
+  readonly description?: string;
+  /**
+   * A URL to the website of the project.
+   */
+  readonly homepage?: string;
+  /**
+   * README file.
+   */
+  readonly readme?: string;
+  /**
+   * License file
+   */
+  readonly licenseFile?: string;
+  /**
+   * Python version required to run this package
+   */
+  readonly requiresPython?: string;
+  /**
+   * A list of PyPI trove classifiers that describe the project.
+   *
+   * @see https://pypi.org/classifiers/
+   */
+  readonly classifiers?: string[];
+}

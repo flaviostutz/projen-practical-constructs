@@ -101,15 +101,6 @@
         }
       ]
     },
-    "docgen": {
-      "name": "docgen",
-      "description": "Generate API.md from .jsii manifest",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API.md"
-        }
-      ]
-    },
     "eject": {
       "name": "eject",
       "description": "Remove projen from the project",
@@ -160,6 +151,9 @@
       "steps": [
         {
           "spawn": "package:js"
+        },
+        {
+          "spawn": "package:python"
         }
       ]
     },
@@ -172,14 +166,18 @@
         }
       ]
     },
-    "post-compile": {
-      "name": "post-compile",
-      "description": "Runs after successful compilation",
+    "package:python": {
+      "name": "package:python",
+      "description": "Create python language bindings",
       "steps": [
         {
-          "spawn": "docgen"
+          "exec": "jsii-pacmak -v --target python"
         }
       ]
+    },
+    "post-compile": {
+      "name": "post-compile",
+      "description": "Runs after successful compilation"
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -273,7 +271,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @iarna/toml"
+          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @iarna/toml"
         },
         {
           "exec": "npx projen"

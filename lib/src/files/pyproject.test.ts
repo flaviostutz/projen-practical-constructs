@@ -3,23 +3,25 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { mkdtempSync } from 'fs';
 
+import { Testing } from 'projen';
+
 import { PythonBasicProject } from '../project';
 
-import { PyProjectToml } from './pyproject';
+import { PyProjectTomlFile } from './pyproject';
 
 describe('pyproject', () => {
   test('invalid package name should fail', () => {
     const outdir = mkdtempSync(join(tmpdir(), 'test-'));
     const project = new PythonBasicProject({ name: 'test2', outdir });
-    new PyProjectToml(project, { packageName: '&^ABC' });
-    // expect(() => Testing.synth(project)).toThrow(/Invalid package name/);
+    new PyProjectTomlFile(project, { packageName: '&^ABC' });
+    expect(() => Testing.synth(project)).toThrow(/Invalid package name/);
     project.synth();
   });
   test('invalid version should fail', () => {
     const outdir = mkdtempSync(join(tmpdir(), 'test-'));
     const project = new PythonBasicProject({ name: 'test3', outdir });
-    new PyProjectToml(project, { version: 'AAAA' });
+    new PyProjectTomlFile(project, { version: 'AAAA' });
     project.synth();
-    // expect(() => Testing.synth(project)).toThrow(/Invalid version format/);
+    expect(() => Testing.synth(project)).toThrow(/Invalid version format/);
   });
 });
