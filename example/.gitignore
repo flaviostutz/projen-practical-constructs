@@ -4,8 +4,6 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
-!/pyproject.toml
-!/.python-version
 *.egg-info
 *.pyc
 .pytest*
@@ -18,4 +16,6 @@ __pycache__
 .ruff_cache
 .mypy_cache
 .audit_cache
+!/pyproject.toml
+!/.python-version
 !/.projenrc.py

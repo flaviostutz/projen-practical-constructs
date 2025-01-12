@@ -1,5 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import { stringify } from '@iarna/toml';
-import { FileBase, IResolver, Project } from 'projen';
+import { DependencyType, FileBase, IResolver, Project } from 'projen';
 
 import { WithRequired } from '../types/utils';
 
@@ -23,6 +24,17 @@ export class PyProjectTomlFile extends FileBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected synthesizeContent(_resolver: IResolver): string | undefined {
+    // merge project and options dependencies
+    const dependencies: string[] = [];
+    const devDependencies: string[] = [];
+    for (const dep of this.project.deps.all) {
+      if (dep.type === DependencyType.RUNTIME) {
+        dependencies.push(`${dep.name}@${dep.version}`);
+      } else if (dep.type === DependencyType.DEVENV || dep.type === DependencyType.TEST) {
+        devDependencies.push(`${dep.name}@${dep.version}`);
+      }
+    }
+
     const contents = {
       'build-system': {
         requires: ['setuptools'],
@@ -37,12 +49,11 @@ export class PyProjectTomlFile extends FileBase {
         license: '<LICENSE>',
         keywords: this.opts.keywords ?? [],
         // maintainers: this.opts.maintainers ?? [],
-        dependencies: this.opts.dependencies ?? [],
+        dependencies: dependencies ?? [],
       },
-      // this name will be updated later
       // 'project.optional-dependencies'
       projectOptionalDependencies: {
-        dev: this.opts.devDependencies ?? [],
+        dev: devDependencies ?? [],
       },
       // 'tool.setuptools.package-data'
       toolSetuptoolsPackageData: {
@@ -70,6 +81,7 @@ const getOptionsWithDefaults = (project: Project, opts?: PyProjectTomlOptions): 
   if (!VERSION_REGEX.test(version)) {
     throw new Error('Invalid version format. Must be in the format "X.Y.Z-<optional suffix>"');
   }
+
   return {
     ...opts,
     packageName: resolvePackageName(project.name, opts),
