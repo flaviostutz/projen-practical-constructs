@@ -7,7 +7,7 @@ import { Testing } from 'projen';
 
 import { PythonBasicProject } from '../project';
 
-import { PyProjectTomlFile } from './pyproject';
+import { PyProjectTomlFile } from './pyproject-toml';
 
 describe('pyproject', () => {
   test('invalid package name should fail', () => {

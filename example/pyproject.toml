@@ -13,10 +13,7 @@ keywords = [ ]
 dependencies = [ ]
 
 [project.optional-dependencies]
-dev = [
-  "../lib/dist/js/projen-python@0.0.0.jsii.tgz",
-  "projen@0.91.6"
-]
+dev = [ "pip-tools==7.4.1", "projen==0.91.6" ]
 
 [tool.setuptools.package-data]
-"example" = [ "py.typed" ]
+example = [ "py.typed" ]

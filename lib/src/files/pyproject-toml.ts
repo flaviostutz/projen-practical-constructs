@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { stringify } from '@iarna/toml';
-import { DependencyType, FileBase, IResolver, Project } from 'projen';
+import { Dependency, DependencyType, FileBase, IResolver, Project } from 'projen';
 
-import { WithRequired } from '../types/utils';
+import { WithRequired } from '../types/utility';
 
 /** Package name format as in https://packaging.python.org/en/latest/specifications/name-normalization/ */
 const PACKAGE_NAME_REGEX = /^([a-z0-9]|[A-z0-9][a-z0-9._-]*[a-z0-9])$/;
@@ -29,9 +29,9 @@ export class PyProjectTomlFile extends FileBase {
     const devDependencies: string[] = [];
     for (const dep of this.project.deps.all) {
       if (dep.type === DependencyType.RUNTIME) {
-        dependencies.push(`${dep.name}@${dep.version}`);
+        dependencies.push(renderDependency(dep));
       } else if (dep.type === DependencyType.DEVENV || dep.type === DependencyType.TEST) {
-        devDependencies.push(`${dep.name}@${dep.version}`);
+        devDependencies.push(renderDependency(dep));
       }
     }
 
@@ -66,7 +66,7 @@ export class PyProjectTomlFile extends FileBase {
       .replace('"<LICENSE>"', `{ file = "LICENSE" }`)
       .replace('projectOptionalDependencies', 'project.optional-dependencies')
       .replace('toolSetuptoolsPackageData', 'tool.setuptools.package-data')
-      .replace('packageDataPackageName', `"${this.opts.packageName}"`);
+      .replace('packageDataPackageName', `${this.opts.packageName}`);
 
     return tomlContents;
   }
@@ -103,6 +103,15 @@ export const resolvePackageName = (
     );
   }
   return packageName;
+};
+
+const renderDependency = (dep: Dependency): string => {
+  let { version } = dep;
+  // version starts with number, so add "==" because it has no qualifier
+  if (version && /^[0-9]+.*/.test(version)) {
+    version = `==${version}`;
+  }
+  return `${dep.name}${version ?? ''}`;
 };
 
 export interface PyProjectTomlOptions {

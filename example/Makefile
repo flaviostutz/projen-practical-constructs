@@ -12,14 +12,7 @@ new:
 	@echo "Create a new project..."
 	npx projen new --no-git --from ../lib/dist/js/projen-python@0.0.0.jsii.tgz
 
-	@echo "Prepare project for first run"
-	make prepare-venv
-
-	@echo "Build project for the first time"
-	make build
-
 build: prepare-projen
-	npx projen
 	npx projen build
 
 .PHONY: test

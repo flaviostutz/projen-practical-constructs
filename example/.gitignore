@@ -17,5 +17,6 @@ __pycache__
 .mypy_cache
 .audit_cache
 !/pyproject.toml
+.venv/
 !/.python-version
 !/.projenrc.py
