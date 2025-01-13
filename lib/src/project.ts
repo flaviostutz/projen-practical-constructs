@@ -1,14 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-new */
 
-import { DependencyType, License, LicenseOptions, Project, ProjectOptions } from 'projen';
+import { DependencyType, License, Project, ProjectOptions } from 'projen';
 import { Projenrc } from 'projen/lib/python';
 
 import { resolvePackageName } from './files/pyproject-toml';
-import { PythonVersionFile } from './files/python-version';
-import { addDefaultGitIgnore } from './utils/addDefaultGitIgnore';
-import { PythonBasicSample } from './sample';
-import { PyProject, PyProjectOptions } from './pyproject';
+import { PythonBasicSample } from './components/sample';
+import { BuildTarget, BuildOptions } from './build';
+import { ReadmeFile } from './files';
+import { LintTarget, LintOptions } from './lint';
+import { TestTarget, TestOptions } from './test';
 
 // https://peps.python.org/pep-0508/
 const DEP_NAME_VERSION_REGEX = /^([A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])(.*)$/;
@@ -38,19 +39,20 @@ export class PythonBasicProject extends Project {
     }
 
     // cleanup default tasks
-    this.tasks.removeTask('build');
-    this.tasks.removeTask('pre-compile');
-    this.tasks.removeTask('post-compile');
-    this.tasks.removeTask('compile');
-    this.tasks.removeTask('test');
-    this.tasks.removeTask('package');
+    cleanupTasks(this);
 
     // create .projenrc.py
     new Projenrc(this, { pythonExec: `${optionsWithDefaults.venvPath}/bin/python` });
 
+    // create README.md
+    new ReadmeFile(this, {
+      projectName: optionsWithDefaults.name,
+      description: optionsWithDefaults.package?.description,
+    });
+
     // create LICENSE
     if (options.license) {
-      new License(this, options.license);
+      new License(this, { spdx: options.license });
     }
 
     // create sample
@@ -58,19 +60,24 @@ export class PythonBasicProject extends Project {
       new PythonBasicSample(this);
     }
 
-    addDefaultGitIgnore(this);
+    // LINT
+    new LintTarget(this, {
+      venvPath: optionsWithDefaults.venvPath,
+      ...optionsWithDefaults.lint,
+      attachTasksTo: 'lint',
+    });
 
-    // ADD THIS AT LAST BECAUSE DEPS IN project MIGHT BE ADDED BY OTHER COMPONENTS
-    // and PyProjectTomlFile will add them to pyproject.toml
-    if (optionsWithDefaults.package) {
-      // create pyproject.toml and build tasks
-      new PyProject(this, optionsWithDefaults);
-      // create .python-version
-      if (optionsWithDefaults.package.requiresPython) {
-        const requiresPython = optionsWithDefaults.package.requiresPython.replace(/[^0-9.]/g, '');
-        new PythonVersionFile(this, { pythonVersion: requiresPython });
-      }
-    }
+    // TEST
+    new TestTarget(this, {
+      venvPath: optionsWithDefaults.venvPath,
+      ...optionsWithDefaults.test,
+      attachTasksTo: 'test',
+    });
+
+    // BUILD
+    // This should be in the last position because other components might add dependencies
+    // and they will be used to generate pyproject.toml, for example
+    new BuildTarget(this, { ...optionsWithDefaults, attachTasksTo: 'build' });
   }
 
   /**
@@ -100,7 +107,7 @@ export class PythonBasicProject extends Project {
   }
 }
 
-export interface PythonBasicOptions extends ProjectOptions, PyProjectOptions {
+export interface PythonBasicOptions extends ProjectOptions, BuildOptions {
   /**
    * Package dependencies in format `['package==1.0.0', 'package2==2.0.0']`
    */
@@ -110,14 +117,22 @@ export interface PythonBasicOptions extends ProjectOptions, PyProjectOptions {
    */
   readonly devDeps?: string[];
   /**
-   * License options
+   * License name in spdx format. e.g: `MIT`, `Apache-2.0`
    */
-  readonly license?: LicenseOptions;
+  readonly license?: string;
   /**
    * Create sample code and test (if dir doesn't exist yet)
    * @default true
    */
   readonly sample?: boolean;
+  /**
+   * Linting configurations such as rules selected etc
+   */
+  readonly lint?: LintOptions;
+  /**
+   * Test configurations
+   */
+  readonly test?: TestOptions;
 }
 
 const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonBasicOptions => {
@@ -134,4 +149,14 @@ const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonB
     package: packageWithDefaults,
     sample: options.sample ?? true,
   };
+};
+
+const cleanupTasks = (project: Project): void => {
+  // cleanup default tasks
+  project.tasks.removeTask('build');
+  project.tasks.removeTask('pre-compile');
+  project.tasks.removeTask('post-compile');
+  project.tasks.removeTask('compile');
+  project.tasks.removeTask('test');
+  project.tasks.removeTask('package');
 };

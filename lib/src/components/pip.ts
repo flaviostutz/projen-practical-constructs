@@ -1,40 +1,44 @@
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-new */
 import { Component, DependencyType, Project, TaskRuntime } from 'projen';
 
-import { PyProjectTomlFile, PyProjectTomlOptions } from './files';
+import { TaskOptions } from '../tasks';
+import { PyProjectTomlFile, PyProjectTomlOptions, PythonVersionFile } from '../files';
 
 const PIP_TOOLS_VERSION = '==7.4.1';
 
-/**
- * Core Python project files and tasks
- * around pyproject.toml
- */
-export class PyProject extends Component {
-  constructor(project: Project, opts: PyProjectOptions) {
+export class Pip extends Component {
+  constructor(project: Project, opts: PipOptions) {
     super(project);
 
-    if (!opts.venvPath) {
-      throw new Error('venvPath is required');
-    }
-    if (!opts.lockFile) {
-      throw new Error('lockFile is required');
-    }
+    // create pyproject.toml
     new PyProjectTomlFile(project, opts.package);
 
-    this.project.addGitIgnore(`${opts.venvPath}/`);
+    // create python-version
+    if (opts.package?.requiresPython) {
+      const requiresPython = opts.package.requiresPython.replace(/[^0-9.]/g, '');
+      new PythonVersionFile(project, { pythonVersion: requiresPython });
+    }
 
+    // add git ignore patterns
+    project.addGitIgnore(`${opts.venvPath}/`);
+    project.addGitIgnore('*.egg-info');
+    project.addGitIgnore('build');
+    project.addGitIgnore('*.pyc');
+    project.addGitIgnore('__pycache__');
+    project.addGitIgnore('.cache');
+
+    // add build related tasks
     project.tasks.addTask('install', {
       description: `Install dependencies from ${opts.lockFile}`,
       exec: `${opts.venvPath}/bin/pip install --require-virtualenv -c ${opts.lockFile}`,
     });
 
-    project.tasks.addTask('install-dev', {
+    const installDevTask = project.tasks.addTask('install-dev', {
       description: `Install dependencies from ${opts.lockFileDev}`,
       exec: `${opts.venvPath}/bin/pip install --require-virtualenv -c ${opts.lockFileDev} .[dev]`,
     });
 
-    project.tasks.addTask('prepare-venv', {
+    const prepareVenvTask = project.tasks.addTask('prepare-venv', {
       description: `Create python virtual environment in ${opts.venvPath}`,
       steps: [
         { exec: `${opts.pythonExec} -m venv ${opts.venvPath}` },
@@ -64,10 +68,14 @@ export class PyProject extends Component {
 
     project.deps.addDependency(`pip-tools@${PIP_TOOLS_VERSION}`, DependencyType.DEVENV);
 
-    project.tasks.addTask('build', {
-      description: `Build project (install deps, compile and package)`,
-      steps: [{ spawn: 'prepare-venv' }, { spawn: 'install-dev' }],
-    });
+    if (opts.attachTasksTo) {
+      const attachTask = project.tasks.tryFind(opts.attachTasksTo);
+      if (!attachTask) {
+        throw new Error(`'${opts.attachTasksTo}' task not found`);
+      }
+      attachTask.spawn(prepareVenvTask);
+      attachTask.spawn(installDevTask);
+    }
   }
 
   public postSynthesize(): void {
@@ -83,17 +91,11 @@ export class PyProject extends Component {
   }
 }
 
-export interface PyProjectOptions {
+export interface PipOptions extends TaskOptions {
   /**
    * Options for pyproject.toml
    */
   readonly package?: PyProjectTomlOptions;
-  /**
-   * Path to the python virtual environment directory
-   * used in this project
-   * @default .venv
-   */
-  readonly venvPath?: string;
   /**
    * Python executable path to be used while creating the virtual environment
    * used in this project
