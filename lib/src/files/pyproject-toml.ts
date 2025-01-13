@@ -2,7 +2,7 @@
 import { stringify } from '@iarna/toml';
 import { Dependency, DependencyType, FileBase, IResolver, Project } from 'projen';
 
-import { WithRequired } from '../types/utility';
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 /** Package name format as in https://packaging.python.org/en/latest/specifications/name-normalization/ */
 const PACKAGE_NAME_REGEX = /^([a-z0-9]|[A-z0-9][a-z0-9._-]*[a-z0-9])$/;

@@ -31,7 +31,6 @@ export class PythonBasicSample extends Component {
     // tests directory
     new SampleDir(project, 'tests/hello_world', {
       files: {
-        '__init__.py': '',
         'test_hello_world.py': ['# FIXME ADD TESTS'].join('\n'),
       },
     });

@@ -1,35 +1,30 @@
 /* eslint-disable no-restricted-syntax */
-import { IResolver, Project, TomlFile } from 'projen';
+import { Project, TomlFile } from 'projen';
 
 /**
  * ruff.toml synthetisation
  */
 export class RuffTomlFile extends TomlFile {
-  private readonly opts: Required<RuffTomlFileOptions>;
-
   constructor(project: Project, opts?: RuffTomlFileOptions) {
-    super(project, 'ruff.toml', {});
-    this.opts = getOptionsWithDefaults(opts);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected synthesizeContent(_resolver: IResolver): string | undefined {
-    return JSON.stringify({
-      'cache-dir': '.cache/.ruff_cache',
-      'show-fixes': true,
-      src: ['src', 'tests'],
-      'target-version': this.opts.targetPythonVersion,
-      'unsafe-fixes': this.opts.unsafeFixes,
-      format: {
-        'docstring-code-format': true,
-      },
-      lint: {
-        ignore: this.opts.ignoreRules,
-        select: this.opts.selectRules,
-        mccabe: {
-          'max-complexity': this.opts.mccabeMaxComplexity,
+    const optsWithDefaults = getOptionsWithDefaults(opts);
+    super(project, 'ruff.toml', {
+      obj: {
+        'cache-dir': '.cache/.ruff_cache',
+        'show-fixes': true,
+        src: ['src', 'tests'],
+        'target-version': optsWithDefaults.targetPythonVersion,
+        'unsafe-fixes': optsWithDefaults.unsafeFixes,
+        format: {
+          'docstring-code-format': true,
         },
-        'per-file-ignores': this.opts.perFileIgnores,
+        lint: {
+          ignore: optsWithDefaults.ignoreRules,
+          select: optsWithDefaults.selectRules,
+          mccabe: {
+            'max-complexity': optsWithDefaults.mccabeMaxComplexity,
+          },
+          'per-file-ignores': optsWithDefaults.perFileIgnores,
+        },
       },
     });
   }

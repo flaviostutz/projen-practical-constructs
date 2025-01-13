@@ -1,9 +1,5 @@
 import { Project, Task } from 'projen';
 
-import { WithRequired } from './types/utility';
-
-export interface TaskOptionsWithRequired extends WithRequired<TaskOptions, 'venvPath'> {}
-
 export interface TaskOptions {
   /**
    * Path to the python virtual environment directory
