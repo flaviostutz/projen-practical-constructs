@@ -2,7 +2,6 @@
 import { Component, DependencyType, Project, TaskRuntime } from 'projen';
 
 import { TaskOptions } from '../tasks';
-import { PyProjectTomlFile, PyProjectTomlOptions, PythonVersionFile } from '../files';
 
 const PIP_TOOLS_VERSION = '==7.4.1';
 
@@ -10,17 +9,17 @@ export class Pip extends Component {
   constructor(project: Project, opts: PipOptions) {
     super(project);
 
-    // create pyproject.toml
-    new PyProjectTomlFile(project, opts.package);
-
-    // create python-version
-    if (opts.package?.requiresPython) {
-      const requiresPython = opts.package.requiresPython.replace(/[^0-9.]/g, '');
-      new PythonVersionFile(project, { pythonVersion: requiresPython });
-    }
+    // default options
+    const optsd: PipOptions = {
+      pythonExec: 'python',
+      lockFile: 'constraints.txt',
+      lockFileDev: 'constraints-dev.txt',
+      venvPath: '.venv',
+      ...opts,
+    };
 
     // add git ignore patterns
-    project.addGitIgnore(`${opts.venvPath}/`);
+    project.addGitIgnore(`${optsd.venvPath}/`);
     project.addGitIgnore('*.egg-info');
     project.addGitIgnore('build');
     project.addGitIgnore('*.pyc');
@@ -29,27 +28,27 @@ export class Pip extends Component {
 
     // add build related tasks
     project.tasks.addTask('install', {
-      description: `Install dependencies from ${opts.lockFile}`,
-      exec: `${opts.venvPath}/bin/pip install --require-virtualenv -c ${opts.lockFile}`,
+      description: `Install dependencies from ${optsd.lockFile}`,
+      exec: `${optsd.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFile}`,
     });
 
     const installDevTask = project.tasks.addTask('install-dev', {
-      description: `Install dependencies from ${opts.lockFileDev}`,
-      exec: `${opts.venvPath}/bin/pip install --require-virtualenv -c ${opts.lockFileDev} .[dev]`,
+      description: `Install dependencies from ${optsd.lockFileDev}`,
+      exec: `${optsd.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} .[dev]`,
     });
 
     const prepareVenvTask = project.tasks.addTask('prepare-venv', {
-      description: `Create python virtual environment in ${opts.venvPath}`,
+      description: `Create python virtual environment in ${optsd.venvPath}`,
       steps: [
-        { exec: `${opts.pythonExec} -m venv ${opts.venvPath}` },
+        { exec: `${optsd.pythonExec} -m venv ${optsd.venvPath}` },
         {
-          exec: `${opts.venvPath}/bin/pip install pip-tools${PIP_TOOLS_VERSION}`,
+          exec: `${optsd.venvPath}/bin/pip install pip-tools${PIP_TOOLS_VERSION}`,
         },
       ],
     });
 
     project.tasks.addTask('update-lockfile', {
-      description: `Update lock file (${opts.lockFile}) according to pyproject.toml`,
+      description: `Update lock file (${optsd.lockFile}) according to pyproject.toml`,
       steps: [
         {
           say: 'Prepare venv',
@@ -57,21 +56,21 @@ export class Pip extends Component {
         },
         {
           say: 'Updating lock file (runtime)',
-          exec: `${opts.venvPath}/bin/pip-compile --all-build-deps --output-file=${opts.lockFile} pyproject.toml`,
+          exec: `${optsd.venvPath}/bin/pip-compile --all-build-deps --output-file=${optsd.lockFile} pyproject.toml`,
         },
         {
           say: 'Updating lock file (dev)',
-          exec: `${opts.venvPath}/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=${opts.lockFileDev} pyproject.toml`,
+          exec: `${optsd.venvPath}/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=${optsd.lockFileDev} pyproject.toml`,
         },
       ],
     });
 
     project.deps.addDependency(`pip-tools@${PIP_TOOLS_VERSION}`, DependencyType.DEVENV);
 
-    if (opts.attachTasksTo) {
-      const attachTask = project.tasks.tryFind(opts.attachTasksTo);
+    if (optsd.attachTasksTo) {
+      const attachTask = project.tasks.tryFind(optsd.attachTasksTo);
       if (!attachTask) {
-        throw new Error(`'${opts.attachTasksTo}' task not found`);
+        throw new Error(`'${optsd.attachTasksTo}' task not found`);
       }
       attachTask.spawn(prepareVenvTask);
       attachTask.spawn(installDevTask);
@@ -92,10 +91,6 @@ export class Pip extends Component {
 }
 
 export interface PipOptions extends TaskOptions {
-  /**
-   * Options for pyproject.toml
-   */
-  readonly package?: PyProjectTomlOptions;
   /**
    * Python executable path to be used while creating the virtual environment
    * used in this project

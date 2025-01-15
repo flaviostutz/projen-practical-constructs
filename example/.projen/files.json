@@ -6,7 +6,6 @@
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
-    ".python-version",
     "LICENSE",
     "mypy.ini",
     "pyproject.toml",

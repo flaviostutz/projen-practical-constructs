@@ -8,7 +8,7 @@ export class Ruff extends Component {
   constructor(project: Project, opts: RuffOptions) {
     super(project);
 
-    new RuffTomlFile(project, opts.ruffToml);
+    new RuffTomlFile(project, opts);
     project.deps.addDependency('ruff@0.8.*', DependencyType.DEVENV);
     project.addGitIgnore('.ruff_cache');
     const lintRuffTask = project.tasks.addTask('lint-ruff', {
@@ -39,11 +39,7 @@ export class Ruff extends Component {
   }
 }
 
-export interface RuffOptions extends TaskOptions {
-  /**
-   * Ruff configuration file options
-   */
-  readonly ruffToml?: RuffTomlFileOptions;
+export interface RuffOptions extends RuffTomlFileOptions, TaskOptions {
   /**
    * Attach lint fix tasks to parent
    */

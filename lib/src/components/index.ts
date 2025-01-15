@@ -4,3 +4,4 @@ export * from './pip';
 export * from './pytest';
 export * from './ruff';
 export * from './sample';
+export * from './package';

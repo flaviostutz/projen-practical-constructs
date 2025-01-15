@@ -8,6 +8,10 @@ attrs==24.3.0
     # via
     #   cattrs
     #   jsii
+beaker==1.13.0
+    # via pylons
+beautifulsoup4==4.12.3
+    # via webtest
 boolean-py==4.0
     # via license-expression
 build==1.2.2.post1
@@ -30,10 +34,16 @@ coverage==7.6.10
     # via pytest-cov
 cyclonedx-python-lib==7.6.2
     # via pip-audit
+decorator==5.1.1
+    # via pylons
 defusedxml==0.7.1
     # via py-serializable
 filelock==3.16.1
     # via cachecontrol
+formencode==2.1.0
+    # via pylons
+helloworld==0.1.dev0
+    # via example (pyproject.toml)
 html5lib==1.1
     # via pip-audit
 idna==3.10
@@ -46,10 +56,19 @@ jsii==1.106.0
     # via
     #   constructs
     #   projen
+legacy-cgi==2.6.1
+    # via webob
 license-expression==30.4.1
     # via cyclonedx-python-lib
+mako==1.3.8
+    # via pylons
 markdown-it-py==3.0.0
     # via rich
+markupsafe==3.0.2
+    # via
+    #   mako
+    #   pylons
+    #   webhelpers
 mdurl==0.1.2
     # via markdown-it-py
 msgpack==1.1.0
@@ -58,6 +77,8 @@ mypy==1.14.1
     # via example (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
+nose==1.3.7
+    # via pylons
 packageurl-python==0.16.0
     # via cyclonedx-python-lib
 packaging==24.2
@@ -66,6 +87,17 @@ packaging==24.2
     #   pip-audit
     #   pip-requirements-parser
     #   pytest
+paste==3.10.1
+    # via
+    #   pastescript
+    #   pylons
+    #   weberror
+pastedeploy==3.1.0
+    # via
+    #   pastescript
+    #   pylons
+pastescript==3.6.0
+    # via pylons
 pip-api==0.0.34
     # via pip-audit
 pip-audit==2.7.3
@@ -86,7 +118,11 @@ publication==0.0.3
 py-serializable==1.1.2
     # via cyclonedx-python-lib
 pygments==2.19.1
-    # via rich
+    # via
+    #   rich
+    #   weberror
+pylons==1.0.3
+    # via helloworld
 pyparsing==3.2.1
     # via pip-requirements-parser
 pyproject-hooks==1.2.0
@@ -101,20 +137,33 @@ pytest-cov==6.0.0
     # via example (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via jsii
+repoze-lru==0.7
+    # via routes
 requests==2.32.3
     # via
     #   cachecontrol
     #   pip-audit
 rich==13.9.4
     # via pip-audit
+routes==2.5.1
+    # via pylons
 ruff==0.8.6
     # via example (pyproject.toml)
+simplejson==3.19.3
+    # via pylons
 six==1.17.0
     # via
     #   html5lib
     #   python-dateutil
+    #   routes
 sortedcontainers==2.4.0
     # via cyclonedx-python-lib
+soupsieve==2.6
+    # via beautifulsoup4
+tempita==0.6.0
+    # via
+    #   pylons
+    #   weberror
 toml==0.10.2
     # via pip-audit
 typeguard==2.13.3
@@ -128,8 +177,21 @@ typing-extensions==4.12.2
     #   mypy
 urllib3==2.3.0
     # via requests
+waitress==3.0.2
+    # via webtest
 webencodings==0.5.1
     # via html5lib
+weberror==0.13.1
+    # via pylons
+webhelpers==1.3
+    # via pylons
+webob==1.8.9
+    # via
+    #   pylons
+    #   weberror
+    #   webtest
+webtest==3.0.2
+    # via pylons
 wheel==0.45.1
     # via pip-tools
 

@@ -8,7 +8,6 @@ import { CoveragercFile, CoveragercFileOptions } from '../files/coveragerc';
 export class PyTest extends Component {
   constructor(project: Project, opts: PyTestOptions) {
     super(project);
-
     new PyTestIniFile(project);
     new CoveragercFile(project, opts);
     project.deps.addDependency('pytest@8.3.*', DependencyType.DEVENV);

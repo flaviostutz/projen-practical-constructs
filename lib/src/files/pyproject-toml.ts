@@ -24,9 +24,9 @@ export class PyProjectTomlFile extends FileBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected synthesizeContent(_resolver: IResolver): string | undefined {
-    // merge project and options dependencies
-    const dependencies: string[] = this.opts.dependencies ?? [];
-    const devDependencies: string[] = this.opts.devDependencies ?? [];
+    // get dependencies from project scope
+    const dependencies = [];
+    const devDependencies = [];
     for (const dep of this.project.deps.all) {
       if (dep.type === DependencyType.RUNTIME) {
         dependencies.push(renderDependency(dep));
@@ -73,19 +73,17 @@ export class PyProjectTomlFile extends FileBase {
 }
 
 const getOptionsWithDefaults = (project: Project, opts?: PyProjectTomlOptions): OptWithRequired => {
-  // version
-  let version = opts?.version;
-  if (!version) {
-    version = '0.0.1';
-  }
-  if (!VERSION_REGEX.test(version)) {
-    throw new Error('Invalid version format. Must be in the format "X.Y.Z-<optional suffix>"');
+  if (opts?.version && !VERSION_REGEX.test(opts?.version)) {
+    throw new Error(
+      `Invalid version format (${opts?.version}). Must be in the format "X.Y.Z-<optional suffix>"`,
+    );
   }
 
   return {
-    ...opts,
+    requiresPython: '>=3.12',
     packageName: resolvePackageName(project.name, opts),
-    version,
+    version: '0.0.1',
+    ...opts,
   };
 };
 
@@ -141,14 +139,6 @@ export interface PyProjectTomlOptions {
    * List of maintainers of the package.
    */
   // readonly maintainers?: { name: string; email: string }[];
-  /**
-   * List of dependencies for this project in format `['package==1.0.0', 'package2^2.0.0']` etc.
-   */
-  readonly dependencies?: string[];
-  /**
-   * List of dev dependencies for this project in format `['package==1.0.0', 'package2^2.0.0']` etc.
-   */
-  readonly devDependencies?: string[];
   /**
    * A short description of the package.
    */

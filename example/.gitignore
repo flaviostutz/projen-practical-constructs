@@ -4,7 +4,6 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
-!/LICENSE
 !/mypy.ini
 .mypy_cache
 !/ruff.toml
@@ -15,7 +14,7 @@ node_modules/
 .coverage
 .pytest_cache
 !/pyproject.toml
-!/.python-version
+!/LICENSE
 .venv/
 *.egg-info
 build

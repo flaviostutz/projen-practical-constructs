@@ -1,15 +1,16 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-new */
 
-import { DependencyType, License, Project, ProjectOptions } from 'projen';
+import { DependencyType, Project, ProjectOptions } from 'projen';
 import { Projenrc } from 'projen/lib/python';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
-import { BuildTarget, BuildOptions } from './build';
+import { Build2Options, BuildTarget } from './build';
 import { ReadmeFile } from './files';
 import { LintTarget, LintOptions } from './lint';
 import { TestTarget, TestOptions } from './test';
+import { TaskOptions } from './tasks';
 
 // https://peps.python.org/pep-0508/
 const DEP_NAME_VERSION_REGEX = /^([A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])(.*)$/;
@@ -50,14 +51,6 @@ export class PythonBasicProject extends Project {
       description: optionsWithDefaults.package?.description,
     });
 
-    // create LICENSE
-    if (options.license) {
-      new License(this, {
-        spdx: options.license,
-        copyrightOwner: options.package?.authorName ?? 'Unknown',
-      });
-    }
-
     // create sample
     if (optionsWithDefaults.sample) {
       new PythonBasicSample(this);
@@ -80,7 +73,7 @@ export class PythonBasicProject extends Project {
     // BUILD
     // This should be in the last position because other components might add dependencies
     // and they will be used to generate pyproject.toml, for example
-    new BuildTarget(this, { ...optionsWithDefaults, attachTasksTo: 'build' });
+    new BuildTarget(this, optionsWithDefaults);
   }
 
   /**
@@ -110,7 +103,7 @@ export class PythonBasicProject extends Project {
   }
 }
 
-export interface PythonBasicOptions extends ProjectOptions, BuildOptions {
+export interface PythonBasicOptions extends ProjectOptions, TaskOptions, Build2Options {
   /**
    * Package dependencies in format `['package==1.0.0', 'package2==2.0.0']`
    */
@@ -119,10 +112,6 @@ export interface PythonBasicOptions extends ProjectOptions, BuildOptions {
    * Development dependencies in format `['package==1.0.0', 'package2==2.0.0']`
    */
   readonly devDeps?: string[];
-  /**
-   * License name in spdx format. e.g: `MIT`, `Apache-2.0`
-   */
-  readonly license?: string;
   /**
    * Create sample code and test (if dir doesn't exist yet)
    * @default true
@@ -139,22 +128,9 @@ export interface PythonBasicOptions extends ProjectOptions, BuildOptions {
 }
 
 const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonBasicOptions => {
-  const packageWithDefaults = {
-    requiresPython: '>=3.12',
-    ...options.package,
-  };
   return {
-    venvPath: '.venv',
-    lockFile: 'constraints.txt',
-    lockFileDev: 'constraints-dev.txt',
-    pythonExec: 'python',
-    test: {
-      minCoverage: 50,
-      ...options.test,
-    },
+    sample: true,
     ...options,
-    package: packageWithDefaults,
-    sample: options.sample ?? true,
   };
 };
 
