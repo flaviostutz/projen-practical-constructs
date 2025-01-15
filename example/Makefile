@@ -1,24 +1,8 @@
-PROJEN_VERSION=0.91.5
+PROJEN_VERSION = 0.91.6
 VENV_PATH = .venv
 
-new:
-	@echo "Delete all files in this dir, except Makefile..."
-	find . -type f ! -name 'Makefile' -delete
-	find . -type d -delete
 
-	@echo "Build the projen type lib..."
-	cd ../lib && make build
-	
-	@echo "Create a new project..."
-	npx projen new --no-git --from ../lib/dist/js/projen-python@0.0.0.jsii.tgz
-
-update:
-	@echo "Build the projen type lib..."
-	cd ../lib && make build
-	make prepare-venv	
-	make build
-
-build: prepare-projen
+build: prepare-projen prepare-venv
 	npx projen
 	npx projen build
 

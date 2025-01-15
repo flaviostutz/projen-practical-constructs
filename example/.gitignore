@@ -14,12 +14,12 @@ node_modules/
 .coverage
 .pytest_cache
 !/pyproject.toml
-!/LICENSE
 .venv/
 *.egg-info
 build
 *.pyc
 __pycache__
 .cache
+!/.python-version
 .ipynb_checkpoints
 !/.projenrc.py

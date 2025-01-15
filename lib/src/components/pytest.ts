@@ -6,7 +6,7 @@ import { PyTestIniFile } from '../files/pytest-ini';
 import { CoveragercFile, CoveragercFileOptions } from '../files/coveragerc';
 
 export class PyTest extends Component {
-  constructor(project: Project, opts: PyTestOptions) {
+  constructor(project: Project, taskOpts: TaskOptions, opts?: PyTestOptions) {
     super(project);
     new PyTestIniFile(project);
     new CoveragercFile(project, opts);
@@ -16,10 +16,10 @@ export class PyTest extends Component {
     project.addGitIgnore('.pytest_cache');
     const lintUnitTask = project.tasks.addTask('test-unit', {
       description: `Unit tests (pytest)`,
-      exec: `${opts.venvPath}/bin/pytest --cov=src`,
+      exec: `${taskOpts.venvPath}/bin/pytest --cov=src`,
     });
-    addTaskToParent(project, lintUnitTask, opts.attachTasksTo);
+    addTaskToParent(project, lintUnitTask, taskOpts.attachTasksTo);
   }
 }
 
-export interface PyTestOptions extends TaskOptions, CoveragercFileOptions {}
+export interface PyTestOptions extends CoveragercFileOptions {}

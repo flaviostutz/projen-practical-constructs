@@ -17,7 +17,7 @@ const project = new cdk.JsiiProject({
   ],
   devDeps: [
     "@stutzlab/eslint-config@^3.1.1",
-    "@typescript-eslint/eslint-plugin@^7.15.0",
+    "@typescript-eslint/eslint-plugin@^7.15.0"
   ],
   peerDeps: [
     'projen@^0.91.6',
@@ -45,8 +45,11 @@ const project = new cdk.JsiiProject({
     updateSnapshot: UpdateSnapshot.NEVER,
     jestConfig: {
       collectCoverage: true,
+      coverageReporters: ['text', 'lcov', 'cobertura'],
+      collectCoverageFrom: ["src/**/*.ts", ".*\.test.ts"],
+      testPathIgnorePatterns: ["src/test.ts"], 
       coverageThreshold: {
-        branches: 30,
+        branches: 60,
         functions: 80,
         lines: 80,
         statements: 80,

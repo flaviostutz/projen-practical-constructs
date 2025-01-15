@@ -6,7 +6,7 @@
     ".projen/deps.json",
     ".projen/files.json",
     ".projen/tasks.json",
-    "LICENSE",
+    ".python-version",
     "mypy.ini",
     "pyproject.toml",
     "pytest.ini",

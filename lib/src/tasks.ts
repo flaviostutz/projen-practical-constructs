@@ -1,6 +1,6 @@
 import { Project, Task } from 'projen';
 
-export interface TaskOptions {
+export interface TaskOptionsTarget {
   /**
    * Path to the python virtual environment directory
    * used in this project
@@ -12,6 +12,26 @@ export interface TaskOptions {
    * It will be included as "spawn" tasks in new steps
    */
   readonly attachTasksTo?: string;
+}
+
+export interface TaskOptions {
+  /**
+   * Path to the python virtual environment directory
+   * used in this project
+   */
+  readonly venvPath: string;
+  /**
+   * Existing task to attach new tasks to.
+   * It will be included as "spawn" tasks in new steps
+   */
+  readonly attachTasksTo?: string;
+}
+
+export interface TaskOptionsWithFix extends TaskOptions {
+  /**
+   * Attach task to fix
+   */
+  readonly attachFixTasksTo?: string;
 }
 
 export const addTaskToParent = (project: Project, task: Task, parentTaskName?: string): void => {

@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PyTestIniFile synthesizes pytest.ini correctly 1`] = `
+"[pytest]
+cache_dir = .cache/.pytest_cache
+testpaths =
+    tests
+    integration
+"
+`;

@@ -1,5 +1,10 @@
 # lib
 
+## Tests
+
+- We use a lot of snapshots on our tests, which in general is not a good practice. But in our case we decided to use it because there are lots of files and the snapshots will check if the file contents were changed.
+- Be careful checking manually the errors on snapshots before updating them to be sure that it's not a breaking change to the users of the library
+
 ## JSII
   - The options of the constructs have to be "interface", not "types" because they are exposed to JSII and it works well only with interfaces
   - The Project type must have an attribute with name "options" in constructor

@@ -6,11 +6,11 @@ import { Projenrc } from 'projen/lib/python';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
-import { Build2Options, BuildTarget } from './build';
+import { Build0Options, BuildTarget } from './build';
 import { ReadmeFile } from './files';
 import { LintTarget, LintOptions } from './lint';
 import { TestTarget, TestOptions } from './test';
-import { TaskOptions } from './tasks';
+import { TaskOptionsTarget } from './tasks';
 
 // https://peps.python.org/pep-0508/
 const DEP_NAME_VERSION_REGEX = /^([A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])(.*)$/;
@@ -39,11 +39,13 @@ export class PythonBasicProject extends Project {
       }
     }
 
+    const venvPath = optionsWithDefaults.venvPath ?? '.venv';
+
     // cleanup default tasks
     cleanupTasks(this);
 
     // create .projenrc.py
-    new Projenrc(this, { pythonExec: `${optionsWithDefaults.venvPath}/bin/python` });
+    new Projenrc(this, { pythonExec: `${venvPath}/bin/python` });
 
     // create README.md
     new ReadmeFile(this, {
@@ -57,23 +59,39 @@ export class PythonBasicProject extends Project {
     }
 
     // LINT
-    new LintTarget(this, {
-      venvPath: optionsWithDefaults.venvPath,
-      ...optionsWithDefaults.lint,
-      attachTasksTo: 'lint',
-    });
+    new LintTarget(
+      this,
+      {
+        venvPath,
+        attachTasksTo: 'lint',
+      },
+      optionsWithDefaults.lint,
+    );
 
     // TEST
-    new TestTarget(this, {
-      venvPath: optionsWithDefaults.venvPath,
-      ...optionsWithDefaults.test,
-      attachTasksTo: 'test',
-    });
+    new TestTarget(
+      this,
+      {
+        venvPath,
+        attachTasksTo: 'test',
+      },
+      optionsWithDefaults.test,
+    );
 
     // BUILD
     // This should be in the last position because other components might add dependencies
     // and they will be used to generate pyproject.toml, for example
-    new BuildTarget(this, optionsWithDefaults);
+    new BuildTarget(
+      this,
+      {
+        venvPath,
+        attachTasksTo: 'build',
+      },
+      {
+        pip: optionsWithDefaults.pip,
+        package: optionsWithDefaults.package,
+      },
+    );
   }
 
   /**
@@ -103,7 +121,7 @@ export class PythonBasicProject extends Project {
   }
 }
 
-export interface PythonBasicOptions extends ProjectOptions, TaskOptions, Build2Options {
+export interface PythonBasicOptions extends ProjectOptions, Build0Options, TaskOptionsTarget {
   /**
    * Package dependencies in format `['package==1.0.0', 'package2==2.0.0']`
    */

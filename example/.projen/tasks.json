@@ -17,7 +17,7 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "undefined/bin/python .projenrc.py"
+          "exec": ".venv/bin/python .projenrc.py"
         }
       ]
     },
@@ -71,7 +71,7 @@
       "description": "Code type checks (mypy)",
       "steps": [
         {
-          "exec": "undefined/bin/pip-audit --cache-dir .cache/.audit_cache"
+          "exec": ".venv/bin/pip-audit --cache-dir .cache/.audit_cache"
         }
       ]
     },
@@ -89,7 +89,7 @@
       "description": "Code type checks (mypy)",
       "steps": [
         {
-          "exec": "undefined/bin/mypy src tests"
+          "exec": ".venv/bin/mypy src tests"
         }
       ]
     },
@@ -98,10 +98,10 @@
       "description": "Code checks (RUFF)",
       "steps": [
         {
-          "exec": "undefined/bin/ruff format --check src tests"
+          "exec": ".venv/bin/ruff format --check src tests"
         },
         {
-          "exec": "undefined/bin/ruff check src tests"
+          "exec": ".venv/bin/ruff check src tests"
         }
       ]
     },
@@ -110,10 +110,10 @@
       "description": "Lint fix (RUFF)",
       "steps": [
         {
-          "exec": "undefined/bin/ruff format src tests"
+          "exec": ".venv/bin/ruff format src tests"
         },
         {
-          "exec": "undefined/bin/ruff check --fix src tests"
+          "exec": ".venv/bin/ruff check --fix src tests"
         }
       ]
     },
@@ -143,7 +143,7 @@
       "description": "Unit tests (pytest)",
       "steps": [
         {
-          "exec": "undefined/bin/pytest --cov=src"
+          "exec": ".venv/bin/pytest --cov=src"
         }
       ]
     },

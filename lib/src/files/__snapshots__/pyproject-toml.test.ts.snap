@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pyproject valid package name and version 1`] = `
+"[build-system]
+requires = [ "setuptools" ]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "abc"
+version = "1.0.0"
+description = ""
+readme = ""
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+keywords = [ ]
+dependencies = [ "helloworld==0.1dev" ]
+
+[project.optional-dependencies]
+dev = [ ]
+
+[tool.setuptools.package-data]
+abc = [ "py.typed" ]
+"
+`;

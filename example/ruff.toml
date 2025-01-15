@@ -4,7 +4,7 @@ cache-dir = ".cache/.ruff_cache"
 show-fixes = true
 src = [ "src", "tests" ]
 target-version = "py313"
-unsafe-fixes = true
+unsafe-fixes = false
 
 [format]
 docstring-code-format = true
@@ -15,4 +15,4 @@ select = [ ]
 per-file-ignores = { }
 
   [lint.mccabe]
-  max-complexity = 20
+  max-complexity = 14

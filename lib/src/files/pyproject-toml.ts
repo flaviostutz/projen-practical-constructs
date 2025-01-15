@@ -28,10 +28,16 @@ export class PyProjectTomlFile extends FileBase {
     const dependencies = [];
     const devDependencies = [];
     for (const dep of this.project.deps.all) {
-      if (dep.type === DependencyType.RUNTIME) {
+      if (dep.type === DependencyType.RUNTIME || DependencyType.OPTIONAL) {
         dependencies.push(renderDependency(dep));
-      } else if (dep.type === DependencyType.DEVENV || dep.type === DependencyType.TEST) {
+      } else if (
+        dep.type === DependencyType.DEVENV ||
+        dep.type === DependencyType.TEST ||
+        dep.type === DependencyType.BUILD
+      ) {
         devDependencies.push(renderDependency(dep));
+      } else {
+        throw new Error(`Dependency type not supported. dep=${JSON.stringify(dep)}`);
       }
     }
 

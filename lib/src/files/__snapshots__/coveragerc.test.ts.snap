@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CoveragercFile synthesizes custom coveragerc 1`] = `
+"[run]
+branch = true
+omit = 
+  **/test/**
+
+[report]
+fail_under = 90
+format = markdown
+skip_empty = false
+skip_covered = true"
+`;
+
+exports[`CoveragercFile synthesizes default coveragerc 1`] = `
+"[run]
+branch = true
+omit = 
+  
+
+[report]
+fail_under = 80
+format = text
+skip_empty = true
+skip_covered = false"
+`;

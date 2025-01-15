@@ -6,10 +6,10 @@ build: prepare-projen
 	npx projen package
 
 .PHONY: test
-test: prepare-projen
+test:
 	npx projen test
 
-lint: prepare-projen
+lint:
 	npm exec eslint -- ./src --ext .ts
 	npm audit --audit-level high
 

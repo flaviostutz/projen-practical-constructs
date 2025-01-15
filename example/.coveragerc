@@ -4,7 +4,7 @@ omit =
   
 
 [report]
-fail_under = 50
+fail_under = 80
 format = text
 skip_empty = true
 skip_covered = false

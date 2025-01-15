@@ -1,11 +1,11 @@
 /* eslint-disable no-new */
 import { Component, DependencyType, Project } from 'projen';
 
-import { addTaskToParent, TaskOptions } from '../tasks';
+import { addTaskToParent, TaskOptionsWithFix } from '../tasks';
 import { RuffTomlFile, RuffTomlFileOptions } from '../files/ruff-toml';
 
 export class Ruff extends Component {
-  constructor(project: Project, opts: RuffOptions) {
+  constructor(project: Project, taskOpts: TaskOptionsWithFix, opts?: RuffOptions) {
     super(project);
 
     new RuffTomlFile(project, opts);
@@ -15,31 +15,31 @@ export class Ruff extends Component {
       description: `Code checks (RUFF)`,
       steps: [
         {
-          exec: `${opts.venvPath}/bin/ruff format --check src tests`,
+          exec: `${taskOpts.venvPath}/bin/ruff format --check src tests`,
         },
         {
-          exec: `${opts.venvPath}/bin/ruff check src tests`,
+          exec: `${taskOpts.venvPath}/bin/ruff check src tests`,
         },
       ],
     });
-    addTaskToParent(project, lintRuffTask, opts.attachTasksTo);
+    addTaskToParent(project, lintRuffTask, taskOpts.attachTasksTo);
 
     const lintFixRuffTask = project.tasks.addTask('lint-ruff-fix', {
       description: `Lint fix (RUFF)`,
       steps: [
         {
-          exec: `${opts.venvPath}/bin/ruff format src tests`,
+          exec: `${taskOpts.venvPath}/bin/ruff format src tests`,
         },
         {
-          exec: `${opts.venvPath}/bin/ruff check --fix src tests`,
+          exec: `${taskOpts.venvPath}/bin/ruff check --fix src tests`,
         },
       ],
     });
-    addTaskToParent(project, lintFixRuffTask, opts.attachFixTaskTo);
+    addTaskToParent(project, lintFixRuffTask, taskOpts.attachFixTasksTo);
   }
 }
 
-export interface RuffOptions extends RuffTomlFileOptions, TaskOptions {
+export interface RuffOptions extends RuffTomlFileOptions {
   /**
    * Attach lint fix tasks to parent
    */

@@ -5,12 +5,13 @@ import { Component, Project } from 'projen';
 import { MyPy } from './components/mypy';
 import { Ruff, RuffOptions } from './components/ruff';
 import { PipAudit } from './components/pip-audit';
+import { TaskOptions } from './tasks';
 
 /**
  * Python project lint configurations
  */
 export class LintTarget extends Component {
-  constructor(project: Project, opts: LintOptions) {
+  constructor(project: Project, taskOptions: TaskOptions, opts?: LintOptions) {
     super(project);
 
     project.tasks.addTask('lint', {
@@ -22,13 +23,13 @@ export class LintTarget extends Component {
     });
 
     // MYPY - type checks
-    new MyPy(project, { ...opts, attachTasksTo: 'lint' });
+    new MyPy(project, taskOptions);
 
     // RUFF - linting and formatting
-    new Ruff(project, { ...opts, attachTasksTo: 'lint', attachFixTaskTo: 'lint-fix' });
+    new Ruff(project, { ...taskOptions, attachFixTasksTo: 'lint-fix' }, opts);
 
     // PIP-AUDIT - dependency vulnerability checks
-    new PipAudit(project, { ...opts, attachTasksTo: 'lint' });
+    new PipAudit(project, taskOptions);
   }
 }
 

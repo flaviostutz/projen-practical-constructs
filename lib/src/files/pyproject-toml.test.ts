@@ -1,27 +1,29 @@
 /* eslint-disable no-new */
-import { tmpdir } from 'os';
-import { join } from 'path';
-import { mkdtempSync } from 'fs';
 
-import { Testing } from 'projen';
+import { DependencyType, Testing } from 'projen';
 
-import { PythonBasicProject } from '../project';
+import { TestProject } from '../utils';
 
 import { PyProjectTomlFile } from './pyproject-toml';
 
 describe('pyproject', () => {
   test('invalid package name should fail', () => {
-    const outdir = mkdtempSync(join(tmpdir(), 'test-'));
-    const project = new PythonBasicProject({ name: 'test2', outdir });
-    new PyProjectTomlFile(project, { packageName: '&^ABC' });
-    expect(() => Testing.synth(project)).toThrow(/Invalid package name/);
-    project.synth();
+    const project = new TestProject();
+    expect(() => new PyProjectTomlFile(project, { packageName: '&^ABC' })).toThrow(
+      /Invalid package name/,
+    );
   });
   test('invalid version should fail', () => {
-    const outdir = mkdtempSync(join(tmpdir(), 'test-'));
-    const project = new PythonBasicProject({ name: 'test3', outdir });
-    new PyProjectTomlFile(project, { version: 'AAAA' });
-    project.synth();
-    expect(() => Testing.synth(project)).toThrow(/Invalid version format/);
+    const project = new TestProject();
+    expect(() => new PyProjectTomlFile(project, { version: 'AAAA' })).toThrow(
+      /Invalid version format/,
+    );
+  });
+  test('valid package name and version', () => {
+    const project = new TestProject();
+    project.deps.addDependency('helloworld==0.1dev', DependencyType.DEVENV);
+    new PyProjectTomlFile(project, { packageName: 'abc', version: '1.0.0' });
+    const files = Testing.synth(project);
+    expect(files['pyproject.toml']).toMatchSnapshot();
   });
 });

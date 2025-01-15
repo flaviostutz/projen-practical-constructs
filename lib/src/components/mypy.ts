@@ -5,7 +5,7 @@ import { MyPyIniFile } from '../files';
 import { addTaskToParent, TaskOptions } from '../tasks';
 
 export class MyPy extends Component {
-  constructor(project: Project, opts: TaskOptions) {
+  constructor(project: Project, taskOpts: TaskOptions) {
     super(project);
 
     new MyPyIniFile(project);
@@ -13,8 +13,8 @@ export class MyPy extends Component {
     project.addGitIgnore('.mypy_cache');
     const lintMypyTask = project.tasks.addTask('lint-mypy', {
       description: `Code type checks (mypy)`,
-      exec: `${opts.venvPath}/bin/mypy src tests`,
+      exec: `${taskOpts.venvPath}/bin/mypy src tests`,
     });
-    addTaskToParent(project, lintMypyTask, opts.attachTasksTo);
+    addTaskToParent(project, lintMypyTask, taskOpts.attachTasksTo);
   }
 }
