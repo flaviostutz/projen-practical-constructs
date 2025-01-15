@@ -15,7 +15,7 @@ export class PythonBasicSample extends Component {
         'hello_world.py': [
           '"""Says hello to the given name."""',
           'def hello(name: str) -> str:',
-          '    """A simple greeting.',
+          '    """Return a greeting message.',
           '    Args:',
           '        name (str): Name to greet.',
           '    Returns:',

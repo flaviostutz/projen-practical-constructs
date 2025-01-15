@@ -4,6 +4,7 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
+!/LICENSE
 !/mypy.ini
 .mypy_cache
 !/ruff.toml

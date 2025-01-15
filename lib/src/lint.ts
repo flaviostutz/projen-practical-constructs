@@ -17,11 +17,15 @@ export class LintTarget extends Component {
       description: `Lint project (format, type check, audit, lint)`,
     });
 
+    project.tasks.addTask('lint-fix', {
+      description: `Fix auto fixable lint issues`,
+    });
+
     // MYPY - type checks
     new MyPy(project, { ...opts, attachTasksTo: 'lint' });
 
     // RUFF - linting and formatting
-    new Ruff(project, { ...opts, attachTasksTo: 'lint' });
+    new Ruff(project, { ...opts, attachTasksTo: 'lint', attachFixTaskTo: 'lint-fix' });
 
     // PIP-AUDIT - dependency vulnerability checks
     new PipAudit(project, { ...opts, attachTasksTo: 'lint' });

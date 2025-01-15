@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "example"
-version = "0.0.1"
-description = ""
+version = "1.0.0"
+description = "Example project"
 readme = ""
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
 keywords = [ ]
-dependencies = [ ]
+dependencies = [ "pandas", "helloworld" ]
 
 [project.optional-dependencies]
 dev = [

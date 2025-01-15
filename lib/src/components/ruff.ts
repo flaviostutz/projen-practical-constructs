@@ -23,6 +23,19 @@ export class Ruff extends Component {
       ],
     });
     addTaskToParent(project, lintRuffTask, opts.attachTasksTo);
+
+    const lintFixRuffTask = project.tasks.addTask('lint-ruff-fix', {
+      description: `Lint fix (RUFF)`,
+      steps: [
+        {
+          exec: `${opts.venvPath}/bin/ruff format src tests`,
+        },
+        {
+          exec: `${opts.venvPath}/bin/ruff check --fix src tests`,
+        },
+      ],
+    });
+    addTaskToParent(project, lintFixRuffTask, opts.attachFixTaskTo);
   }
 }
 
@@ -31,4 +44,8 @@ export interface RuffOptions extends TaskOptions {
    * Ruff configuration file options
    */
   readonly ruffToml?: RuffTomlFileOptions;
+  /**
+   * Attach lint fix tasks to parent
+   */
+  readonly attachFixTaskTo?: string;
 }

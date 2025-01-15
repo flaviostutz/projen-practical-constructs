@@ -35,19 +35,19 @@
     },
     "install": {
       "name": "install",
-      "description": "Install dependencies from constraints.txt",
+      "description": "Install dependencies from requirements.txt",
       "steps": [
         {
-          "exec": ".venv/bin/pip install --require-virtualenv -c constraints.txt"
+          "exec": ".venv/bin/pip install --require-virtualenv -c requirements.txt"
         }
       ]
     },
     "install-dev": {
       "name": "install-dev",
-      "description": "Install dependencies from constraints-dev.txt",
+      "description": "Install dependencies from requirements-dev.txt",
       "steps": [
         {
-          "exec": ".venv/bin/pip install --require-virtualenv -c constraints-dev.txt .[dev]"
+          "exec": ".venv/bin/pip install --require-virtualenv -c requirements-dev.txt .[dev]"
         }
       ]
     },
@@ -75,6 +75,15 @@
         }
       ]
     },
+    "lint-fix": {
+      "name": "lint-fix",
+      "description": "Fix auto fixable lint issues",
+      "steps": [
+        {
+          "spawn": "lint-ruff-fix"
+        }
+      ]
+    },
     "lint-mypy": {
       "name": "lint-mypy",
       "description": "Code type checks (mypy)",
@@ -93,6 +102,18 @@
         },
         {
           "exec": ".venv/bin/ruff check src tests"
+        }
+      ]
+    },
+    "lint-ruff-fix": {
+      "name": "lint-ruff-fix",
+      "description": "Lint fix (RUFF)",
+      "steps": [
+        {
+          "exec": ".venv/bin/ruff format src tests"
+        },
+        {
+          "exec": ".venv/bin/ruff check --fix src tests"
         }
       ]
     },
@@ -128,7 +149,7 @@
     },
     "update-lockfile": {
       "name": "update-lockfile",
-      "description": "Update lock file (constraints.txt) according to pyproject.toml",
+      "description": "Update lock file (requirements.txt) according to pyproject.toml",
       "steps": [
         {
           "say": "Prepare venv",
@@ -136,11 +157,11 @@
         },
         {
           "say": "Updating lock file (runtime)",
-          "exec": ".venv/bin/pip-compile --all-build-deps --output-file=constraints.txt pyproject.toml"
+          "exec": ".venv/bin/pip-compile --all-build-deps --output-file=requirements.txt pyproject.toml"
         },
         {
           "say": "Updating lock file (dev)",
-          "exec": ".venv/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=constraints-dev.txt pyproject.toml"
+          "exec": ".venv/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=requirements-dev.txt pyproject.toml"
         }
       ]
     }

@@ -25,8 +25,8 @@ export class PyProjectTomlFile extends FileBase {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected synthesizeContent(_resolver: IResolver): string | undefined {
     // merge project and options dependencies
-    const dependencies: string[] = [];
-    const devDependencies: string[] = [];
+    const dependencies: string[] = this.opts.dependencies ?? [];
+    const devDependencies: string[] = this.opts.devDependencies ?? [];
     for (const dep of this.project.deps.all) {
       if (dep.type === DependencyType.RUNTIME) {
         dependencies.push(renderDependency(dep));
@@ -142,11 +142,11 @@ export interface PyProjectTomlOptions {
    */
   // readonly maintainers?: { name: string; email: string }[];
   /**
-   * List of dependencies for this project.
+   * List of dependencies for this project in format `['package==1.0.0', 'package2^2.0.0']` etc.
    */
   readonly dependencies?: string[];
   /**
-   * List of dev dependencies for this project.
+   * List of dev dependencies for this project in format `['package==1.0.0', 'package2^2.0.0']` etc.
    */
   readonly devDependencies?: string[];
   /**

@@ -12,7 +12,14 @@ new:
 	@echo "Create a new project..."
 	npx projen new --no-git --from ../lib/dist/js/projen-python@0.0.0.jsii.tgz
 
+update:
+	@echo "Build the projen type lib..."
+	cd ../lib && make build
+	make prepare-venv	
+	make build
+
 build: prepare-projen
+	npx projen
 	npx projen build
 
 .PHONY: test

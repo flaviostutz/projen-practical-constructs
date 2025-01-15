@@ -52,7 +52,10 @@ export class PythonBasicProject extends Project {
 
     // create LICENSE
     if (options.license) {
-      new License(this, { spdx: options.license });
+      new License(this, {
+        spdx: options.license,
+        copyrightOwner: options.package?.authorName ?? 'Unknown',
+      });
     }
 
     // create sample
@@ -145,6 +148,10 @@ const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonB
     lockFile: 'constraints.txt',
     lockFileDev: 'constraints-dev.txt',
     pythonExec: 'python',
+    test: {
+      minCoverage: 50,
+      ...options.test,
+    },
     ...options,
     package: packageWithDefaults,
     sample: options.sample ?? true,

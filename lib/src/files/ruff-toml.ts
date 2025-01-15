@@ -31,9 +31,7 @@ export class RuffTomlFile extends TomlFile {
 }
 
 const getOptionsWithDefaults = (opts?: RuffTomlFileOptions): Required<RuffTomlFileOptions> => {
-  const defaultOptions = {
-    unsafeFixes: false,
-    targetPythonVersion: 'py313',
+  const defaultRules = {
     ignoreRules: [
       'TD003',
       'TRY002',
@@ -113,29 +111,36 @@ const getOptionsWithDefaults = (opts?: RuffTomlFileOptions): Required<RuffTomlFi
       'FURB',
       'RUF',
     ],
-    addToExistingRules: true,
     perFileIgnores: {
-      'tests/*': ['D', 'S101'],
+      'tests/*': ['D', 'S101', 'INP001'],
     },
+  };
+
+  const defaultOptions = {
+    unsafeFixes: false,
+    targetPythonVersion: 'py313',
+    addToExistingRules: true,
     mccabeMaxComplexity: 14,
+    ignoreRules: [],
+    selectRules: [],
+    perFileIgnores: {},
     ...opts,
   };
 
-  // add provided rules to default rules
-  if (defaultOptions.addToExistingRules) {
-    defaultOptions.ignoreRules = [...defaultOptions.ignoreRules, ...(opts?.ignoreRules ?? [])];
-    defaultOptions.selectRules = [...defaultOptions.selectRules, ...(opts?.selectRules ?? [])];
+  if (opts?.addToExistingRules) {
+    defaultOptions.ignoreRules = [
+      ...defaultRules.ignoreRules,
+      ...(defaultOptions.ignoreRules ?? []),
+    ];
+    defaultOptions.selectRules = [
+      ...defaultRules.selectRules,
+      ...(defaultOptions.selectRules ?? []),
+    ];
     defaultOptions.perFileIgnores = {
-      ...defaultOptions.perFileIgnores,
-      ...(opts?.perFileIgnores ?? {}),
+      ...defaultRules.perFileIgnores,
+      ...(defaultOptions.perFileIgnores ?? {}),
     };
-    // replace rules with the provided ones
-  } else {
-    defaultOptions.ignoreRules = opts?.ignoreRules ?? defaultOptions.ignoreRules;
-    defaultOptions.selectRules = opts?.selectRules ?? defaultOptions.selectRules;
-    defaultOptions.perFileIgnores = opts?.perFileIgnores ?? defaultOptions.perFileIgnores;
   }
-
   return defaultOptions;
 };
 

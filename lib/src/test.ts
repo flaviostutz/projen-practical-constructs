@@ -2,7 +2,6 @@
 /* eslint-disable no-new */
 import { Component, Project } from 'projen';
 
-import { TaskOptions } from './tasks';
 import { PyTest, PyTestOptions } from './components/pytest';
 
 /**
@@ -20,4 +19,4 @@ export class TestTarget extends Component {
   }
 }
 
-export interface TestOptions extends TaskOptions, PyTestOptions {}
+export interface TestOptions extends PyTestOptions {}
