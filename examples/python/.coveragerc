@@ -1,0 +1,10 @@
+[run]
+branch = true
+omit = 
+  
+
+[report]
+fail_under = 80
+format = text
+skip_empty = true
+skip_covered = false
