@@ -2,12 +2,13 @@
 import { Component, DependencyType, Project } from 'projen';
 
 import { addTaskToParent, TaskOptions } from '../tasks';
-import { PyTestIniFile } from '../files/pytest-ini';
+import { PyTestIniFile, PyTestIniOptions } from '../files/pytest-ini';
 import { CoveragercFile, CoveragercFileOptions } from '../files/coveragerc';
 
 export class PyTest extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: PyTestOptions) {
     super(project);
+
     new PyTestIniFile(project);
     new CoveragercFile(project, opts);
     project.deps.addDependency('pytest@8.3.*', DependencyType.DEVENV);
@@ -16,10 +17,10 @@ export class PyTest extends Component {
     project.addGitIgnore('.pytest_cache');
     const lintUnitTask = project.tasks.addTask('test-unit', {
       description: `Unit tests (pytest)`,
-      exec: `${taskOpts.venvPath}/bin/pytest --cov=src`,
+      exec: `${taskOpts.venvPath}/bin/pytest`,
     });
     addTaskToParent(project, lintUnitTask, taskOpts.attachTasksTo);
   }
 }
 
-export interface PyTestOptions extends CoveragercFileOptions {}
+export interface PyTestOptions extends CoveragercFileOptions, PyTestIniOptions {}

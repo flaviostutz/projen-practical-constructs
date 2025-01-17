@@ -14,11 +14,3 @@ test('TestTarget is synthesized correctly', () => {
   const output = Testing.synth(project);
   expect(output).toMatchSnapshot();
 });
-
-test('TestTarget synthesizes correctly', () => {
-  const project = Testing.project();
-  const taskOpts: TaskOptions = { venvPath: '.venv' };
-  new TestTarget(project, taskOpts);
-  const output = Testing.synth(project);
-  expect(output).toBeDefined();
-});

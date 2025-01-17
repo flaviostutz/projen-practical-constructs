@@ -12,11 +12,3 @@ test('LintTarget is synthesized correctly', () => {
   const output = Testing.synth(project);
   expect(output).toMatchSnapshot();
 });
-
-test('LintTarget synthesizes correctly', () => {
-  const project = Testing.project();
-  const taskOpts: TaskOptions = { venvPath: '.venv' };
-  new LintTarget(project, taskOpts);
-  const output = Testing.synth(project);
-  expect(output).toBeDefined();
-});

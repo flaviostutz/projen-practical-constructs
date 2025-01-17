@@ -33,7 +33,7 @@ export class Pip extends Component {
 
     const installDevTask = project.tasks.addTask('install-dev', {
       description: `Install dependencies from ${optsd.lockFileDev}`,
-      exec: `${taskOpts.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} .[dev]`,
+      exec: `${taskOpts.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} --editable .[dev]`,
     });
 
     const prepareVenvTask = project.tasks.addTask('prepare-venv', {
