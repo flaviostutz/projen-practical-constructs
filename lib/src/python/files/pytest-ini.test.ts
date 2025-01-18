@@ -2,7 +2,7 @@
 
 import { Testing } from 'projen';
 
-import { TestProject } from '../utils';
+import { TestProject } from '../../common/test-project';
 
 import { PyTestIniFile } from './pytest-ini';
 

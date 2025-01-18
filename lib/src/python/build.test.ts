@@ -3,7 +3,7 @@ import { Testing } from 'projen';
 
 import { BuildTarget } from './build';
 import { TaskOptions } from './tasks';
-import { TestProject } from './utils';
+import { TestProject } from '../common/test-project';
 
 describe('BuildTarget', () => {
   test('BuildTarget is synthesized correctly', () => {

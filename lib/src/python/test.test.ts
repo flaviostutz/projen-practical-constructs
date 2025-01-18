@@ -3,7 +3,7 @@ import { Testing } from 'projen';
 
 import { TestTarget } from './test';
 import { TaskOptions } from './tasks';
-import { TestProject } from './utils';
+import { TestProject } from '../common/test-project';
 
 test('TestTarget is synthesized correctly', () => {
   const project = new TestProject();

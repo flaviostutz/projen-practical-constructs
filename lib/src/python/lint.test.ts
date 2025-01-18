@@ -3,7 +3,7 @@ import { Testing } from 'projen';
 
 import { LintTarget } from './lint';
 import { TaskOptions } from './tasks';
-import { TestProject } from './utils';
+import { TestProject } from '../common/test-project';
 
 test('LintTarget is synthesized correctly', () => {
   const project = new TestProject();

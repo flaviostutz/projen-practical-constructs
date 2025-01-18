@@ -1,7 +1,7 @@
 /* eslint-disable no-new */
 import { Testing } from 'projen';
 
-import { TestProject } from '../utils';
+import { TestProject } from '../../common/test-project';
 
 import { ReadmeFile } from './readme';
 

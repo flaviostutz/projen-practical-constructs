@@ -2,7 +2,7 @@
 
 import { DependencyType, Testing } from 'projen';
 
-import { TestProject } from '../utils';
+import { TestProject } from '../../common/test-project';
 
 import { PyProjectTomlFile } from './pyproject-toml';
 

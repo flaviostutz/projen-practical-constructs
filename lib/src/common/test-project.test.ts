@@ -1,6 +1,6 @@
 import { Testing } from 'projen';
 
-import { TestProject } from './utils';
+import { TestProject } from './test-project';
 
 test('TestProject synthesizes correctly', () => {
   const project = new TestProject();

@@ -4,6 +4,8 @@
 import { DependencyType, Project, ProjectOptions } from 'projen';
 import { Projenrc } from 'projen/lib/python';
 
+import { MakefileProjen } from '../common/components/makefile-projen';
+
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
 import { Build0Options, BuildTarget } from './build';
@@ -15,6 +17,10 @@ import { TaskOptionsTarget } from './tasks';
 // https://peps.python.org/pep-0508/
 const DEP_NAME_VERSION_REGEX = /^([A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])(.*)$/;
 
+/**
+ * Python project with basic configurations for linting, testing, building etc
+ * @pjid python-basic
+ */
 export class PythonBasicProject extends Project {
   constructor(options: PythonBasicOptions) {
     const optionsWithDefaults = getPythonBasicOptionsWithDefaults(options);
@@ -57,6 +63,32 @@ export class PythonBasicProject extends Project {
     if (optionsWithDefaults.sample) {
       new PythonBasicSample(this);
     }
+
+    // create Makefile
+    new MakefileProjen(this, {
+      nodeVersion: '20.16.0',
+      projenLibVersion: '0.91.6',
+      tsNodeLibVersion: '10.9.2',
+      additionalContents: `prepare-venv:
+@echo "Installing Python with pyenv (version from .python-version file)..."
+pyenv install -s
+
+@echo "Preparing Python virtual environment at $(VENV_PATH)..."
+pyenv exec python -m venv $(VENV_PATH)
+
+@echo "Installing Projen $(PROJEN_VERSION)..."
+$(VENV_PATH)/bin/pip install projen==$(PROJEN_VERSION)
+
+`,
+      additionalContentsTargets: {
+        prepare: `
+brew install python
+brew install pyenv
+make prepare-venv
+make prepare-projen
+`,
+      },
+    });
 
     // LINT
     new LintTarget(
