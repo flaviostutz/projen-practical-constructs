@@ -76,7 +76,7 @@ prepare:
 	make prepare-projen
 
 prepare-projen:
-	@if [ "$$CI" == "true" ]; then \
+	@if [ "$$CI" != "" ]; then \
 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; \
 	else \
 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \

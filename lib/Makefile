@@ -26,7 +26,8 @@ prepare:
 	@echo "Configure your shell following instructions at in https://formulae.brew.sh/formula/nvm"
 
 prepare-projen:
-	@if [ "$$CI" == "true" ]; then \
+	echo "CI='$$CI'"
+	@if [ "$$CI" != "" ]; then \
 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; \
 	else \
 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \
