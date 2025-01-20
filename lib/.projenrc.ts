@@ -18,7 +18,6 @@ const project = new cdk.JsiiProject({
   devDeps: [
     "@stutzlab/eslint-config@^3.1.1",
     "@typescript-eslint/eslint-plugin@^7.15.0",
-    '@swc/core-linux-x64-gnu^1.10.8',
   ],
   peerDeps: [
     'projen@^0.91.6',
