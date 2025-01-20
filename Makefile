@@ -9,24 +9,31 @@ build: build-lib build-examples
 test: test-unit test-integration
 
 build-lib:
+	@echo "\n>>> Build lib..."
 	cd lib && make build
 
 build-examples:
+	@echo "\n>>> Build examples..."
 	cd "examples/python" && make build
 
 test-unit: test-lib test-examples
 
 test-lib:
+	@echo "\n>>> Test lib..."
 	cd lib && make test
 
 test-examples:
+	@echo "\n>>> Test examples..."
 	cd "examples/python" && make test
 
 test-integration:
+	@echo "\n>>> Integration tests..."
 	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
 lint:
+	@echo "\n>>> Lint lib..."
 	cd lib && make lint
+	@echo "\n>>> Lint examples..."
 	cd "examples/python" && make lint
 
 # Creates a brand new project using this project type
