@@ -27,7 +27,7 @@ test-integration:
 
 lint:
 	cd lib && make lint
-	cd "examples/python" make lint
+	cd "examples/python" && make lint
 
 # Creates a brand new project using this project type
 # and runs build, lint, test on it to check if 
