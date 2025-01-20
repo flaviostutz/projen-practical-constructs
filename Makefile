@@ -12,7 +12,7 @@ build-lib:
 	cd lib && make build
 
 build-examples:
-	cd examples/python && make build
+	cd "examples/python" && make build
 
 test-unit: test-lib test-examples
 
@@ -20,14 +20,14 @@ test-lib:
 	cd lib && make test
 
 test-examples:
-	cd examples/python && make test
+	cd "examples/python" && make test
 
 test-integration:
 	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
 lint:
 	cd lib && make lint
-	cd examples/python make lint
+	cd "examples/python" make lint
 
 # Creates a brand new project using this project type
 # and runs build, lint, test on it to check if 
