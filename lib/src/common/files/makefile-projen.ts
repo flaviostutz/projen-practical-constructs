@@ -45,7 +45,11 @@ prepare:
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.prepare ?? '')}
 
 prepare-projen:
-	npm install --no-save ts-node@${this.optsWithDefaults.tsNodeLibVersion} projen@${this.optsWithDefaults.projenLibVersion}
+	@if [ "$$CI" == "true" ]; then \
+		set -x; npm install --no-save --no-package-lock ts-node@${this.optsWithDefaults.tsNodeLibVersion} projen@${this.optsWithDefaults.projenLibVersion}; \
+	else \
+		set -x; npm install --no-save ts-node@${this.optsWithDefaults.tsNodeLibVersion} projen@${this.optsWithDefaults.projenLibVersion}; \
+	fi
 
 ${this.optsWithDefaults.additionalMakefileContentsProjen ?? ''}
 `;

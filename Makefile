@@ -43,16 +43,14 @@ run-test-integration:
 	fi
 
 	@echo "\n>>> Delete all files in $$EXAMPLE_PATH..."
-	rm -rf $$EXAMPLE_PATH
-	mkdir $$EXAMPLE_PATH
-	@# cd $$EXAMPLE_PATH && find . -type f ! -name 'Makefile' -delete
-	@# cd $$EXAMPLE_PATH && find . -type d -delete
+	rm -rf "$$EXAMPLE_PATH"
+	mkdir "$$EXAMPLE_PATH"
 
 	@echo "\n>>> Create a brand new example project with type '$$PROJ_TYPE'"
-	cd $$EXAMPLE_PATH && npx projen new --no-git --from ../../lib/dist/js/projen-python@0.0.0.jsii.tgz $$PROJ_TYPE
+	cd "$$EXAMPLE_PATH" && npx projen new --no-git --from ../../lib/dist/js/projen-python@0.0.0.jsii.tgz $$PROJ_TYPE
 
 	@echo "\n>>> Run build, lint-fix, lint and test on the generated example project"
-	cd $$EXAMPLE_PATH && make build lint-fix lint test
+	cd "$$EXAMPLE_PATH" && make build lint-fix lint test
 
 
 example-update:
@@ -63,7 +61,7 @@ example-update:
 	@echo "Build projen type lib..."
 	cd lib && make build
 	@echo "Update the example project..."
-	cd $$EXAMPLE_PATH && make prepare-venv build
+	cd "$$EXAMPLE_PATH" && make prepare-venv build
 
 dev-new:
 	make build-lib
@@ -78,7 +76,11 @@ prepare:
 	make prepare-projen
 
 prepare-projen:
-	npm install --no-save ts-node@10.9.2 projen@0.91.6
+	@if [ "$$CI" == "true" ]; then \
+		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; \
+	else \
+		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \
+	fi
 
 prepare-venv:
 	@echo "Installing Python with pyenv (version from .python-version file)..."
