@@ -46,8 +46,8 @@ const project = new cdk.JsiiProject({
     jestConfig: {
       collectCoverage: true,
       coverageReporters: ['text', 'lcov', 'cobertura'],
-      collectCoverageFrom: ["src/**/*.ts", ".*\.test.ts"],
-      testPathIgnorePatterns: ["src/.*/test.ts"], 
+      collectCoverageFrom: ["src/**/*.ts", "src/.*\.test.ts"],
+      testPathIgnorePatterns: ["src/.*/test.ts", "test/.*"], 
       coverageThreshold: {
         branches: 60,
         functions: 80,
