@@ -83,7 +83,7 @@
       ".*.test.ts"
     ],
     "testPathIgnorePatterns": [
-      "src/test.ts"
+      "src/.*/test.ts"
     ],
     "coverageThreshold": {
       "global": {
@@ -102,7 +102,7 @@
     "clearMocks": true,
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
-      "src/test.ts"
+      "src/.*/test.ts"
     ],
     "watchPathIgnorePatterns": [
       "/node_modules/"

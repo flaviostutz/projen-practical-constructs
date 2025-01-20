@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import { Testing } from 'projen';
 
+import { TestProject } from '../common/test-project';
+
 import { BuildTarget } from './build';
 import { TaskOptions } from './tasks';
-import { TestProject } from '../common/test-project';
 
 describe('BuildTarget', () => {
   test('BuildTarget is synthesized correctly', () => {

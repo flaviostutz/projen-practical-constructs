@@ -4,6 +4,8 @@ node_modules/
 !/.projen/tasks.json
 !/.projen/deps.json
 !/.projen/files.json
+!/Makefile-projen
+!/.nvmrc
 !/mypy.ini
 .mypy_cache
 !/ruff.toml

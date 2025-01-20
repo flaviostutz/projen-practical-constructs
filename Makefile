@@ -1,33 +1,41 @@
+SHELL := /bin/bash
+VENV_PATH := .venv
+PROJEN_VERSION := 0.91.6
+
 all: build lint test
 
-build:
-	cd lib && make build
-	cd example/python && make build
+build: build-lib build-examples
 
-test:
+test: test-lib test-examples test-integration
+
+build-lib:
+	cd lib && make build
+
+build-examples:
+	cd examples/python && make build
+
+test-lib:
 	cd lib && make test
-	make test-examples
-	make test-integration-examples
+
+test-examples:
+	cd examples/python && make test
+
+test-integration:
+	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
 lint:
 	cd lib && make lint
 	cd examples/python make lint
 
-test-examples:
-	cd examples/python && make test
-
-test-integration-examples:
-	EXAMPLE_PATH=examples/python PROJ_TYPE=python && make run-test-integration
-
 # Creates a brand new project using this project type
 # and runs build, lint, test on it to check if 
 # everything is working as expected
 run-test-integration:
-	if [ "$$EXAMPLE_PATH" = "" ]; then \
+	@if [ "$$EXAMPLE_PATH" = "" ]; then \
 		echo "EXAMPLE_PATH env is required"; \
 		exit 1; \
 	fi
-	if [ "$$PROJ_TYPE" = "" ]; then \
+	@if [ "$$PROJ_TYPE" = "" ]; then \
 		echo "PROJ_TYPE env is required"; \
 		exit 1; \
 	fi
@@ -35,14 +43,14 @@ run-test-integration:
 	@echo "\n>>> Delete all files in $$EXAMPLE_PATH..."
 	rm -rf $$EXAMPLE_PATH
 	mkdir $$EXAMPLE_PATH
-	# cd $$EXAMPLE_PATH && find . -type f ! -name 'Makefile' -delete
-	# cd $$EXAMPLE_PATH && find . -type d -delete
+	@# cd $$EXAMPLE_PATH && find . -type f ! -name 'Makefile' -delete
+	@# cd $$EXAMPLE_PATH && find . -type d -delete
 
-	@echo "\n>>> Create a brand new example project with type $$PROJ_TYPE"
-	cd $$ EXAMPLE_PATH && npx projen new --no-git --from ../../lib/dist/js/projen-python@0.0.0.jsii.tgz $$PROJ_TYPE
+	@echo "\n>>> Create a brand new example project with type '$$PROJ_TYPE'"
+	cd $$EXAMPLE_PATH && npx projen new --no-git --from ../../lib/dist/js/projen-python@0.0.0.jsii.tgz $$PROJ_TYPE
 
 	@echo "\n>>> Run build, lint-fix, lint and test on the generated example project"
-	cd $$ EXAMPLE_PATH && make build lint-fix lint test
+	cd $$EXAMPLE_PATH && make build lint-fix lint test
 
 
 example-update:
@@ -55,6 +63,9 @@ example-update:
 	@echo "Update the example project..."
 	cd $$EXAMPLE_PATH && make prepare-venv build
 
+dev-new:
+	make build-lib
+	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
 prepare:
 	# Node is required for projen runtime

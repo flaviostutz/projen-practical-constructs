@@ -1,0 +1,53 @@
+name: tag-publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Check package
+    uses: flaviostutz/gh-makefile/.github/workflows/make-ci.yml@main
+    with:
+      working-directory: ./
+      tooling: node
+      tooling-version: 20
+      stage: prd
+      target-build: true
+      target-lint: true
+      target-unit-tests: true
+      target-integration-tests: true
+
+  publish-npm:
+    name: Publish to npmjs.org
+    runs-on: ubuntu-latest
+    needs: build
+    environment: npmjs-registry
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - run: make build
+      - run: make deploy-npm
+        env:
+          NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+
+  publish-pypi:
+    name: Publish to pypi
+    runs-on: ubuntu-latest
+    needs: build
+    environment: pypi-registry
+    steps:
+      - uses: actions/checkout@v3
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20.x'
+      #     registry-url: 'https://registry.npmjs.org'
+      - run: make build
+      - run: make deploy-pypi
+        env:
+          PYPI_ACCESS_TOKEN: ${{ secrets.PYPI_ACCESS_TOKEN }}
+          

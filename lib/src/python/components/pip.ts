@@ -2,8 +2,8 @@
 import { Component, DependencyType, Project, TaskRuntime } from 'projen';
 
 import { TaskOptions } from '../tasks';
-
-const PIP_TOOLS_VERSION = '==7.4.1';
+import { PIP_TOOLS_VERSION } from '../constants';
+import { PROJEN_VERSION } from '../../common/constants';
 
 export class Pip extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: PipOptions) {
@@ -25,15 +25,17 @@ export class Pip extends Component {
     project.addGitIgnore('__pycache__');
     project.addGitIgnore('.cache');
 
+    project.tasks.addEnvironment('VENV_PATH', taskOpts.venvPath);
+
     // add build related tasks
     project.tasks.addTask('install', {
       description: `Install dependencies from ${optsd.lockFile}`,
-      exec: `${taskOpts.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFile}`,
+      exec: `$VENV_PATH/bin/pip install --require-virtualenv -c ${optsd.lockFile}`,
     });
 
     const installDevTask = project.tasks.addTask('install-dev', {
       description: `Install dependencies from ${optsd.lockFileDev}`,
-      exec: `${taskOpts.venvPath}/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} --editable .[dev]`,
+      exec: `$VENV_PATH/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} --editable .[dev]`,
     });
 
     const prepareVenvTask = project.tasks.addTask('prepare-venv', {
@@ -41,7 +43,7 @@ export class Pip extends Component {
       steps: [
         { exec: `${optsd.pythonExec} -m venv ${taskOpts.venvPath}` },
         {
-          exec: `${taskOpts.venvPath}/bin/pip install pip-tools${PIP_TOOLS_VERSION}`,
+          exec: `$VENV_PATH/bin/pip install pip-tools==${PIP_TOOLS_VERSION} projen==${PROJEN_VERSION}`,
         },
       ],
     });
@@ -55,11 +57,11 @@ export class Pip extends Component {
         },
         {
           say: 'Updating lock file (runtime)',
-          exec: `${taskOpts.venvPath}/bin/pip-compile --all-build-deps --output-file=${optsd.lockFile} pyproject.toml`,
+          exec: `$VENV_PATH/bin/pip-compile --all-build-deps --output-file=${optsd.lockFile} pyproject.toml`,
         },
         {
           say: 'Updating lock file (dev)',
-          exec: `${taskOpts.venvPath}/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=${optsd.lockFileDev} pyproject.toml`,
+          exec: `$VENV_PATH/bin/pip-compile --all-build-deps --extra dev --strip-extras --output-file=${optsd.lockFileDev} pyproject.toml`,
         },
       ],
     });

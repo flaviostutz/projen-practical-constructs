@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import { Testing } from 'projen';
 
+import { TestProject } from '../common/test-project';
+
 import { LintTarget } from './lint';
 import { TaskOptions } from './tasks';
-import { TestProject } from '../common/test-project';
 
 test('LintTarget is synthesized correctly', () => {
   const project = new TestProject();

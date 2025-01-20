@@ -1,0 +1,36 @@
+SHELL := /bin/bash
+
+all: build lint test
+
+build:
+	npx projen build
+
+lint:
+	npx projen lint
+
+lint-fix:
+	npx projen lint-fix
+
+test:
+	npx projen test
+
+clean:
+	npx projen clean
+
+prepare:
+	brew install nvm
+	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+	
+	brew install python
+	brew install pyenv
+	make prepare-venv
+	make prepare-projen
+	
+
+prepare-projen:
+	npm install --no-save ts-node@10.9.2 projen@0.91.6
+
+prepare-venv:
+	npx projen prepare-venv
+
+

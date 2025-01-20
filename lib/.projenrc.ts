@@ -47,7 +47,7 @@ const project = new cdk.JsiiProject({
       collectCoverage: true,
       coverageReporters: ['text', 'lcov', 'cobertura'],
       collectCoverageFrom: ["src/**/*.ts", ".*\.test.ts"],
-      testPathIgnorePatterns: ["src/test.ts"], 
+      testPathIgnorePatterns: ["src/.*/test.ts"], 
       coverageThreshold: {
         branches: 60,
         functions: 80,

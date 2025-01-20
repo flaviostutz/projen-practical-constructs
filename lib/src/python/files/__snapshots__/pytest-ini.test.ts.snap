@@ -3,6 +3,7 @@
 exports[`PyTestIniFile synthesizes pytest.ini correctly 1`] = `
 "[pytest]
 cache_dir = .cache/.pytest_cache
+addopts = --cov=src --verbose
 testpaths =
     tests
     integration

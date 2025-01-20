@@ -12,7 +12,7 @@
     },
     {
       "name": "pip-tools",
-      "version": "==7.4.1",
+      "version": "7.4.1",
       "type": "devenv"
     },
     {

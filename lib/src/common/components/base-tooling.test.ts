@@ -3,11 +3,11 @@ import { Testing } from 'projen';
 
 import { TestProject } from '../test-project';
 
-import { MakefileProjen } from './makefile-projen';
+import { BaseTooling } from './base-tooling';
 
-test('default Makefile for projen projects', () => {
+test('base tooling for projen projects', () => {
   const project = new TestProject();
-  new MakefileProjen(project);
+  new BaseTooling(project);
   const output = Testing.synth(project);
   expect(output).toMatchSnapshot();
 });

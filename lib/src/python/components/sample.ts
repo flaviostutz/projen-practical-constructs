@@ -9,10 +9,14 @@ export class PythonBasicSample extends Component {
     super(project);
 
     // src directory
+
+    // this sample will produce some formatting errors that are
+    // used to exercise the use of lint-fix in the pipeline
     new SampleDir(project, 'src/hello_world', {
       files: {
-        'hello_world.py': `"""Says hello to the given name."""
-          def hello(name: str) -> str:
+        '__init__.py': '',
+        'hello.py': `"""Says hello to the given name."""
+def say(name: str) -> str:
               """Return a greeting message.
               Args:
                   name (str): Name to greet.
@@ -28,16 +32,16 @@ export class PythonBasicSample extends Component {
     // tests directory
     new SampleDir(project, 'tests/hello_world', {
       files: {
-        'test_hello_world.py': `from hello_world import hello_world
+        'test_hello_world.py': `from hello_world import hello
 
 def test_hello_with_name():
-    assert hello_world.hello("Alice") == "Hello Alice!"
+    assert hello.say("Alice") == "Hello Alice!"
 
 def test_hello_with_empty_string():
-    assert hello_world.hello("") == "Hello !"
+    assert hello.say("") == "Hello !"
 
 def test_hello_with_special_characters():
-    assert hello_world.hello("!@#$") == "Hello !@#$!"
+    assert hello.say("!@#$") == "Hello !@#$!"
           `,
       },
     });
