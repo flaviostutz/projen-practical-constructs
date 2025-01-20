@@ -16,8 +16,8 @@ jobs:
       stage: prd
       target-build: true
       target-lint: true
-      target-unit-tests: true
-      target-integration-tests: true
+      target-test-unit: true
+      target-test-integration: true
 
   publish-npm:
     name: Publish to npmjs.org

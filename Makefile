@@ -6,13 +6,15 @@ all: build lint test
 
 build: build-lib build-examples
 
-test: test-lib test-examples test-integration
+test: test-unit test-integration
 
 build-lib:
 	cd lib && make build
 
 build-examples:
 	cd examples/python && make build
+
+test-unit: test-lib test-examples
 
 test-lib:
 	cd lib && make test
