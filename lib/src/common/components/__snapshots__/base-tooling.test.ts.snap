@@ -126,7 +126,7 @@ prepare:
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
 
 prepare-projen:
-	npm install --no-save ts-node@10.9.2 projen@0.91.6
+	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
 
 ",
