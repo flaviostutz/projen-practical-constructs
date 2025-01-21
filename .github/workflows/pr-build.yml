@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR
-        uses: Namchee/conventional-pr@v(version)
+        uses: Namchee/conventional-pr@v0.15.6
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
