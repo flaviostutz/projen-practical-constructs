@@ -3,7 +3,7 @@ build: prepare-projen
 	npx projen
 	npx projen install
 	npx projen compile
-	npx projen package
+	npx projen package-all
 
 .PHONY: test
 test:
@@ -36,7 +36,8 @@ publish-pypi:
 		echo "PYPI_TOKEN_PASSWORD env is required"; \
 		exit 1; \
 	fi
-	npx projen release
+	# when CI is defined, only packages for js are created by release
+	CI='' npx projen release
 	TWINE_USERNAME="$$PYPI_TOKEN_NAME" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
 		npx -p publib@latest publib-pypi
 
