@@ -1,6 +1,4 @@
 SHELL := /bin/bash
-VENV_PATH := .venv
-PROJEN_VERSION := 0.91.6
 
 all: build lint test
 
@@ -18,6 +16,7 @@ build-examples:
 		make dev-new; \
 	fi
 	cd "examples/python" && make build
+	make install-examples-local
 
 test-unit: test-lib test-examples
 
@@ -68,7 +67,7 @@ publish-npmjs:
 publish-pypi:
 	cd lib && make publish-pypi
 
-example-update:
+example-update: install-examples-local
 	if [ "$$EXAMPLE_PATH" = "" ]; then \
 		echo "EXAMPLE_PATH env is required"; \
 		exit 1; \
@@ -87,29 +86,11 @@ prepare:
 	brew install nvm
 	brew install python
 	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-
-prepare-projen:
-	@if [ "$$CI" != "" ]; then \
-		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; \
-	else \
-		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \
-	fi
 
 clean:
 	cd lib && make clean
 	cd examples/python && make clean
 
-prepare-venv:
-	@echo "Installing Python with pyenv (version from .python-version file)..."
-	pyenv install -s
-
-	@echo "Preparing Python virtual environment at $(VENV_PATH)..."
-	pyenv exec python -m venv $(VENV_PATH)
-
-	@echo "Installing Projen $(PROJEN_VERSION)..."
-	$(VENV_PATH)/bin/pip install projen==$(PROJEN_VERSION)
-
-	@echo "Installing local version of projen-practical-constructs..."
-	$(VENV_PATH)/bin/pip install $$(ls ../../lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
+install-examples-local:
+	@echo "Installing local version of projen-practical-constructs in examples..."
+	examples/python/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
