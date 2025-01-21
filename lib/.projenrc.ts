@@ -1,9 +1,10 @@
-import { cdk, JsonPatch } from 'projen';
+import { cdk } from 'projen';
 import { NodePackageManager, UpdateSnapshot } from 'projen/lib/javascript';
+import { ReleaseTrigger } from 'projen/lib/release';
 
 const project = new cdk.JsiiProject({
-  name: 'projen-python',
-  packageName: 'projen-python',
+  name: 'projen-practical-constructs',
+  packageName: 'projen-practical-constructs',
   author: 'Flavio Stutz',
   authorAddress: 'flaviostutz@gmail.com',
   description: 'Constructs and utilities for managing projects (Python, NodeJS etc) with Projen enforcing solid build, test and linting structures',
@@ -24,9 +25,10 @@ const project = new cdk.JsiiProject({
     'constructs@^10.4.2',
   ],
   publishToPypi: {
-    distName: "projen_python",
-    module: "projen_python",
+    distName: "projen_practical_constructs",
+    module: "projen_practical_constructs",
   },
+  releaseTrigger: ReleaseTrigger.manual(),
   defaultReleaseBranch: 'main',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/flaviostutz/projen-practical-constructs.git',

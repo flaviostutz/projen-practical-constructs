@@ -19,6 +19,27 @@ lint-fix: prepare-projen
 clean:
 	rm -rf node_modules dist lib coverage test-reports .jsii
 
+publish-npmjs:
+	@if [ "$$NPM_ACCESS_TOKEN" = "" ]; then \
+		echo "NPM_ACCESS_TOKEN env is required"; \
+		exit 1; \
+	fi
+	npx projen release
+	NPM_TOKEN=$$NPM_ACCESS_TOKEN npx -p publib@latest publib-npm
+
+publish-pypi:
+	@if [ "$$PYPI_TOKEN_NAME" = "" ]; then \
+		echo "PYPI_TOKEN_NAME env is required"; \
+		exit 1; \
+	fi
+	@if [ "$$PYPI_TOKEN_PASSWORD" = "" ]; then \
+		echo "PYPI_TOKEN_PASSWORD env is required"; \
+		exit 1; \
+	fi
+	npx projen release
+	TWINE_USERNAME="$$PYPI_TOKEN_NAME" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
+		npx -p publib@latest publib-pypi
+
 all: build test lint
 
 prepare:

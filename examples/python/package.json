@@ -1,6 +1,6 @@
 {
   "devDependencies": {
     "projen": "^0.91.6",
-    "projen-python": "file:../../lib/dist/js/projen-python@0.0.0.jsii.tgz"
+    "projen-practical-constructs": "file:../../lib/dist/js/projen-practical-constructs@0.0.0.jsii.tgz"
   }
 }

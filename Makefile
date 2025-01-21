@@ -14,6 +14,9 @@ build-lib:
 
 build-examples:
 	@echo "\n>>> Build examples..."
+	@if [  ! -f "examples/python/Makefile" ]; then \
+		make dev-new; \
+	fi
 	cd "examples/python" && make build
 
 test-unit: test-lib test-examples
@@ -54,11 +57,16 @@ run-test-integration:
 	mkdir "$$EXAMPLE_PATH"
 
 	@echo "\n>>> Create a brand new example project with type '$$PROJ_TYPE'"
-	cd "$$EXAMPLE_PATH" && npx projen new --no-git --from ../../lib/dist/js/projen-python@0.0.0.jsii.tgz $$PROJ_TYPE
+	cd "$$EXAMPLE_PATH" && npx projen new --no-git --from ../../lib/dist/js/projen-practical-constructs@0.0.0.jsii.tgz $$PROJ_TYPE
 
 	@echo "\n>>> Run build, lint-fix, lint and test on the generated example project"
 	cd "$$EXAMPLE_PATH" && make build lint-fix lint test
 
+publish-npmjs:
+	cd lib && make publish-npmjs
+
+publish-pypi:
+	cd lib && make publish-pypi
 
 example-update:
 	if [ "$$EXAMPLE_PATH" = "" ]; then \
@@ -89,6 +97,10 @@ prepare-projen:
 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \
 	fi
 
+clean:
+	cd lib && make clean
+	cd examples/python && make clean
+
 prepare-venv:
 	@echo "Installing Python with pyenv (version from .python-version file)..."
 	pyenv install -s
@@ -99,5 +111,5 @@ prepare-venv:
 	@echo "Installing Projen $(PROJEN_VERSION)..."
 	$(VENV_PATH)/bin/pip install projen==$(PROJEN_VERSION)
 
-	@echo "Installing local version of projen-python..."
-	$(VENV_PATH)/bin/pip install ../lib/dist/python/projen_python-0.0.0.tar.gz 
+	@echo "Installing local version of projen-practical-constructs..."
+	$(VENV_PATH)/bin/pip install $$(ls ../../lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
