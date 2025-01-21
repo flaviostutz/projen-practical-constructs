@@ -49,6 +49,9 @@ jobs:
         with:
           python-version: '3.x'
       - run: make release
+        env:
+          # when CI is defined, package pypi is not built (only js package)
+          CI: ''
       - run: make publish-pypi
         env:
           PYPI_TOKEN_NAME: ${{ secrets.PYPI_TOKEN_NAME }}
