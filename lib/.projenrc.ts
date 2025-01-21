@@ -6,7 +6,7 @@ const project = new cdk.JsiiProject({
   packageName: 'projen-python',
   author: 'Flavio Stutz',
   authorAddress: 'flaviostutz@gmail.com',
-  description: 'Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures',
+  description: 'Constructs and utilities for managing projects (Python, NodeJS etc) with Projen enforcing solid build, test and linting structures',
   jsiiVersion: '~5.7.0',
   deps: [
     '@iarna/toml@^2.2.5',
@@ -29,7 +29,7 @@ const project = new cdk.JsiiProject({
   },
   defaultReleaseBranch: 'main',
   projenrcTs: true,
-  repositoryUrl: 'https://github.com/flaviostutz/projen-python.git',
+  repositoryUrl: 'https://github.com/flaviostutz/projen-practical-constructs.git',
   github: false,
   typescriptVersion: '5.5.4',
   projenrcTsOptions: {
