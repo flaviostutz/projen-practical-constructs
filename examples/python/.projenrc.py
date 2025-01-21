@@ -1,7 +1,7 @@
-from projen_python import PythonBasicProject
+from projen_practical_constructs import PythonBasicProject
 
 project = PythonBasicProject(
-    dev_deps=["../../lib/dist/js/projen-python@0.0.0.jsii.tgz"],
+    dev_deps=["../../lib/dist/js/projen-practical-constructs@0.0.0.jsii.tgz"],
     name="python",
 )
 

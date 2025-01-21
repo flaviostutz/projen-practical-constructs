@@ -1,9 +1,9 @@
 {
-  "name": "projen-python",
-  "description": "Constructs and utilities for managing Python based projects with Projen enforcing solid build, test and linting structures",
+  "name": "projen-practical-constructs",
+  "description": "Constructs and utilities for managing projects (Python, NodeJS etc) with Projen enforcing solid build, test and linting structures",
   "repository": {
     "type": "git",
-    "url": "https://github.com/flaviostutz/projen-python.git"
+    "url": "https://github.com/flaviostutz/projen-practical-constructs.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -20,6 +20,7 @@
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
+    "publish:git": "npx projen publish:git",
     "release": "npx projen release",
     "test": "npx projen test",
     "test:update": "npx projen test:update",
@@ -133,8 +134,8 @@
     "outdir": "dist",
     "targets": {
       "python": {
-        "distName": "projen_python",
-        "module": "projen_python"
+        "distName": "projen_practical_constructs",
+        "module": "projen_practical_constructs"
       }
     },
     "tsc": {

@@ -16,8 +16,7 @@ jobs:
       stage: prd
       target-build: true
       target-lint: true
-      target-test-unit: true
-      target-test-integration: true
+      target-test: true
 
   publish-npm:
     name: Publish to npmjs.org
@@ -30,8 +29,8 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: make build
-      - run: make deploy-npm
+      - run: make release
+      - run: make publish-npmjs
         env:
           NPM_ACCESS_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
@@ -42,12 +41,15 @@ jobs:
     environment: pypi-registry
     steps:
       - uses: actions/checkout@v3
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '20.x'
-      #     registry-url: 'https://registry.npmjs.org'
-      - run: make build
-      - run: make deploy-pypi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: make release
+      - run: make publish-pypi
         env:
-          PYPI_ACCESS_TOKEN: ${{ secrets.PYPI_ACCESS_TOKEN }}
-          
+          PYPI_TOKEN_NAME: ${{ secrets.PYPI_TOKEN_NAME }}
+          PYPI_TOKEN_PASSWORD: ${{ secrets.PYPI_TOKEN_PASSWORD }}

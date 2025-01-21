@@ -5,6 +5,14 @@ on:
     branches: ['main']
 
 jobs:
+  # pr-validation:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Validate PR
+  #       uses: Namchee/conventional-pr@v0.15.6
+  #       with:
+  #         access_token: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: Build, lint, test in PR
     uses: flaviostutz/gh-makefile/.github/workflows/make-ci.yml@main
@@ -14,5 +22,4 @@ jobs:
       tooling-version: 20
       target-build: true
       target-lint: true
-      target-test-unit: true
-      target-test-integration: true
+      target-test: true
