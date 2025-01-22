@@ -19,7 +19,7 @@ lint-fix: prepare-projen
 clean:
 	rm -rf node_modules dist lib coverage test-reports .jsii
 
-publish-npmjs:
+publish-npmjs: prepare-projen
 	@if [ "$$NPM_ACCESS_TOKEN" = "" ]; then \
 		echo "NPM_ACCESS_TOKEN env is required"; \
 		exit 1; \
@@ -27,7 +27,7 @@ publish-npmjs:
 	npx projen release
 	NPM_TOKEN=$$NPM_ACCESS_TOKEN npx -p publib@latest publib-npm
 
-publish-pypi:
+publish-pypi: prepare-projen
 	@if [ "$$PYPI_TOKEN_NAME" = "" ]; then \
 		echo "PYPI_TOKEN_NAME env is required"; \
 		exit 1; \
