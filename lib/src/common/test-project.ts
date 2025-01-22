@@ -1,5 +1,6 @@
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+// eslint-disable-next-line unicorn/import-style
 import { join } from 'node:path';
 
 import { Project } from 'projen';

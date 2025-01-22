@@ -5,7 +5,7 @@
 !/.projen/files.json
 !/package.json
 !/LICENSE
-/.npmignore
+!/.npmignore
 logs
 *.log
 npm-debug.log*
@@ -35,7 +35,7 @@ junit.xml
 /dist/changelog.md
 /dist/version.txt
 !/test/
-/tsconfig.dev.json
+!/tsconfig.dev.json
 !/src/
 /lib
 /dist/

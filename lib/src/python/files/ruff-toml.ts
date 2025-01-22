@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 /* eslint-disable no-restricted-syntax */
 import { Project, TomlFile } from 'projen';
 
@@ -138,7 +139,7 @@ const getOptionsWithDefaults = (opts?: RuffTomlFileOptions): Required<RuffTomlFi
     ];
     defaultOptions.perFileIgnores = {
       ...defaultRules.perFileIgnores,
-      ...(defaultOptions.perFileIgnores ?? {}),
+      ...defaultOptions.perFileIgnores,
     };
   }
   return defaultOptions;

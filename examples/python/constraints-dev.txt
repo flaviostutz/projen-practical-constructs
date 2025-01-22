@@ -32,7 +32,7 @@ cyclonedx-python-lib==7.6.2
     # via pip-audit
 defusedxml==0.7.1
     # via py-serializable
-filelock==3.16.1
+filelock==3.17.0
     # via cachecontrol
 html5lib==1.1
     # via pip-audit

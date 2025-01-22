@@ -1,3 +1,6 @@
+/* eslint-disable unicorn/consistent-destructuring */
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/immutable-data */
 /* eslint-disable no-restricted-syntax */
 import { stringify } from '@iarna/toml';
 import { Dependency, DependencyType, FileBase, IResolver, Project } from 'projen';
@@ -5,7 +8,7 @@ import { Dependency, DependencyType, FileBase, IResolver, Project } from 'projen
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 /** Package name format as in https://packaging.python.org/en/latest/specifications/name-normalization/ */
-const PACKAGE_NAME_REGEX = /^([a-z0-9]|[A-z0-9][a-z0-9._-]*[a-z0-9])$/;
+const PACKAGE_NAME_REGEX = /^([\da-z]|[\dA-z][\d._a-z-]*[\da-z])$/;
 
 const VERSION_REGEX = /^(\d+\.\d+\.\d+)(-.+)?$/;
 
@@ -112,7 +115,7 @@ export const resolvePackageName = (
 const renderDependency = (dep: Dependency): string => {
   let { version } = dep;
   // version starts with number, so add "==" because it has no qualifier
-  if (version && /^[0-9]+.*/.test(version)) {
+  if (version && /^\d+.*/.test(version)) {
     version = `==${version}`;
   }
   return `${dep.name}${version ?? ''}`;

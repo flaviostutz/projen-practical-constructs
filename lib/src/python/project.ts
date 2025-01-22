@@ -17,7 +17,7 @@ import { TaskOptionsTarget } from './tasks';
 import { TS_NODE_VERSION } from './constants';
 
 // https://peps.python.org/pep-0508/
-const DEP_NAME_VERSION_REGEX = /^([A-Za-z0-9][A-Za-z0-9._-]*[A-Za-z0-9])(.*)$/;
+const DEP_NAME_VERSION_REGEX = /^([\dA-Za-z][\w.-]*[\dA-Za-z])(.*)$/;
 
 /**
  * Python project with basic configurations for linting, testing, building etc

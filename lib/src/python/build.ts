@@ -26,7 +26,8 @@ export class BuildTarget extends Component {
 
     // create python-version (can be used by pyenv etc)
     const requiresPython = opts?.package?.requiresPython ?? '3.12';
-    const pythonVersion = requiresPython.replace(/[^0-9.]/g, '');
+    // eslint-disable-next-line unicorn/prefer-string-replace-all
+    const pythonVersion = requiresPython.replace(/[^\d.]/g, '');
     new PythonVersionFile(project, { pythonVersion });
 
     project.addGitIgnore('.ipynb_checkpoints');

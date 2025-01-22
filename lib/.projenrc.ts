@@ -37,7 +37,6 @@ const project = new cdk.JsiiProject({
   projenrcTsOptions: {
     swc: true,
   },
-  commitGenerated: false,
   license: 'MIT',
   docgen: false,
   packageManager: NodePackageManager.NPM, // PNPM doesn't work with jsii
