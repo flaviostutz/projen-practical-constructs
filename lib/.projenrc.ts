@@ -17,7 +17,7 @@ const project = new cdk.JsiiProject({
     '@iarna/toml'
   ],
   devDeps: [
-    "@stutzlab/eslint-config@^3.1.1",
+    "@stutzlab/eslint-config@^3.2.1",
     "@typescript-eslint/eslint-plugin@^7.15.0",
   ],
   peerDeps: [
@@ -28,7 +28,7 @@ const project = new cdk.JsiiProject({
     distName: "projen_practical_constructs",
     module: "projen_practical_constructs",
   },
-  releaseTrigger: ReleaseTrigger.manual(),
+  releaseTrigger: ReleaseTrigger.manual({gitPushCommand:''}),
   defaultReleaseBranch: 'main',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/flaviostutz/projen-practical-constructs.git',
@@ -41,7 +41,7 @@ const project = new cdk.JsiiProject({
   license: 'MIT',
   docgen: false,
   packageManager: NodePackageManager.NPM, // PNPM doesn't work with jsii
-  pnpmVersion: '',
+  // pnpmVersion: '',
   eslint: false,
   jestOptions: {
     updateSnapshot: UpdateSnapshot.NEVER,
