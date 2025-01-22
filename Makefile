@@ -81,12 +81,6 @@ dev-new:
 	make build-lib
 	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
-prepare:
-	# Node is required for projen runtime
-	brew install nvm
-	brew install python
-	brew install pyenv
-
 clean:
 	cd lib && make clean
 	cd examples/python && make clean
@@ -94,3 +88,14 @@ clean:
 install-examples-local:
 	@echo "Installing local version of projen-practical-constructs in examples..."
 	examples/python/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
+
+prepare:
+	brew install python
+	brew install pyenv
+	@# Node is required for projen runtime
+	brew install nvm
+	@echo "Configure your shell following instructions at https://formulae.brew.sh/formula/nvm"
+	@echo "Then open a shell and run:"
+	@echo "nvm use"
+	@echo "corepack enable"
+

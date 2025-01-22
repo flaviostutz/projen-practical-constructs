@@ -79,6 +79,7 @@
     },
     {
       "name": "@iarna/toml",
+      "version": "2.2.5",
       "type": "bundled"
     },
     {

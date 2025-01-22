@@ -14,7 +14,7 @@ const project = new cdk.JsiiProject({
   ],
   // every lib that is not jsii needs to be bundled in the final package
   bundledDeps: [
-    '@iarna/toml'
+    '@iarna/toml@2.2.5'
   ],
   devDeps: [
     "@stutzlab/eslint-config@^3.2.1",
@@ -29,10 +29,10 @@ const project = new cdk.JsiiProject({
     module: "projen_practical_constructs",
   },
   releaseTrigger: ReleaseTrigger.manual({gitPushCommand:''}),
+  github: false,
   defaultReleaseBranch: 'main',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/flaviostutz/projen-practical-constructs.git',
-  github: false,
   typescriptVersion: '5.5.4',
   projenrcTsOptions: {
     swc: true,
