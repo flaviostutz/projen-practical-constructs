@@ -29,7 +29,7 @@ publish-npmjs: prepare-projen
 
 	echo "" >> .npmrc
 	echo "//registry.npmjs.org/:_authToken=$${NPM_ACCESS_TOKEN}" >> .npmrc
-	NPM_TOKEN="$${NPM_ACCESS_TOKEN}" npx -p publib@latest publib-npm
+	NPM_TOKEN="$${NPM_ACCESS_TOKEN}" npx -y -p publib@latest publib-npm
 
 publish-pypi: prepare-projen
 	@if [ "$$PYPI_TOKEN_PASSWORD" = "" ]; then \
@@ -38,9 +38,9 @@ publish-pypi: prepare-projen
 	fi
 
 	npx projen package-release
-	
+
 	TWINE_USERNAME="__token__" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
-		npx -p publib@latest publib-pypi
+		npx -y -p publib@latest publib-pypi
 
 
 all: build test lint

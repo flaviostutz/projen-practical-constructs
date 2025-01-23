@@ -80,5 +80,6 @@ project.tasks.addTask('package-release', {
   ]
 });
 
+project.addGitIgnore('.npmrc');
 
 project.synth();
