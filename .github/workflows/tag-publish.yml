@@ -49,5 +49,4 @@ jobs:
           python-version: '3.x'
       - run: make publish-pypi
         env:
-          PYPI_TOKEN_NAME: ${{ secrets.PYPI_TOKEN_NAME }}
           PYPI_TOKEN_PASSWORD: ${{ secrets.PYPI_TOKEN_PASSWORD }}

@@ -25,20 +25,16 @@ publish-npmjs: prepare-projen
 		exit 1; \
 	fi
 	npx projen release
-	NPM_TOKEN=$$NPM_ACCESS_TOKEN npx -p publib@latest publib-npm
+	NPM_TOKEN="$$NPM_ACCESS_TOKEN" npx -p publib@latest publib-npm
 
 publish-pypi: prepare-projen
-	@if [ "$$PYPI_TOKEN_NAME" = "" ]; then \
-		echo "PYPI_TOKEN_NAME env is required"; \
-		exit 1; \
-	fi
 	@if [ "$$PYPI_TOKEN_PASSWORD" = "" ]; then \
 		echo "PYPI_TOKEN_PASSWORD env is required"; \
 		exit 1; \
 	fi
 	# when CI is defined, only packages for js are created by release
 	CI='' npx projen release
-	TWINE_USERNAME="$$PYPI_TOKEN_NAME" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
+	TWINE_USERNAME="__token__" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
 		npx -p publib@latest publib-pypi
 
 all: build test lint
