@@ -157,6 +157,27 @@
         }
       ]
     },
+    "package-release": {
+      "name": "package-release",
+      "description": "Package using the latest git tag as version",
+      "steps": [
+        {
+          "exec": "rm -fr dist"
+        },
+        {
+          "spawn": "bump"
+        },
+        {
+          "spawn": "compile"
+        },
+        {
+          "spawn": "package"
+        },
+        {
+          "spawn": "unbump"
+        }
+      ]
+    },
     "package:js": {
       "name": "package:js",
       "description": "Create js language bindings",
@@ -196,6 +217,17 @@
         "PROJECT_CHANGELOG_FILE": "CHANGELOG.md",
         "VERSION_FILE": "dist/version.txt"
       },
+      "steps": [
+        {
+          "builtin": "release/update-changelog"
+        },
+        {
+          "builtin": "release/tag-version"
+        },
+        {
+          "exec": "git push --follow-tags origin main"
+        }
+      ],
       "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "release": {

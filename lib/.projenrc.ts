@@ -59,8 +59,26 @@ const project = new cdk.JsiiProject({
   },
 });
 
-// remove publish git task because it will try to tag, commit and push
-// release log to repo, which we don't want
-project.tasks.tryFind('publish:git')?.reset();
+project.tasks.addTask('package-release', {
+  description: 'Package using the latest git tag as version',
+  steps: [
+    {
+      "exec": "rm -fr dist"
+    },
+    {
+      "spawn": "bump"
+    },
+    {
+      "spawn": "compile"
+    },
+    {
+      "spawn": "package-all"
+    },
+    {
+      "spawn": "unbump"
+    },
+  ]
+});
+
 
 project.synth();
