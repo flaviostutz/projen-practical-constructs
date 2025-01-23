@@ -196,14 +196,6 @@
         "PROJECT_CHANGELOG_FILE": "CHANGELOG.md",
         "VERSION_FILE": "dist/version.txt"
       },
-      "steps": [
-        {
-          "builtin": "release/update-changelog"
-        },
-        {
-          "builtin": "release/tag-version"
-        }
-      ],
       "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
     },
     "release": {

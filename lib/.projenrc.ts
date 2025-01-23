@@ -28,7 +28,7 @@ const project = new cdk.JsiiProject({
     distName: "projen_practical_constructs",
     module: "projen_practical_constructs",
   },
-  releaseTrigger: ReleaseTrigger.manual({gitPushCommand:''}),
+  releaseTrigger: ReleaseTrigger.manual(),
   github: false,
   defaultReleaseBranch: 'main',
   projenrcTs: true,
@@ -58,5 +58,9 @@ const project = new cdk.JsiiProject({
     },
   },
 });
+
+// remove publish git task because it will try to tag, commit and push
+// release log to repo, which we don't want
+project.tasks.tryFind('publish:git')?.reset();
 
 project.synth();
