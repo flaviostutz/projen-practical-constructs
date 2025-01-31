@@ -14,7 +14,7 @@ const project = new cdk.JsiiProject({
   ],
   // every lib that is not jsii needs to be bundled in the final package
   bundledDeps: [
-    '@iarna/toml@2.2.5'
+    '@iarna/toml@2.2.5',
   ],
   devDeps: [
     "@stutzlab/eslint-config@^3.2.1",

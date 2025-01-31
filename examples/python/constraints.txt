@@ -55,7 +55,7 @@ mdurl==0.1.2
 msgpack==1.1.0
     # via cachecontrol
 mypy==1.14.1
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
 packageurl-python==0.16.0
@@ -69,15 +69,15 @@ packaging==24.2
 pip-api==0.0.34
     # via pip-audit
 pip-audit==2.7.3
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 pip-requirements-parser==32.0.1
     # via pip-audit
 pip-tools==7.4.1
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 pluggy==1.5.0
     # via pytest
 projen==0.91.6
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 publication==0.0.3
     # via
     #   constructs
@@ -96,9 +96,9 @@ pyproject-hooks==1.2.0
 pytest==8.3.4
     # via
     #   pytest-cov
-    #   python (pyproject.toml)
+    #   python2 (pyproject.toml)
 pytest-cov==6.0.0
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via jsii
 requests==2.32.3
@@ -108,7 +108,7 @@ requests==2.32.3
 rich==13.9.4
     # via pip-audit
 ruff==0.8.6
-    # via python (pyproject.toml)
+    # via python2 (pyproject.toml)
 six==1.17.0
     # via
     #   html5lib

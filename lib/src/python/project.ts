@@ -183,8 +183,8 @@ const cleanupTasks = (project: Project): void => {
   // cleanup default tasks
   project.tasks.removeTask('build');
   project.tasks.removeTask('pre-compile');
-  project.tasks.removeTask('post-compile');
   project.tasks.removeTask('compile');
+  project.tasks.removeTask('post-compile');
   project.tasks.removeTask('test');
   project.tasks.removeTask('package');
 };
