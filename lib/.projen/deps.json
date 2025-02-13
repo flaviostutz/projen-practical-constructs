@@ -83,6 +83,11 @@
       "type": "bundled"
     },
     {
+      "name": "monotag",
+      "version": "1.13.0",
+      "type": "bundled"
+    },
+    {
       "name": "constructs",
       "version": "^10.4.2",
       "type": "peer"
@@ -95,6 +100,11 @@
     {
       "name": "@iarna/toml",
       "version": "^2.2.5",
+      "type": "runtime"
+    },
+    {
+      "name": "monotag",
+      "version": "1.13.0",
       "type": "runtime"
     }
   ],
