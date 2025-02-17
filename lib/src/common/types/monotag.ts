@@ -8,17 +8,30 @@
  * Options for analyzing and generating a new tag
  */
 export interface NextTagOptions {
+  /**
+   * Command line used to invoke Monotag to perform tag calculations
+   * @default 'npx monotag@1.14.0'
+   */
+  monotagCmd?: string;
+  /**
+   * Extra arguments to be added to every invocation of Monotag
+   * @default ''
+   */
+  monotagExtraArgs?: string;
+
   // from BasicOptions in Monotag
   /**
    * Directory where the git repository is located
    * Defaults to local directory
+   * @default '.'
    */
-  repoDir: string;
+  repoDir?: string;
   /**
    * Path inside repository for looking for changes
    * Defaults to any path
+   * @default ''
    */
-  path: string;
+  path?: string;
   /**
    * Git ref range (starting point) for searching for changes in git log history
    * @default latest tag
@@ -46,8 +59,9 @@ export interface NextTagOptions {
   // from NextTagOptions in Monotag
   /**
    * Tag prefix to look for latest tag and for generating the tag
+   * @default ''
    */
-  tagPrefix: string;
+  tagPrefix?: string;
   /**
    * Tag suffix to add to the generated tag
    * When using pre-release capabilities, that will manage and increment prerelease versions,
@@ -122,4 +136,33 @@ export interface NextTagOptions {
    * @default undefined (won't be created)
    */
   changelogFile?: string;
+
+  /**
+   * Configure git cli with username
+   * Required if action is 'commit', 'tag' or 'push'
+   */
+  gitUsername?: string;
+  /**
+   * Configure git cli with email
+   * Required if action is 'commit', 'tag' or 'push'
+   */
+  gitEmail?: string;
+
+  /**
+   * Bump action to be performed after the tag is generated
+   * in regard to package files such as package.json, pyproject.yml etc
+   * Options:
+   *   - 'latest': bump the version field of the files to the calculated tag
+   *   - 'zero': bump the version field of the files to 0.0.0
+   *   - 'none': won't change any files
+   * @default 'none'
+   */
+  bumpAction?: 'latest' | 'zero' | 'none';
+  /**
+   * Files to be bumped with the latest version
+   * It will search for a "version" attribute in the file, replace it with the new version and save
+   * If the field doesn't exist, it won't be changed
+   * @default ['package.json']
+   */
+  bumpFiles?: string[];
 }

@@ -60,12 +60,10 @@
     "projen": "^0.91.6"
   },
   "dependencies": {
-    "@iarna/toml": "^2.2.5",
-    "monotag": "1.13.0"
+    "@iarna/toml": "^2.2.5"
   },
   "bundledDependencies": [
-    "@iarna/toml",
-    "monotag"
+    "@iarna/toml"
   ],
   "main": "lib/index.js",
   "license": "MIT",
