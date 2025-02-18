@@ -1,18 +1,30 @@
 /* eslint-disable no-new */
 import { Testing, Project } from 'projen';
 
-import { CommonTargetsTasks, BaseTasksOptions } from './common-targets';
+import { CommonTargetsTasks } from './common-targets';
 
 describe('CommonTargetsTasks', () => {
-  it('does not add tasks when no options are provided', () => {
+  it('minimum tasks', () => {
     const project = new Project({ name: 'test1' });
     new CommonTargetsTasks(project, { lint: true });
     const synth = Testing.synth(project);
-    console.log(JSON.stringify(synth, null, 2));
-    expect(synth['.projen/tasks.json']).not.toMatchObject({
+    const tasksObj = synth['.projen/tasks.json'];
+    expect(tasksObj).not.toMatchObject({
       tasks: { build: {} },
     });
-    expect(synth['.projen/tasks.json']).toMatchObject({
+    expect(tasksObj).not.toMatchObject({
+      tasks: { test: {} },
+    });
+    expect(tasksObj).not.toMatchObject({
+      tasks: { package: {} },
+    });
+    expect(tasksObj).not.toMatchObject({
+      tasks: { compile: {} },
+    });
+    expect(tasksObj).not.toMatchObject({
+      tasks: { 'pre-compile': {} },
+    });
+    expect(tasksObj).toMatchObject({
       tasks: { lint: { description: 'Lint project' } },
     });
   });
@@ -21,37 +33,43 @@ describe('CommonTargetsTasks', () => {
     const project = new Project({ name: 'test1' });
     new CommonTargetsTasks(project, { build: true });
     const synth = Testing.synth(project);
-    expect(synth['.projen/tasks.json']).toContain('"name":"build"');
-    expect(synth['.projen/tasks.json']).toContain('"name":"install"');
-    expect(synth['.projen/tasks.json']).toContain('"name":"compile"');
-    expect(synth['.projen/tasks.json']).toContain('"name":"package"');
+    const tasksObj = synth['.projen/tasks.json'];
+    expect(tasksObj).toMatchObject({
+      tasks: { build: {} },
+    });
+    expect(tasksObj).not.toMatchObject({
+      tasks: { 'compile:pre': {} },
+    });
   });
-
   it('adds lint and test tasks when lint/test are enabled', () => {
     const project = new Project({ name: 'test' });
-    new CommonTargetsTasks(project, { build: true, lint: true, test: true });
-    const synth = Testing.synth(project);
-    expect(synth['.projen/tasks.json']).toContain('"name":"lint"');
-    expect(synth['.projen/tasks.json']).toContain('"name":"test"');
-  });
-
-  it('adds lifecycle tasks when buildLifecycleTasks is enabled', () => {
-    const project = new Project({ name: 'test' });
-    new CommonTargetsTasks(project, { build: true, buildLifecycleTasks: true });
-    const synth = Testing.synth(project);
-    expect(synth['.projen/tasks.json']).toContain('"name":"compile:pre"');
-    expect(synth['.projen/tasks.json']).toContain('"name":"package:pre"');
-  });
-
-  it('adds release tasks when release is true', () => {
-    const project = new Project({ name: 'test' });
-    const opts: BaseTasksOptions = {
+    new CommonTargetsTasks(project, {
       build: true,
+      lint: true,
+      test: true,
+      deploy: true,
       release: true,
-      releaseOpts: { action: 'console' },
-    };
-    new CommonTargetsTasks(project, opts);
+      publish: true,
+    });
     const synth = Testing.synth(project);
-    expect(synth['.projen/tasks.json']).toContain('"action":"console"');
+    const tasksObj = synth['.projen/tasks.json'];
+    expect(tasksObj).toMatchObject({
+      tasks: { build: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { lint: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { test: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { deploy: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { release: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { publish: {} },
+    });
   });
 });

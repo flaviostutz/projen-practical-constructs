@@ -35,10 +35,22 @@ describe('ReleaseTasks', () => {
       gitEmail: 'test@example.com',
       gitUsername: 'testuser',
       bumpAction: 'latest',
+      preRelease: true,
     };
     new ReleaseTasks(project, options);
     const output = Testing.synth(project);
-    expect(JSON.stringify(output)).toContain('npx monotag@1.14.0 tag --bump-action=\\"latest\\"');
+    const tasksObj = output['.projen/tasks.json'];
+    expect(tasksObj).toMatchObject({
+      tasks: {
+        'release:custom:next-tag': {
+          steps: [
+            {
+              exec: 'npx monotag@1.14.0 tag --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"',
+            },
+          ],
+        },
+      },
+    });
   });
 
   it('throws error for invalid action', () => {

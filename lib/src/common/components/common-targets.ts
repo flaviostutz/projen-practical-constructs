@@ -14,10 +14,24 @@ export class CommonTargetsTasks extends Component {
       throw new Error('No tasks enabled. At least one task must be enabled');
     }
 
+    // cleanup existing tasks
+    project.tasks.removeTask('build');
+    project.tasks.removeTask('test');
+    project.tasks.removeTask('compile');
+    project.tasks.removeTask('package');
+    project.tasks.removeTask('pre-compile');
+    project.tasks.removeTask('post-compile');
+
     if (opts?.build) {
       const buildTask = project.tasks.addTask('build', {
         description: `Build project (install -> compile -> package)`,
       });
+
+      // default
+      const defaultTask = project.tasks.tryFind('default');
+      if (defaultTask) {
+        buildTask.spawn(defaultTask);
+      }
 
       // install
       buildTask.spawn(
@@ -26,50 +40,46 @@ export class CommonTargetsTasks extends Component {
         }),
       );
 
-      // compile
-      if (opts.buildLifecycleTasks) {
-        buildTask.spawn(project.tasks.addTask('compile:pre'));
-      }
-
       const compileTask = project.tasks.addTask('compile', {
         description: `Compile project`,
       });
       buildTask.spawn(compileTask);
 
-      if (opts.buildLifecycleTasks) {
-        buildTask.spawn(project.tasks.addTask('compile:pre'));
-      }
-
       // package
-      if (opts.buildLifecycleTasks) {
-        buildTask.spawn(project.tasks.addTask('package:pre'));
-      }
-
       const packageTask = project.tasks.addTask('package', {
         description: `Prepare a distributable package`,
       });
       buildTask.spawn(packageTask);
+    }
 
-      if (opts.buildLifecycleTasks) {
-        buildTask.spawn(project.tasks.addTask('package:pre'));
-      }
+    if (opts?.lint) {
+      project.tasks.addTask('lint', {
+        description: `Lint project`,
+      });
+    }
 
-      if (opts?.lint) {
-        project.tasks.addTask('lint', {
-          description: `Lint project`,
-        });
-      }
+    if (opts?.test) {
+      project.tasks.addTask('test', {
+        description: `Test project`,
+      });
+    }
 
-      if (opts?.test) {
-        project.tasks.addTask('test', {
-          description: `Test project`,
-        });
-      }
+    if (opts?.publish) {
+      project.tasks.addTask('publish', {
+        description: `Publish project artifacts to a repository`,
+      });
+    }
 
-      if (opts?.release) {
-        // eslint-disable-next-line no-new
-        new ReleaseTasks(project, opts.releaseOpts);
-      }
+    if (opts?.deploy) {
+      project.tasks.addTask('deploy', {
+        description: `Deploy project runtime resources to an environment`,
+        requiredEnv: ['STAGE'],
+      });
+    }
+
+    if (opts?.release) {
+      // eslint-disable-next-line no-new
+      new ReleaseTasks(project, opts.releaseOpts);
     }
   }
 }
@@ -79,10 +89,6 @@ export interface BaseTasksOptions {
    * Whether to include the build task with all its default subtasks
    */
   build?: boolean;
-  /**
-   * Whether to include pre/post placeholder tasks to each step in build
-   */
-  buildLifecycleTasks?: boolean;
   /**
    * Whether to include the lint tasks
    */
@@ -99,4 +105,12 @@ export interface BaseTasksOptions {
    * Release task options
    */
   releaseOpts?: ReleaseTasksOptions;
+  /**
+   * Whether to include deploy tasks
+   */
+  deploy?: boolean;
+  /**
+   * Whether to include publish tasks
+   */
+  publish?: boolean;
 }
