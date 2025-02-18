@@ -45,7 +45,7 @@ describe('ReleaseTasks', () => {
         'release:custom:next-tag': {
           steps: [
             {
-              exec: 'npx monotag@1.14.0 tag --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"',
+              exec: 'npx -y monotag@1.14.0 tag --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"',
             },
           ],
         },

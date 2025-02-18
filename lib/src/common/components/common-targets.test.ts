@@ -49,7 +49,7 @@ describe('CommonTargetsTasks', () => {
       test: true,
       deploy: true,
       release: true,
-      publish: true,
+      publish: false,
     });
     const synth = Testing.synth(project);
     const tasksObj = synth['.projen/tasks.json'];
@@ -68,7 +68,7 @@ describe('CommonTargetsTasks', () => {
     expect(tasksObj).toMatchObject({
       tasks: { release: {} },
     });
-    expect(tasksObj).toMatchObject({
+    expect(tasksObj).not.toMatchObject({
       tasks: { publish: {} },
     });
   });

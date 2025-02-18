@@ -111,7 +111,7 @@ const getOptionsWithDefaults = (
   return {
     name: '',
     action: 'console',
-    monotagCmd: 'npx monotag@1.14.0',
+    monotagCmd: 'npx -y monotag@1.14.0',
     ...opts,
   };
 };
