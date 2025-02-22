@@ -97,8 +97,18 @@ node_modules/
         ],
       },
       "lint": {
-        "description": "Lint project (format, type check, audit, lint)",
         "name": "lint",
+        "steps": [
+          {
+            "spawn": "lint-mypy",
+          },
+          {
+            "spawn": "lint-ruff",
+          },
+          {
+            "spawn": "lint-audit",
+          },
+        ],
       },
       "lint-audit": {
         "description": "Code type checks (mypy)",
@@ -110,7 +120,6 @@ node_modules/
         ],
       },
       "lint-fix": {
-        "description": "Fix auto fixable lint issues",
         "name": "lint-fix",
         "steps": [
           {

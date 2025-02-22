@@ -89,16 +89,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -117,6 +116,14 @@ __pycache__
       "pre-compile": {
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
+      },
+      "prepare": {
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
       },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
@@ -246,16 +253,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from another_requirements.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c another_requirements.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from dev_requirements.txt",
+        "description": "Install dependencies from dev_requirements.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -274,6 +280,14 @@ __pycache__
       "pre-compile": {
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
+      },
+      "prepare": {
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
       },
       "prepare-venv": {
         "description": "Create python virtual environment in .another_venv",
@@ -403,16 +417,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from custom_requirements.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c custom_requirements.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -431,6 +444,14 @@ __pycache__
       "pre-compile": {
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
+      },
+      "prepare": {
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
       },
       "prepare-venv": {
         "description": "Create python virtual environment in .custom_venv",

@@ -6,6 +6,7 @@ import { Projenrc } from 'projen/lib/python';
 
 import { NODE_VERSION, PROJEN_VERSION } from '../common/constants';
 import { BaseTooling } from '../common/components/base-tooling';
+import { CommonTargetsTasks } from '../common/components/common-targets';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
@@ -49,11 +50,17 @@ export class PythonBasicProject extends Project {
 
     const venvPath = optionsWithDefaults.venvPath ?? '.venv';
 
-    // cleanup default tasks
-    cleanupTasks(this);
-
     // create .projenrc.py
     new Projenrc(this, { pythonExec: `${venvPath}/bin/python` });
+
+    // will create tasks such as build, lint, test, release etc
+    // based on common-tasks spec
+    new CommonTargetsTasks(this, {
+      build: true,
+      lint: true,
+      test: true,
+      release: true,
+    });
 
     // create README.md
     new ReadmeFile(this, {
@@ -90,7 +97,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'lint',
       },
       optionsWithDefaults.lint,
     );
@@ -100,7 +106,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'test',
       },
       optionsWithDefaults.test,
     );
@@ -112,7 +117,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'build',
       },
       {
         pip: optionsWithDefaults.pip,
@@ -177,14 +181,4 @@ const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonB
     sample: true,
     ...options,
   };
-};
-
-const cleanupTasks = (project: Project): void => {
-  // cleanup default tasks
-  project.tasks.removeTask('build');
-  project.tasks.removeTask('pre-compile');
-  project.tasks.removeTask('compile');
-  project.tasks.removeTask('post-compile');
-  project.tasks.removeTask('test');
-  project.tasks.removeTask('package');
 };

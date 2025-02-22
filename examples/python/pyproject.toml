@@ -3,7 +3,7 @@ requires = [ "setuptools" ]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "python2"
+name = "python"
 version = "0.0.1"
 description = ""
 readme = ""
@@ -17,12 +17,11 @@ dependencies = [
   "projen==0.91.6",
   "pytest-cov==6.0.*",
   "pytest==8.3.*",
-  "ruff==0.8.*",
-  "hello"
+  "ruff==0.8.*"
 ]
 
 [project.optional-dependencies]
 dev = [ ]
 
 [tool.setuptools.package-data]
-python2 = [ "py.typed" ]
+python = [ "py.typed" ]

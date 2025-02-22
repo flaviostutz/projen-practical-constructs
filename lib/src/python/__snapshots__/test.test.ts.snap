@@ -89,8 +89,12 @@ node_modules/
         "name": "pre-compile",
       },
       "test": {
-        "description": "Test project (unit tests/coverage)",
         "name": "test",
+        "steps": [
+          {
+            "spawn": "test-unit",
+          },
+        ],
       },
       "test-unit": {
         "description": "Unit tests (pytest)",

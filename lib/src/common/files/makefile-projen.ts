@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { FileBase, IResolver, Project } from 'projen';
 
 import { TS_NODE_VERSION } from '../../python/constants';
@@ -21,28 +22,15 @@ export class MakefileProjenFile extends FileBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected synthesizeContent(_resolver: IResolver): string | undefined {
-    return `SHELL := /bin/bash
+    // eslint-disable-next-line functional/no-let
+    let contents = `SHELL := /bin/bash
 
 all: build lint test
 
-build:
-	npx projen build${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.build)}
-
-lint:
-	npx projen lint${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.lint)}
-
-lint-fix:
-	npx projen lint-fix${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets['lint-fix'])}
-
-test:
-	npx projen test${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.test)}
-
-clean:
-	npx projen clean${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.clean)}
-
 prepare:
 	brew install nvm
-	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.prepare ?? '')}
+	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  ${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.prepare)}
 
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then \
@@ -51,12 +39,27 @@ prepare-projen:
 		set -x; npm install --no-save ts-node@${this.optsWithDefaults.tsNodeLibVersion} projen@${this.optsWithDefaults.projenLibVersion}; \
 	fi
 
-${this.optsWithDefaults.additionalMakefileContentsProjen ?? ''}
 `;
+
+    for (const task of this.project.tasks.all) {
+      if (task.name === 'default') {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      const additional =
+        targetContents(this.optsWithDefaults.additionalMakefileContentsTargets[task.name]) ?? '';
+      contents += `# ${task.description}
+${task.name.replace(':', '-')}:
+	npx projen ${task.name}${additional}
+
+`;
+    }
+    return contents;
   }
 }
 
 const targetContents = (contents?: string): string => {
+  if (!contents) return '';
   // add spaces to each line
   const contentWithSpaces = contents?.replace(/\n/g, '\n	');
   return contentWithSpaces ? `\n	${contentWithSpaces}` : '';

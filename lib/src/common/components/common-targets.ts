@@ -1,6 +1,7 @@
 import { Component, Project } from 'projen';
 
 import { ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
+import { CommonTargets } from './common-target-type';
 
 /**
  * Base tasks for projen projects based on
@@ -22,12 +23,19 @@ export class CommonTargetsTasks extends Component {
     project.tasks.removeTask('pre-compile');
     project.tasks.removeTask('post-compile');
 
+    const prepareTask = project.tasks.addTask(CommonTargets.PREPARE, {
+      description: `Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)`,
+    });
+
     if (opts?.build) {
-      const buildTask = project.tasks.addTask('build', {
+      const buildTask = project.tasks.addTask(CommonTargets.BUILD, {
         description: `Build project (install -> compile -> package)`,
       });
 
-      // default
+      // prepare
+      buildTask.spawn(prepareTask);
+
+      // default (runs projen synth)
       const defaultTask = project.tasks.tryFind('default');
       if (defaultTask) {
         buildTask.spawn(defaultTask);
@@ -35,43 +43,46 @@ export class CommonTargetsTasks extends Component {
 
       // install
       buildTask.spawn(
-        project.tasks.addTask('install', {
+        project.tasks.addTask(CommonTargets.INSTALL, {
           description: `Install project dependencies`,
         }),
       );
 
-      const compileTask = project.tasks.addTask('compile', {
+      const compileTask = project.tasks.addTask(CommonTargets.COMPILE, {
         description: `Compile project`,
       });
       buildTask.spawn(compileTask);
 
       // package
-      const packageTask = project.tasks.addTask('package', {
+      const packageTask = project.tasks.addTask(CommonTargets.PACKAGE, {
         description: `Prepare a distributable package`,
       });
       buildTask.spawn(packageTask);
     }
 
     if (opts?.lint) {
-      project.tasks.addTask('lint', {
-        description: `Lint project`,
+      project.tasks.addTask(CommonTargets.LINT, {
+        description: `Lint project (code style, formatting, audit, code smells etc)`,
+      });
+      project.tasks.addTask(CommonTargets.LINT_FIX, {
+        description: `Fix auto fixable lint issues`,
       });
     }
 
     if (opts?.test) {
-      project.tasks.addTask('test', {
+      project.tasks.addTask(CommonTargets.TEST, {
         description: `Test project`,
       });
     }
 
     if (opts?.publish) {
-      project.tasks.addTask('publish', {
+      project.tasks.addTask(CommonTargets.PUBLISH, {
         description: `Publish project artifacts to a repository`,
       });
     }
 
     if (opts?.deploy) {
-      project.tasks.addTask('deploy', {
+      project.tasks.addTask(CommonTargets.DEPLOY, {
         description: `Deploy project runtime resources to an environment`,
         requiredEnv: ['STAGE'],
       });

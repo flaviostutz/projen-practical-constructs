@@ -82,6 +82,22 @@ node_modules/
           },
         ],
       },
+      "lint": {
+        "name": "lint",
+        "steps": [
+          {
+            "spawn": "lint-ruff",
+          },
+        ],
+      },
+      "lint-fix": {
+        "name": "lint-fix",
+        "steps": [
+          {
+            "spawn": "lint-ruff-fix",
+          },
+        ],
+      },
       "lint-ruff": {
         "description": "Code checks (RUFF)",
         "name": "lint-ruff",
@@ -225,6 +241,22 @@ node_modules/
         "steps": [
           {
             "spawn": "default",
+          },
+        ],
+      },
+      "lint": {
+        "name": "lint",
+        "steps": [
+          {
+            "spawn": "lint-ruff",
+          },
+        ],
+      },
+      "lint-fix": {
+        "name": "lint-fix",
+        "steps": [
+          {
+            "spawn": "lint-ruff-fix",
           },
         ],
       },

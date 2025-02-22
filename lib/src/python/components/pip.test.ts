@@ -3,18 +3,23 @@
 import { Testing } from 'projen';
 
 import { TestProject } from '../../common/test-project';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 import { Pip } from './pip';
 
 describe('Pip', () => {
   test('snapshot of default options', () => {
     const project = new TestProject();
+    project.tasks.addTask(CommonTargets.INSTALL);
+    project.tasks.addTask(CommonTargets.PREPARE);
     new Pip(project, { venvPath: '.venv' });
     const out = Testing.synth(project);
     expect(out).toMatchSnapshot();
   });
   test('snapshot with custom options', () => {
     const project = new TestProject();
+    project.tasks.addTask(CommonTargets.INSTALL);
+    project.tasks.addTask(CommonTargets.PREPARE);
     new Pip(project, { venvPath: '.custom_venv' }, { lockFile: 'custom_requirements.txt' });
     const out = Testing.synth(project);
     expect(out).toMatchSnapshot();
@@ -22,6 +27,8 @@ describe('Pip', () => {
 
   test('snapshot with another set of custom options', () => {
     const project = new TestProject();
+    project.tasks.addTask(CommonTargets.INSTALL);
+    project.tasks.addTask(CommonTargets.PREPARE);
     new Pip(
       project,
       {

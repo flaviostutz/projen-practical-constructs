@@ -50,7 +50,6 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
         "name": "build",
       },
       "compile": {
@@ -74,16 +73,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -102,6 +100,14 @@ __pycache__
       "pre-compile": {
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
+      },
+      "prepare": {
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
       },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
@@ -213,7 +219,6 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
         "name": "build",
       },
       "compile": {
@@ -237,16 +242,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -265,6 +269,14 @@ __pycache__
       "pre-compile": {
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
+      },
+      "prepare": {
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
       },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",

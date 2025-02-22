@@ -2,7 +2,8 @@
 import { Component, DependencyType, Project } from 'projen';
 
 import { MyPyIniFile } from '../files';
-import { addTaskToParent, TaskOptions } from '../tasks';
+import { addSpawnTaskToExisting, TaskOptions } from '../tasks';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 export class MyPy extends Component {
   constructor(project: Project, taskOpts: TaskOptions) {
@@ -15,6 +16,6 @@ export class MyPy extends Component {
       description: `Code type checks (mypy)`,
       exec: `${taskOpts.venvPath}/bin/mypy src tests`,
     });
-    addTaskToParent(project, lintMypyTask, taskOpts.attachTasksTo);
+    addSpawnTaskToExisting(project, lintMypyTask, CommonTargets.LINT);
   }
 }

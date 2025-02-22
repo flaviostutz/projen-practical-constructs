@@ -4,6 +4,8 @@ import { NextTagOptions } from '../types/monotag';
 import { WithRequired } from '../types/utils';
 import { monotagCliArgs } from '../utils/monotag';
 
+import { CommonTargets } from './common-target-type';
+
 /**
  * Create tasks to support the basics of creating a software release based on git tags.
  * Uses monotag to calculate the next tag and release notes.
@@ -34,7 +36,7 @@ export class ReleaseTasks extends Component {
       project.addGitIgnore(optsWithDefaults.versionFile);
     }
 
-    const taskPrefix = `release${optsWithDefaults.name ? `:${optsWithDefaults.name}` : ''}`;
+    const taskPrefix = `${CommonTargets.RELEASE}${optsWithDefaults.name ? `:${optsWithDefaults.name}` : ''}`;
 
     const releaseTask = project.addTask(`${taskPrefix}`, {
       description: `Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.`,

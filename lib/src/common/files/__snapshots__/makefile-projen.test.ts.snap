@@ -93,28 +93,41 @@ node_modules/
 
 all: build lint test
 
-build:
-	npx projen build
-
-lint:
-	npx projen lint
-
-lint-fix:
-	npx projen lint-fix
-
-test:
-	npx projen test
-
-clean:
-	npx projen clean
-
 prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  
 
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
+# Remove projen from the project
+eject:
+	npx projen eject
+
+# Prepare the project for compilation
+pre-compile:
+	npx projen pre-compile
+
+# Only compile
+compile:
+	npx projen compile
+
+# Runs after successful compilation
+post-compile:
+	npx projen post-compile
+
+# Run tests
+test:
+	npx projen test
+
+# Creates the distribution package
+package:
+	npx projen package
+
+# Full release build
+build:
+	npx projen build
 
 ",
 }

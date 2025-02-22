@@ -25,7 +25,9 @@ describe('CommonTargetsTasks', () => {
       tasks: { 'pre-compile': {} },
     });
     expect(tasksObj).toMatchObject({
-      tasks: { lint: { description: 'Lint project' } },
+      tasks: {
+        lint: { description: 'Lint project (code style, formatting, audit, code smells etc)' },
+      },
     });
   });
 

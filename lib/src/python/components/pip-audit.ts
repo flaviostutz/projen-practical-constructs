@@ -1,7 +1,8 @@
 /* eslint-disable no-new */
 import { Component, DependencyType, Project } from 'projen';
 
-import { addTaskToParent, TaskOptions } from '../tasks';
+import { addSpawnTaskToExisting, TaskOptions } from '../tasks';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 export class PipAudit extends Component {
   constructor(project: Project, opts: TaskOptions) {
@@ -13,6 +14,6 @@ export class PipAudit extends Component {
       description: `Code type checks (mypy)`,
       exec: `${opts.venvPath}/bin/pip-audit --cache-dir .cache/.audit_cache`,
     });
-    addTaskToParent(project, lintAuditTask, opts.attachTasksTo);
+    addSpawnTaskToExisting(project, lintAuditTask, CommonTargets.LINT);
   }
 }

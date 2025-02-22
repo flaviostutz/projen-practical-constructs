@@ -15,8 +15,8 @@ build-examples:
 	@if [  ! -f "examples/python/Makefile" ]; then \
 		make dev-new; \
 	fi
-	cd "examples/python" && make build
 	make install-examples-local
+	cd "examples/python" && make build
 
 test-unit: test-lib test-examples
 
@@ -82,8 +82,8 @@ dev-new:
 	EXAMPLE_PATH=examples/python PROJ_TYPE=python_basic make run-test-integration
 
 clean:
-	cd lib && make clean
-	cd examples/python && make clean
+	-cd lib && make clean
+	-cd examples/python && make clean
 
 install-examples-local:
 	@echo "Installing local version of projen-practical-constructs in examples..."

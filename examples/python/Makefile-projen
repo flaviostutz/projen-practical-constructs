@@ -2,24 +2,10 @@ SHELL := /bin/bash
 
 all: build lint test
 
-build:
-	npx projen build
-
-lint:
-	npx projen lint
-
-lint-fix:
-	npx projen lint-fix
-
-test:
-	npx projen test
-
-clean:
-	npx projen clean
-
 prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  
 	
 	brew install python
 	brew install pyenv
@@ -30,7 +16,97 @@ prepare:
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
+# Remove projen from the project
+eject:
+	npx projen eject
+
+# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
+prepare:
+	npx projen prepare
+	
+	brew install python
+	brew install pyenv
+	make prepare-venv
+	make prepare-projen
+	
+
+# Build project (install -> compile -> package)
+build:
+	npx projen build
+
+# Install project dependencies
+install:
+	npx projen install
+
+# Compile project
+compile:
+	npx projen compile
+
+# Prepare a distributable package
+package:
+	npx projen package
+
+# Lint project (code style, formatting, audit, code smells etc)
+lint:
+	npx projen lint
+
+# Fix auto fixable lint issues
+lint-fix:
+	npx projen lint-fix
+
+# Test project
+test:
+	npx projen test
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release:
+	npx projen release
+
+# Executed before any release tasks. Placeholder for customizations
+release-pre:
+	npx projen release:pre
+
+# Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
+release-next-tag:
+	npx projen release:next-tag
+
+# Generates documentation, special files etc. Placeholder for customizations
+release-generate:
+	npx projen release:generate
+
+# Executed after all release tasks. Placeholder for customizations
+release-post:
+	npx projen release:post
+
+# Code type checks (mypy)
+lint-mypy:
+	npx projen lint-mypy
+
+# Code checks (RUFF)
+lint-ruff:
+	npx projen lint-ruff
+
+# Lint fix (RUFF)
+lint-ruff-fix:
+	npx projen lint-ruff-fix
+
+# Code type checks (mypy)
+lint-audit:
+	npx projen lint-audit
+
+# Unit tests (pytest)
+test-unit:
+	npx projen test-unit
+
+# Install dependencies from constraints-dev.txt (including dev deps)
+install-dev:
+	npx projen install-dev
+
+# Create python virtual environment in .venv
 prepare-venv:
 	npx projen prepare-venv
 
+# Update lock file (constraints.txt) according to pyproject.toml
+update-lockfile:
+	npx projen update-lockfile
 

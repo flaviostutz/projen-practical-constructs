@@ -129,16 +129,29 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
+        "description": "Build project (install -> compile -> package)",
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare-venv",
+            "spawn": "prepare",
           },
           {
-            "spawn": "install-dev",
+            "spawn": "default",
+          },
+          {
+            "spawn": "install",
+          },
+          {
+            "spawn": "compile",
+          },
+          {
+            "spawn": "package",
           },
         ],
+      },
+      "compile": {
+        "description": "Compile project",
+        "name": "compile",
       },
       "default": {
         "description": "Synthesize project files",
@@ -162,16 +175,16 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
+        "description": "Install project dependencies",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -180,7 +193,7 @@ __pycache__
         ],
       },
       "lint": {
-        "description": "Lint project (format, type check, audit, lint)",
+        "description": "Lint project (code style, formatting, audit, code smells etc)",
         "name": "lint",
         "steps": [
           {
@@ -245,6 +258,19 @@ __pycache__
           },
         ],
       },
+      "package": {
+        "description": "Prepare a distributable package",
+        "name": "package",
+      },
+      "prepare": {
+        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
+      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -257,8 +283,47 @@ __pycache__
           },
         ],
       },
+      "release": {
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+        "name": "release",
+        "steps": [
+          {
+            "spawn": "release:pre",
+          },
+          {
+            "spawn": "release:next-tag",
+          },
+          {
+            "spawn": "release:generate",
+          },
+          {
+            "spawn": "release:post",
+          },
+        ],
+      },
+      "release:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:generate",
+      },
+      "release:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.14.0 tag ",
+          },
+        ],
+      },
+      "release:post": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:post",
+      },
+      "release:pre": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre",
+      },
       "test": {
-        "description": "Test project (unit tests/coverage)",
+        "description": "Test project",
         "name": "test",
         "steps": [
           {
@@ -310,24 +375,10 @@ dev-sample:
 
 all: build lint test
 
-build:
-	npx projen build
-
-lint:
-	npx projen lint
-
-lint-fix:
-	npx projen lint-fix
-
-test:
-	npx projen test
-
-clean:
-	npx projen clean
-
 prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  
 	
 	brew install python
 	brew install pyenv
@@ -338,9 +389,99 @@ prepare:
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
+# Remove projen from the project
+eject:
+	npx projen eject
+
+# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
+prepare:
+	npx projen prepare
+	
+	brew install python
+	brew install pyenv
+	make prepare-venv
+	make prepare-projen
+	
+
+# Build project (install -> compile -> package)
+build:
+	npx projen build
+
+# Install project dependencies
+install:
+	npx projen install
+
+# Compile project
+compile:
+	npx projen compile
+
+# Prepare a distributable package
+package:
+	npx projen package
+
+# Lint project (code style, formatting, audit, code smells etc)
+lint:
+	npx projen lint
+
+# Fix auto fixable lint issues
+lint-fix:
+	npx projen lint-fix
+
+# Test project
+test:
+	npx projen test
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release:
+	npx projen release
+
+# Executed before any release tasks. Placeholder for customizations
+release-pre:
+	npx projen release:pre
+
+# Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
+release-next-tag:
+	npx projen release:next-tag
+
+# Generates documentation, special files etc. Placeholder for customizations
+release-generate:
+	npx projen release:generate
+
+# Executed after all release tasks. Placeholder for customizations
+release-post:
+	npx projen release:post
+
+# Code type checks (mypy)
+lint-mypy:
+	npx projen lint-mypy
+
+# Code checks (RUFF)
+lint-ruff:
+	npx projen lint-ruff
+
+# Lint fix (RUFF)
+lint-ruff-fix:
+	npx projen lint-ruff-fix
+
+# Code type checks (mypy)
+lint-audit:
+	npx projen lint-audit
+
+# Unit tests (pytest)
+test-unit:
+	npx projen test-unit
+
+# Install dependencies from constraints-dev.txt (including dev deps)
+install-dev:
+	npx projen install-dev
+
+# Create python virtual environment in .venv
 prepare-venv:
 	npx projen prepare-venv
 
+# Update lock file (constraints.txt) according to pyproject.toml
+update-lockfile:
+	npx projen update-lockfile
 
 ",
   "mypy.ini": "[mypy]
@@ -549,16 +690,29 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
+        "description": "Build project (install -> compile -> package)",
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare-venv",
+            "spawn": "prepare",
           },
           {
-            "spawn": "install-dev",
+            "spawn": "default",
+          },
+          {
+            "spawn": "install",
+          },
+          {
+            "spawn": "compile",
+          },
+          {
+            "spawn": "package",
           },
         ],
+      },
+      "compile": {
+        "description": "Compile project",
+        "name": "compile",
       },
       "default": {
         "description": "Synthesize project files",
@@ -582,16 +736,16 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from lock.txt",
+        "description": "Install project dependencies",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c lock.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -600,7 +754,7 @@ __pycache__
         ],
       },
       "lint": {
-        "description": "Lint project (format, type check, audit, lint)",
+        "description": "Lint project (code style, formatting, audit, code smells etc)",
         "name": "lint",
         "steps": [
           {
@@ -665,6 +819,19 @@ __pycache__
           },
         ],
       },
+      "package": {
+        "description": "Prepare a distributable package",
+        "name": "package",
+      },
+      "prepare": {
+        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
+      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -677,8 +844,47 @@ __pycache__
           },
         ],
       },
+      "release": {
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+        "name": "release",
+        "steps": [
+          {
+            "spawn": "release:pre",
+          },
+          {
+            "spawn": "release:next-tag",
+          },
+          {
+            "spawn": "release:generate",
+          },
+          {
+            "spawn": "release:post",
+          },
+        ],
+      },
+      "release:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:generate",
+      },
+      "release:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.14.0 tag ",
+          },
+        ],
+      },
+      "release:post": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:post",
+      },
+      "release:pre": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre",
+      },
       "test": {
-        "description": "Test project (unit tests/coverage)",
+        "description": "Test project",
         "name": "test",
         "steps": [
           {
@@ -750,24 +956,10 @@ dev-sample:
 
 all: build lint test
 
-build:
-	npx projen build
-
-lint:
-	npx projen lint
-
-lint-fix:
-	npx projen lint-fix
-
-test:
-	npx projen test
-
-clean:
-	npx projen clean
-
 prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  
 	
 	brew install python
 	brew install pyenv
@@ -778,9 +970,99 @@ prepare:
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
+# Remove projen from the project
+eject:
+	npx projen eject
+
+# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
+prepare:
+	npx projen prepare
+	
+	brew install python
+	brew install pyenv
+	make prepare-venv
+	make prepare-projen
+	
+
+# Build project (install -> compile -> package)
+build:
+	npx projen build
+
+# Install project dependencies
+install:
+	npx projen install
+
+# Compile project
+compile:
+	npx projen compile
+
+# Prepare a distributable package
+package:
+	npx projen package
+
+# Lint project (code style, formatting, audit, code smells etc)
+lint:
+	npx projen lint
+
+# Fix auto fixable lint issues
+lint-fix:
+	npx projen lint-fix
+
+# Test project
+test:
+	npx projen test
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release:
+	npx projen release
+
+# Executed before any release tasks. Placeholder for customizations
+release-pre:
+	npx projen release:pre
+
+# Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
+release-next-tag:
+	npx projen release:next-tag
+
+# Generates documentation, special files etc. Placeholder for customizations
+release-generate:
+	npx projen release:generate
+
+# Executed after all release tasks. Placeholder for customizations
+release-post:
+	npx projen release:post
+
+# Code type checks (mypy)
+lint-mypy:
+	npx projen lint-mypy
+
+# Code checks (RUFF)
+lint-ruff:
+	npx projen lint-ruff
+
+# Lint fix (RUFF)
+lint-ruff-fix:
+	npx projen lint-ruff-fix
+
+# Code type checks (mypy)
+lint-audit:
+	npx projen lint-audit
+
+# Unit tests (pytest)
+test-unit:
+	npx projen test-unit
+
+# Install dependencies from constraints-dev.txt (including dev deps)
+install-dev:
+	npx projen install-dev
+
+# Create python virtual environment in .venv
 prepare-venv:
 	npx projen prepare-venv
 
+# Update lock file (lock.txt) according to pyproject.toml
+update-lockfile:
+	npx projen update-lockfile
 
 ",
   "mypy.ini": "[mypy]
@@ -960,16 +1242,29 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
+        "description": "Build project (install -> compile -> package)",
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare-venv",
+            "spawn": "prepare",
           },
           {
-            "spawn": "install-dev",
+            "spawn": "default",
+          },
+          {
+            "spawn": "install",
+          },
+          {
+            "spawn": "compile",
+          },
+          {
+            "spawn": "package",
           },
         ],
+      },
+      "compile": {
+        "description": "Compile project",
+        "name": "compile",
       },
       "default": {
         "description": "Synthesize project files",
@@ -993,16 +1288,16 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
+        "description": "Install project dependencies",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -1011,7 +1306,7 @@ __pycache__
         ],
       },
       "lint": {
-        "description": "Lint project (format, type check, audit, lint)",
+        "description": "Lint project (code style, formatting, audit, code smells etc)",
         "name": "lint",
         "steps": [
           {
@@ -1076,6 +1371,19 @@ __pycache__
           },
         ],
       },
+      "package": {
+        "description": "Prepare a distributable package",
+        "name": "package",
+      },
+      "prepare": {
+        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
+        "name": "prepare",
+        "steps": [
+          {
+            "spawn": "prepare-venv",
+          },
+        ],
+      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -1088,8 +1396,47 @@ __pycache__
           },
         ],
       },
+      "release": {
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+        "name": "release",
+        "steps": [
+          {
+            "spawn": "release:pre",
+          },
+          {
+            "spawn": "release:next-tag",
+          },
+          {
+            "spawn": "release:generate",
+          },
+          {
+            "spawn": "release:post",
+          },
+        ],
+      },
+      "release:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:generate",
+      },
+      "release:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.14.0 tag ",
+          },
+        ],
+      },
+      "release:post": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:post",
+      },
+      "release:pre": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre",
+      },
       "test": {
-        "description": "Test project (unit tests/coverage)",
+        "description": "Test project",
         "name": "test",
         "steps": [
           {
@@ -1141,24 +1488,10 @@ dev-sample:
 
 all: build lint test
 
-build:
-	npx projen build
-
-lint:
-	npx projen lint
-
-lint-fix:
-	npx projen lint-fix
-
-test:
-	npx projen test
-
-clean:
-	npx projen clean
-
 prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  
 	
 	brew install python
 	brew install pyenv
@@ -1169,9 +1502,99 @@ prepare:
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
 
+# Remove projen from the project
+eject:
+	npx projen eject
+
+# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
+prepare:
+	npx projen prepare
+	
+	brew install python
+	brew install pyenv
+	make prepare-venv
+	make prepare-projen
+	
+
+# Build project (install -> compile -> package)
+build:
+	npx projen build
+
+# Install project dependencies
+install:
+	npx projen install
+
+# Compile project
+compile:
+	npx projen compile
+
+# Prepare a distributable package
+package:
+	npx projen package
+
+# Lint project (code style, formatting, audit, code smells etc)
+lint:
+	npx projen lint
+
+# Fix auto fixable lint issues
+lint-fix:
+	npx projen lint-fix
+
+# Test project
+test:
+	npx projen test
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release:
+	npx projen release
+
+# Executed before any release tasks. Placeholder for customizations
+release-pre:
+	npx projen release:pre
+
+# Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
+release-next-tag:
+	npx projen release:next-tag
+
+# Generates documentation, special files etc. Placeholder for customizations
+release-generate:
+	npx projen release:generate
+
+# Executed after all release tasks. Placeholder for customizations
+release-post:
+	npx projen release:post
+
+# Code type checks (mypy)
+lint-mypy:
+	npx projen lint-mypy
+
+# Code checks (RUFF)
+lint-ruff:
+	npx projen lint-ruff
+
+# Lint fix (RUFF)
+lint-ruff-fix:
+	npx projen lint-ruff-fix
+
+# Code type checks (mypy)
+lint-audit:
+	npx projen lint-audit
+
+# Unit tests (pytest)
+test-unit:
+	npx projen test-unit
+
+# Install dependencies from constraints-dev.txt (including dev deps)
+install-dev:
+	npx projen install-dev
+
+# Create python virtual environment in .venv
 prepare-venv:
 	npx projen prepare-venv
 
+# Update lock file (constraints.txt) according to pyproject.toml
+update-lockfile:
+	npx projen update-lockfile
 
 ",
   "mypy.ini": "[mypy]
