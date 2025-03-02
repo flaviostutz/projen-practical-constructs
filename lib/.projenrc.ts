@@ -21,7 +21,7 @@ const project = new cdk.JsiiProject({
     "@typescript-eslint/eslint-plugin@^7.15.0",
   ],
   peerDeps: [
-    'projen@^0.91.6',
+    'projen@^0.91.13',
     'constructs@^10.4.2',
   ],
   publishToPypi: {

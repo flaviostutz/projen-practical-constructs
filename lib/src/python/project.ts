@@ -82,14 +82,6 @@ export class PythonBasicProject extends Project {
 	npx projen prepare-venv
 
 `,
-      additionalMakefileContentsTargets: {
-        prepare: `
-brew install python
-brew install pyenv
-make prepare-venv
-make prepare-projen
-`,
-      },
     });
 
     // LINT

@@ -133,9 +133,6 @@ __pycache__
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare",
-          },
-          {
             "spawn": "default",
           },
           {
@@ -262,15 +259,6 @@ __pycache__
         "description": "Prepare a distributable package",
         "name": "package",
       },
-      "prepare": {
-        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -279,7 +267,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -379,29 +367,13 @@ prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
   
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 prepare-projen:
-	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
+	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.13; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.13; 	fi
 
 # Remove projen from the project
 eject:
 	npx projen eject
-
-# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
-prepare:
-	npx projen prepare
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 # Build project (install -> compile -> package)
 build:
@@ -694,9 +666,6 @@ __pycache__
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare",
-          },
-          {
             "spawn": "default",
           },
           {
@@ -823,15 +792,6 @@ __pycache__
         "description": "Prepare a distributable package",
         "name": "package",
       },
-      "prepare": {
-        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -840,7 +800,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -960,29 +920,13 @@ prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
   
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 prepare-projen:
-	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
+	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.13; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.13; 	fi
 
 # Remove projen from the project
 eject:
 	npx projen eject
-
-# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
-prepare:
-	npx projen prepare
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 # Build project (install -> compile -> package)
 build:
@@ -1246,9 +1190,6 @@ __pycache__
         "name": "build",
         "steps": [
           {
-            "spawn": "prepare",
-          },
-          {
             "spawn": "default",
           },
           {
@@ -1375,15 +1316,6 @@ __pycache__
         "description": "Prepare a distributable package",
         "name": "package",
       },
-      "prepare": {
-        "description": "Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)",
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -1392,7 +1324,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -1492,29 +1424,13 @@ prepare:
 	brew install nvm
 	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
   
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 prepare-projen:
-	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; 	fi
+	@if [ "$$CI" == "true" ]; then 		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.13; 	else 		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.13; 	fi
 
 # Remove projen from the project
 eject:
 	npx projen eject
-
-# Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)
-prepare:
-	npx projen prepare
-	
-	brew install python
-	brew install pyenv
-	make prepare-venv
-	make prepare-projen
-	
 
 # Build project (install -> compile -> package)
 build:

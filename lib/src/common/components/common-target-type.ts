@@ -1,5 +1,4 @@
 export enum CommonTargets {
-  PREPARE = 'prepare',
   BUILD = 'build',
   INSTALL = 'install',
   COMPILE = 'compile',

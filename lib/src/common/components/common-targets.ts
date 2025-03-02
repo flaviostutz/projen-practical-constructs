@@ -23,17 +23,10 @@ export class CommonTargetsTasks extends Component {
     project.tasks.removeTask('pre-compile');
     project.tasks.removeTask('post-compile');
 
-    const prepareTask = project.tasks.addTask(CommonTargets.PREPARE, {
-      description: `Installs (or checks) any tools required on the developer machine to build this software (such as nvm, brew, python, golang etc)`,
-    });
-
     if (opts?.build) {
       const buildTask = project.tasks.addTask(CommonTargets.BUILD, {
         description: `Build project (install -> compile -> package)`,
       });
-
-      // prepare
-      buildTask.spawn(prepareTask);
 
       // default (runs projen synth)
       const defaultTask = project.tasks.tryFind('default');

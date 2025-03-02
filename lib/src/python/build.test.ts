@@ -14,7 +14,6 @@ describe('BuildTarget', () => {
     project.removeTask(CommonTargets.BUILD);
     project.addTask(CommonTargets.BUILD);
     project.addTask(CommonTargets.INSTALL);
-    project.addTask(CommonTargets.PREPARE);
     new BuildTarget(project, taskOpts);
     const output = Testing.synth(project);
     expect(output).toMatchSnapshot();
@@ -26,7 +25,6 @@ describe('BuildTarget', () => {
     project.removeTask(CommonTargets.BUILD);
     project.addTask(CommonTargets.BUILD);
     project.addTask(CommonTargets.INSTALL);
-    project.addTask(CommonTargets.PREPARE);
     new BuildTarget(project, taskOpts, {
       package: {
         version: '1.2.3',

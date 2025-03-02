@@ -47,7 +47,7 @@ all: build test lint
 
 prepare-projen:
 	@if [ "$$CI" != "" ]; then \
-		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.6; \
+		set -x; npm install --no-save --no-package-lock ts-node@10.9.2 projen@0.91.13; \
 	else \
-		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.6; \
+		set -x; npm install --no-save ts-node@10.9.2 projen@0.91.13; \
 	fi

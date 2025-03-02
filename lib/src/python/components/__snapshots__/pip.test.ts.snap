@@ -117,14 +117,6 @@ __pycache__
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
       },
-      "prepare": {
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .venv",
         "name": "prepare-venv",
@@ -133,7 +125,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -281,14 +273,6 @@ __pycache__
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
       },
-      "prepare": {
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .another_venv",
         "name": "prepare-venv",
@@ -297,7 +281,7 @@ __pycache__
             "exec": "python -m venv .another_venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -445,14 +429,6 @@ __pycache__
         "description": "Prepare the project for compilation",
         "name": "pre-compile",
       },
-      "prepare": {
-        "name": "prepare",
-        "steps": [
-          {
-            "spawn": "prepare-venv",
-          },
-        ],
-      },
       "prepare-venv": {
         "description": "Create python virtual environment in .custom_venv",
         "name": "prepare-venv",
@@ -461,7 +437,7 @@ __pycache__
             "exec": "python -m venv .custom_venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },

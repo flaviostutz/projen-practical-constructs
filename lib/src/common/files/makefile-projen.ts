@@ -80,7 +80,7 @@ export interface MakefileProjenOptions {
   /**
    * The version of projen lib to be used in "prepare" target of the Makefile
    * to install tooling for Projen to work
-   * @default '0.91.6'
+   * @default '0.91.13'
    */
   readonly projenLibVersion?: string;
   /**

@@ -14,7 +14,7 @@ dependencies = [
   "mypy==1.14.*",
   "pip-audit==2.*",
   "pip-tools==7.4.1",
-  "projen==0.91.6",
+  "projen==0.91.13",
   "pytest-cov==6.0.*",
   "pytest==8.3.*",
   "ruff==0.8.*"

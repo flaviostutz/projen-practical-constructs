@@ -4,7 +4,7 @@
 #
 #    pip-compile --all-build-deps --extra=dev --output-file=constraints-dev.txt --strip-extras pyproject.toml
 #
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   cattrs
     #   jsii
@@ -28,7 +28,7 @@ constructs==10.4.2
     # via projen
 coverage==7.6.12
     # via pytest-cov
-cyclonedx-python-lib==8.8.0
+cyclonedx-python-lib==8.9.0
     # via pip-audit
 defusedxml==0.7.1
     # via py-serializable
@@ -40,7 +40,7 @@ importlib-resources==6.5.2
     # via jsii
 iniconfig==2.0.0
     # via pytest
-jsii==1.106.0
+jsii==1.108.0
     # via
     #   constructs
     #   projen
@@ -76,7 +76,7 @@ platformdirs==4.3.6
     # via pip-audit
 pluggy==1.5.0
     # via pytest
-projen==0.91.6
+projen==0.91.13
     # via python (pyproject.toml)
 publication==0.0.3
     # via
@@ -93,7 +93,7 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   pytest-cov
     #   python (pyproject.toml)

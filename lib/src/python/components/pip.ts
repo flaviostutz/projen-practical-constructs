@@ -35,7 +35,7 @@ export class Pip extends Component {
     });
     addSpawnTaskToExisting(project, installDevTask, CommonTargets.INSTALL);
 
-    const prepareVenvTask = project.tasks.addTask('prepare-venv', {
+    project.tasks.addTask('prepare-venv', {
       description: `Create python virtual environment in ${taskOpts.venvPath}`,
       steps: [
         { exec: `${optsd.pythonExec} -m venv ${taskOpts.venvPath}` },
@@ -44,7 +44,6 @@ export class Pip extends Component {
         },
       ],
     });
-    addSpawnTaskToExisting(project, prepareVenvTask, CommonTargets.PREPARE);
 
     project.tasks.addTask('update-lockfile', {
       description: `Update lock file (${optsd.lockFile}) according to pyproject.toml`,
@@ -74,9 +73,13 @@ export class Pip extends Component {
 
     // run prepare venv, update lockfile and build
     const runtime = new TaskRuntime(this.project.outdir);
+
+    // similar to "build", but without the "default" task
     runtime.runTask('prepare-venv');
     runtime.runTask('update-lockfile');
-    runtime.runTask('build');
+    runtime.runTask('install');
+    runtime.runTask('compile');
+    runtime.runTask('package');
   }
 }
 

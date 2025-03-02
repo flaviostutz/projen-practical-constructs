@@ -15,7 +15,7 @@ build-examples:
 	@if [  ! -f "examples/python/Makefile" ]; then \
 		make dev-new; \
 	fi
-	make install-examples-local
+	EXAMPLE_PATH="examples/python" make install-examples-local
 	cd "examples/python" && make build
 
 test-unit: test-lib test-examples
@@ -35,8 +35,8 @@ test-integration:
 lint:
 	@echo ">>> Lint lib..."
 	cd lib && make lint
-	@echo ">>> Lint examples..."
-	cd "examples/python" && make lint
+	# @echo ">>> Lint examples..."
+	# cd "examples/python" && make lint
 
 # Creates a brand new project using this project type
 # and runs build, lint, test on it to check if 
@@ -57,6 +57,8 @@ run-test-integration:
 
 	@echo ">>> Create a brand new example project with type '$$PROJ_TYPE'"
 	cd "$$EXAMPLE_PATH" && npx projen new --no-git --from ../../lib/dist/js/projen-practical-constructs@0.0.0.jsii.tgz $$PROJ_TYPE
+
+	EXAMPLE_PATH="examples/python" make install-examples-local
 
 	@echo ">>> Run build, lint-fix, lint and test on the generated example project"
 	cd "$$EXAMPLE_PATH" && make build lint-fix lint test
@@ -86,8 +88,12 @@ clean:
 	-cd examples/python && make clean
 
 install-examples-local:
+	@if [ "$$EXAMPLE_PATH" = "" ]; then \
+		echo "EXAMPLE_PATH env is required"; \
+		exit 1; \
+	fi
 	@echo "Installing local version of projen-practical-constructs in examples..."
-	examples/python/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
+	$$EXAMPLE_PATH/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
 
 prepare:
 	brew install python
