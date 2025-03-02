@@ -92,6 +92,7 @@ install-examples-local:
 		echo "EXAMPLE_PATH env is required"; \
 		exit 1; \
 	fi
+	cd $$EXAMPLE_PATH && make prepare-venv
 	@echo "Installing local version of projen-practical-constructs in examples..."
 	$$EXAMPLE_PATH/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
 
