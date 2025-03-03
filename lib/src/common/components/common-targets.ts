@@ -11,7 +11,7 @@ export class CommonTargetsTasks extends Component {
   constructor(project: Project, opts?: BaseTasksOptions) {
     super(project);
 
-    if (!opts?.build && !opts?.lint && !opts?.test && !opts?.release) {
+    if (!opts?.buildEnable && !opts?.lintEnable && !opts?.testEnable && !opts?.releaseEnable) {
       throw new Error('No tasks enabled. At least one task must be enabled');
     }
 
@@ -23,7 +23,7 @@ export class CommonTargetsTasks extends Component {
     project.tasks.removeTask('pre-compile');
     project.tasks.removeTask('post-compile');
 
-    if (opts?.build) {
+    if (opts?.buildEnable) {
       const buildTask = project.tasks.addTask(CommonTargets.BUILD, {
         description: `Build project (install -> compile -> package)`,
       });
@@ -53,7 +53,7 @@ export class CommonTargetsTasks extends Component {
       buildTask.spawn(packageTask);
     }
 
-    if (opts?.lint) {
+    if (opts?.lintEnable) {
       project.tasks.addTask(CommonTargets.LINT, {
         description: `Lint project (code style, formatting, audit, code smells etc)`,
       });
@@ -62,26 +62,26 @@ export class CommonTargetsTasks extends Component {
       });
     }
 
-    if (opts?.test) {
+    if (opts?.testEnable) {
       project.tasks.addTask(CommonTargets.TEST, {
         description: `Test project`,
       });
     }
 
-    if (opts?.publish) {
+    if (opts?.publishEnable) {
       project.tasks.addTask(CommonTargets.PUBLISH, {
         description: `Publish project artifacts to a repository`,
       });
     }
 
-    if (opts?.deploy) {
+    if (opts?.deployEnable) {
       project.tasks.addTask(CommonTargets.DEPLOY, {
         description: `Deploy project runtime resources to an environment`,
         requiredEnv: ['STAGE'],
       });
     }
 
-    if (opts?.release) {
+    if (opts?.releaseEnable) {
       // eslint-disable-next-line no-new
       new ReleaseTasks(project, opts.releaseOpts);
     }
@@ -92,29 +92,29 @@ export interface BaseTasksOptions {
   /**
    * Whether to include the build task with all its default subtasks
    */
-  build?: boolean;
+  readonly buildEnable?: boolean;
   /**
    * Whether to include the lint tasks
    */
-  lint?: boolean;
+  readonly lintEnable?: boolean;
   /**
    * Whether to include the test tasks
    */
-  test?: boolean;
+  readonly testEnable?: boolean;
   /**
    * Whether to include release tasks
    */
-  release?: boolean;
+  readonly releaseEnable?: boolean;
   /**
    * Release task options
    */
-  releaseOpts?: ReleaseTasksOptions;
+  readonly releaseOpts?: ReleaseTasksOptions;
   /**
    * Whether to include deploy tasks
    */
-  deploy?: boolean;
+  readonly deployEnable?: boolean;
   /**
    * Whether to include publish tasks
    */
-  publish?: boolean;
+  readonly publishEnable?: boolean;
 }

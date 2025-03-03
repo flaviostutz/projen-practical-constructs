@@ -298,7 +298,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 tag ",
+            "exec": "npx -y monotag@1.14.0 notes ",
           },
         ],
       },
@@ -831,7 +831,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 tag ",
+            "exec": "npx -y monotag@1.14.0 notes ",
           },
         ],
       },
@@ -1355,7 +1355,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 tag ",
+            "exec": "npx -y monotag@1.14.0 notes ",
           },
         ],
       },

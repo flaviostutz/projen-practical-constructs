@@ -12,12 +12,12 @@ export interface NextTagOptions {
    * Command line used to invoke Monotag to perform tag calculations
    * @default 'npx monotag@1.14.0'
    */
-  monotagCmd?: string;
+  readonly monotagCmd?: string;
   /**
    * Extra arguments to be added to every invocation of Monotag
    * @default ''
    */
-  monotagExtraArgs?: string;
+  readonly monotagExtraArgs?: string;
 
   // from BasicOptions in Monotag
   /**
@@ -25,43 +25,43 @@ export interface NextTagOptions {
    * Defaults to local directory
    * @default '.'
    */
-  repoDir?: string;
+  readonly repoDir?: string;
   /**
    * Path inside repository for looking for changes
    * Defaults to any path
    * @default ''
    */
-  path?: string;
+  readonly path?: string;
   /**
    * Git ref range (starting point) for searching for changes in git log history
    * @default latest tag
    */
-  fromRef?: string;
+  readonly fromRef?: string;
   /**
    * Git ref range (ending point) for searching for changes in git log history
    * Defaults to HEAD
    * @default HEAD
    */
-  toRef?: string;
+  readonly toRef?: string;
   /**
    * Only take into consideration git commits that follows the conventional commits format
    * while rendering release notes
    * @default false
    */
-  onlyConvCommit?: boolean;
+  readonly onlyConvCommit?: boolean;
   /**
    * Output messages about what is being done
    * Such as git commands being executed etc
    * @default false
    */
-  verbose?: boolean;
+  readonly verbose?: boolean;
 
   // from NextTagOptions in Monotag
   /**
    * Tag prefix to look for latest tag and for generating the tag
    * @default ''
    */
-  tagPrefix?: string;
+  readonly tagPrefix?: string;
   /**
    * Tag suffix to add to the generated tag
    * When using pre-release capabilities, that will manage and increment prerelease versions,
@@ -69,26 +69,26 @@ export interface NextTagOptions {
    * E.g.: 1.0.0-beta.1-MY_SUFFIX, if tagSuffix is '-MY_SUFFIX'
    * @default ''
    */
-  tagSuffix?: string;
+  readonly tagSuffix?: string;
   /**
    * Which level to increment the version.
    * If undefined, it will be automatic, based on commit messages
    * @default undefined
    */
-  semverLevel?: 'major' | 'minor' | 'patch' | 'none';
+  readonly semverLevel?: 'major' | 'minor' | 'patch' | 'none';
 
   /**
    * Minimum version for the generated tag.
    * If the naturally incremented version is lower, this value will be used
    * @default no limit
    */
-  minVersion?: string;
+  readonly minVersion?: string;
   /**
    * Maximum version for the generated tag.
    * If the generated version is higher than this, the operation will fail
    * @default no limit
    */
-  maxVersion?: string;
+  readonly maxVersion?: string;
   /**
    * If the generated version is a pre-release
    * This will add a pre-release identifier to the version. E.g.: 1.0.0-beta
@@ -99,35 +99,35 @@ export interface NextTagOptions {
    * The same applies for minor and patch levels.
    * @default false
    */
-  preRelease?: boolean;
+  readonly preRelease?: boolean;
   /**
    * Pre-release identifier
    * @default 'beta'
    */
-  preReleaseIdentifier?: string;
+  readonly preReleaseIdentifier?: string;
   /**
    * If true, the pre-release version will always be incremented
    * even if no changes are detected
    * So subsequent calls to 'nextTag' will always increment the pre-release version
    * @default false
    */
-  preReleaseAlwaysIncrement?: boolean;
+  readonly preReleaseAlwaysIncrement?: boolean;
   /**
    * File that will be written with the tag name (e.g.: myservice/1.2.3-beta.0)
    * @default undefined (won't be created)
    */
-  tagFile?: string;
+  readonly tagFile?: string;
   /**
    * File that will be written with the version (e.g.: 1.2.3-beta.0)
    * @default undefined (won't be created)
    */
-  versionFile?: string;
+  readonly versionFile?: string;
   /**
    * File that will be written with the notes with the changes detected
    * The content will be a markdown with a list of commits
    * @default undefined (won't be created)
    */
-  notesFile?: string;
+  readonly notesFile?: string;
   /**
    * File with the changelog that will be updated with the new version
    * During update, this will check if the version is already present in the changelog
@@ -135,34 +135,34 @@ export interface NextTagOptions {
    * Normally this file is named CHANGELOG.md
    * @default undefined (won't be created)
    */
-  changelogFile?: string;
+  readonly changelogFile?: string;
 
   /**
    * Configure git cli with username
    * Required if action is 'commit', 'tag' or 'push'
    */
-  gitUsername?: string;
+  readonly gitUsername?: string;
   /**
    * Configure git cli with email
    * Required if action is 'commit', 'tag' or 'push'
    */
-  gitEmail?: string;
+  readonly gitEmail?: string;
 
   /**
    * Bump action to be performed after the tag is generated
    * in regard to package files such as package.json, pyproject.yml etc
-   * Options:
+   * Should be one of:
    *   - 'latest': bump the version field of the files to the calculated tag
    *   - 'zero': bump the version field of the files to 0.0.0
    *   - 'none': won't change any files
    * @default 'none'
    */
-  bumpAction?: 'latest' | 'zero' | 'none';
+  readonly bumpAction?: 'latest' | 'zero' | 'none';
   /**
    * Files to be bumped with the latest version
    * It will search for a "version" attribute in the file, replace it with the new version and save
    * If the field doesn't exist, it won't be changed
    * @default ['package.json']
    */
-  bumpFiles?: string[];
+  readonly bumpFiles?: string[];
 }

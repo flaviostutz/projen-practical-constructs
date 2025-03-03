@@ -120,7 +120,7 @@ node_modules/
         "name": "release:custom:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 tag --git-email="test@example.com" --git-username="testuser"",
+            "exec": "npx -y monotag@1.14.0 notes --git-email="test@example.com" --git-username="testuser"",
           },
         ],
       },
@@ -249,7 +249,7 @@ node_modules/
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 tag ",
+            "exec": "npx -y monotag@1.14.0 notes ",
           },
         ],
       },

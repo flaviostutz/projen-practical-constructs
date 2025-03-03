@@ -5,7 +5,7 @@ import { TS_NODE_VERSION } from '../../python/constants';
 import { NODE_VERSION, PROJEN_VERSION } from '../constants';
 
 export class MakefileProjenFile extends FileBase {
-  optsWithDefaults: Required<MakefileProjenOptions>;
+  private readonly optsWithDefaults: Required<MakefileProjenOptions>;
 
   constructor(project: Project, opts?: MakefileProjenOptions) {
     super(project, 'Makefile-projen');

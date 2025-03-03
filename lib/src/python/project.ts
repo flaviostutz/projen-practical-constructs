@@ -7,6 +7,7 @@ import { Projenrc } from 'projen/lib/python';
 import { NODE_VERSION, PROJEN_VERSION } from '../common/constants';
 import { BaseTooling } from '../common/components/base-tooling';
 import { CommonTargetsTasks } from '../common/components/common-targets';
+import { ReleaseTasksOptions } from '../common/components/release-tasks';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
@@ -56,10 +57,11 @@ export class PythonBasicProject extends Project {
     // will create tasks such as build, lint, test, release etc
     // based on common-tasks spec
     new CommonTargetsTasks(this, {
-      build: true,
-      lint: true,
-      test: true,
-      release: true,
+      buildEnable: true,
+      lintEnable: true,
+      testEnable: true,
+      releaseEnable: true,
+      releaseOpts: optionsWithDefaults.release,
     });
 
     // create README.md
@@ -166,6 +168,10 @@ export interface PythonBasicOptions extends ProjectOptions, Build0Options, TaskO
    * Test configurations
    */
   readonly test?: TestOptions;
+  /**
+   * Release options for the "release" task
+   */
+  readonly release?: ReleaseTasksOptions;
 }
 
 const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonBasicOptions => {

@@ -52,7 +52,7 @@ export class ReleaseTasks extends Component {
         'Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"',
       steps: [
         {
-          exec: `${optsWithDefaults.monotagCmd} tag ${monotagCliArgs(optsWithDefaults)}`,
+          exec: `${optsWithDefaults.monotagCmd} notes ${monotagCliArgs(optsWithDefaults)}`,
         },
       ],
     });
@@ -127,7 +127,7 @@ export interface ReleaseTasksOptions extends NextTagOptions {
    *  - push: Calculate tag/notes, commit, tag (git) and push resources to remote git
    * @default 'console'
    */
-  action: 'console' | 'tag' | 'push';
+  readonly action: 'console' | 'tag' | 'push';
   /**
    * Name of this release group of tasks
    * Useful if you have multiple release tasks in the same project
@@ -135,5 +135,5 @@ export interface ReleaseTasksOptions extends NextTagOptions {
    * The release tasks will be named as "release:<name>:<task>"
    * @default ''
    */
-  name?: string;
+  readonly name?: string;
 }
