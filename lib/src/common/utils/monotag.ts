@@ -17,7 +17,7 @@ export const monotagCliArgs = (opts: NextTagOptions): string => {
   pushIfDefined(args, 'path', opts.path);
   pushIfDefined(args, 'prerelease', opts.preRelease ? 'true' : '');
   pushIfDefined(args, 'prerelease-increment', opts.preReleaseAlwaysIncrement ? 'true' : '');
-  pushIfDefined(args, 'prerelease-id', opts.preReleaseIdentifier);
+  pushIfDefined(args, 'prerelease-identifier', opts.preReleaseIdentifier);
   pushIfDefined(args, 'repoDir', opts.repoDir);
   pushIfDefined(args, 'semver-level', opts.semverLevel);
   pushIfDefined(args, 'tag-file', opts.tagFile);

@@ -178,7 +178,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes "
+          "exec": "npx -y monotag@1.15.1 notes --prerelease-identifier=\"rc\""
         }
       ]
     },
@@ -217,7 +217,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\""
+          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\" --prerelease-identifier=\"rc\""
         }
       ]
     },
