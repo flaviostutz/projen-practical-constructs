@@ -148,7 +148,7 @@
       "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
       "steps": [
         {
-          "spawn": "release:pre"
+          "spawn": "release:before"
         },
         {
           "spawn": "release:next-tag"
@@ -157,9 +157,17 @@
           "spawn": "release:generate"
         },
         {
-          "spawn": "release:post"
+          "spawn": "release:after"
         }
       ]
+    },
+    "release:after": {
+      "name": "release:after",
+      "description": "Executed after all release tasks. Placeholder for customizations"
+    },
+    "release:before": {
+      "name": "release:before",
+      "description": "Executed before any release tasks. Placeholder for customizations"
     },
     "release:generate": {
       "name": "release:generate",
@@ -170,17 +178,48 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.14.0 notes "
+          "exec": "npx -y monotag@1.15.1 notes "
         }
       ]
     },
-    "release:post": {
-      "name": "release:post",
-      "description": "Executed after all release tasks. Placeholder for customizations"
-    },
     "release:pre": {
       "name": "release:pre",
+      "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+      "steps": [
+        {
+          "spawn": "release:pre:before"
+        },
+        {
+          "spawn": "release:pre:next-tag"
+        },
+        {
+          "spawn": "release:pre:generate"
+        },
+        {
+          "spawn": "release:pre:after"
+        }
+      ]
+    },
+    "release:pre:after": {
+      "name": "release:pre:after",
+      "description": "Executed after all release tasks. Placeholder for customizations"
+    },
+    "release:pre:before": {
+      "name": "release:pre:before",
       "description": "Executed before any release tasks. Placeholder for customizations"
+    },
+    "release:pre:generate": {
+      "name": "release:pre:generate",
+      "description": "Generates documentation, special files etc. Placeholder for customizations"
+    },
+    "release:pre:next-tag": {
+      "name": "release:pre:next-tag",
+      "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\""
+        }
+      ]
     },
     "test": {
       "name": "test",

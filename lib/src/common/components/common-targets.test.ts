@@ -74,4 +74,22 @@ describe('CommonTargetsTasks', () => {
       tasks: { publish: {} },
     });
   });
+  it('keep existing tasks', () => {
+    const project = new Project({ name: 'test1' });
+    new CommonTargetsTasks(project, { cleanupDefaultTasks: false, lintEnable: true });
+    const synth = Testing.synth(project);
+    const tasksObj = synth['.projen/tasks.json'];
+    expect(tasksObj).toMatchObject({
+      tasks: { build: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { lint: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { test: {} },
+    });
+    expect(tasksObj).toMatchObject({
+      tasks: { 'pre-compile': {} },
+    });
+  });
 });

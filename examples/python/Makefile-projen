@@ -47,8 +47,8 @@ release:
 	npx projen release
 
 # Executed before any release tasks. Placeholder for customizations
-release-pre:
-	npx projen release:pre
+release-before:
+	npx projen release:before
 
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
@@ -59,8 +59,12 @@ release-generate:
 	npx projen release:generate
 
 # Executed after all release tasks. Placeholder for customizations
-release-post:
-	npx projen release:post
+release-after:
+	npx projen release:after
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release-pre:
+	npx projen release:pre
 
 # Code type checks (mypy)
 lint-mypy:

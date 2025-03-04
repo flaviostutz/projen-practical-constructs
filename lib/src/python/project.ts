@@ -61,7 +61,23 @@ export class PythonBasicProject extends Project {
       lintEnable: true,
       testEnable: true,
       releaseEnable: true,
-      releaseOpts: optionsWithDefaults.release,
+      releaseOpts: {
+        action: 'console',
+        ...optionsWithDefaults.release,
+        preRelease: false,
+      },
+    });
+
+    // create pre-release task "release:pre"
+    new CommonTargetsTasks(this, {
+      cleanupDefaultTasks: false,
+      releaseEnable: true,
+      releaseOpts: {
+        action: 'console',
+        ...optionsWithDefaults.release,
+        preRelease: true,
+        name: 'pre',
+      },
     });
 
     // create README.md

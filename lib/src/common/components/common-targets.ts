@@ -16,12 +16,14 @@ export class CommonTargetsTasks extends Component {
     }
 
     // cleanup existing tasks
-    project.tasks.removeTask('build');
-    project.tasks.removeTask('test');
-    project.tasks.removeTask('compile');
-    project.tasks.removeTask('package');
-    project.tasks.removeTask('pre-compile');
-    project.tasks.removeTask('post-compile');
+    if (opts?.cleanupDefaultTasks ?? true) {
+      project.tasks.removeTask('build');
+      project.tasks.removeTask('test');
+      project.tasks.removeTask('compile');
+      project.tasks.removeTask('package');
+      project.tasks.removeTask('pre-compile');
+      project.tasks.removeTask('post-compile');
+    }
 
     if (opts?.buildEnable) {
       const buildTask = project.tasks.addTask(CommonTargets.BUILD, {
@@ -117,4 +119,11 @@ export interface BaseTasksOptions {
    * Whether to include publish tasks
    */
   readonly publishEnable?: boolean;
+
+  /**
+   * Whether to cleanup default tasks (build, test, compile, package, pre-compile, post-compile)
+   * before adding new ones
+   * @default true
+   */
+  readonly cleanupDefaultTasks?: boolean;
 }

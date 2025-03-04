@@ -3,7 +3,7 @@ import { Testing } from 'projen';
 
 import { TestProject } from '../test-project';
 
-import { ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
+import { MONOTAG_VERSION, ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
 
 describe('ReleaseTasks', () => {
   it('synthesizes correctly with default options', () => {
@@ -45,7 +45,9 @@ describe('ReleaseTasks', () => {
         'release:custom:next-tag': {
           steps: [
             {
-              exec: 'npx -y monotag@1.14.0 notes --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"',
+              exec: `npx -y monotag@${
+                MONOTAG_VERSION
+              } notes --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"`,
             },
           ],
         },
@@ -59,7 +61,7 @@ describe('ReleaseTasks', () => {
       action: 'invalid' as 'console',
     };
     expect(() => new ReleaseTasks(project, options)).toThrow(
-      'Invalid action: invalid. Valid actions are: console, tag, push',
+      "Invalid action: 'invalid'. Valid actions are: 'console', 'tag', 'push'",
     );
   });
 

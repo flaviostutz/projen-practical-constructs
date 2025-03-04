@@ -6,6 +6,8 @@ import { monotagCliArgs } from '../utils/monotag';
 
 import { CommonTargets } from './common-target-type';
 
+export const MONOTAG_VERSION = '1.15.1';
+
 /**
  * Create tasks to support the basics of creating a software release based on git tags.
  * Uses monotag to calculate the next tag and release notes.
@@ -42,7 +44,7 @@ export class ReleaseTasks extends Component {
       description: `Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.`,
     });
 
-    const preTask = project.addTask(`${taskPrefix}:pre`, {
+    const preTask = project.addTask(`${taskPrefix}:before`, {
       description: 'Executed before any release tasks. Placeholder for customizations',
     });
     releaseTask.spawn(preTask);
@@ -88,7 +90,7 @@ export class ReleaseTasks extends Component {
       releaseTask.spawn(gitPushTask);
     }
 
-    const postTask = project.addTask(`${taskPrefix}:post`, {
+    const postTask = project.addTask(`${taskPrefix}:after`, {
       description: 'Executed after all release tasks. Placeholder for customizations',
     });
     releaseTask.spawn(postTask);
@@ -100,7 +102,9 @@ const getOptionsWithDefaults = (
 ): WithRequired<ReleaseTasksOptions, 'name' | 'action' | 'monotagCmd'> => {
   // check if action is valid
   if (opts?.action && !['console', 'tag', 'push'].includes(opts.action)) {
-    throw new Error(`Invalid action: ${opts.action}. Valid actions are: console, tag, push`);
+    throw new Error(
+      `Invalid action: '${opts?.action}'. Valid actions are: 'console', 'tag', 'push'`,
+    );
   }
 
   if (
@@ -113,7 +117,7 @@ const getOptionsWithDefaults = (
   return {
     name: '',
     action: 'console',
-    monotagCmd: 'npx -y monotag@1.14.0',
+    monotagCmd: `npx -y monotag@${MONOTAG_VERSION}`,
     ...opts,
   };
 };
@@ -127,12 +131,12 @@ export interface ReleaseTasksOptions extends NextTagOptions {
    *  - push: Calculate tag/notes, commit, tag (git) and push resources to remote git
    * @default 'console'
    */
-  readonly action: 'console' | 'tag' | 'push';
+  readonly action?: 'console' | 'tag' | 'push';
   /**
    * Name of this release group of tasks
    * Useful if you have multiple release tasks in the same project
    * with different configurations.
-   * The release tasks will be named as "release:<name>:<task>"
+   * The release tasks will be named as "release:[name]:[task]"
    * @default ''
    */
   readonly name?: string;

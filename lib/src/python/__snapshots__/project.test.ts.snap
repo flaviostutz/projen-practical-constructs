@@ -276,7 +276,7 @@ __pycache__
         "name": "release",
         "steps": [
           {
-            "spawn": "release:pre",
+            "spawn": "release:before",
           },
           {
             "spawn": "release:next-tag",
@@ -285,9 +285,17 @@ __pycache__
             "spawn": "release:generate",
           },
           {
-            "spawn": "release:post",
+            "spawn": "release:after",
           },
         ],
+      },
+      "release:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:after",
+      },
+      "release:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:before",
       },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -298,17 +306,48 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 notes ",
+            "exec": "npx -y monotag@1.15.1 notes ",
           },
         ],
       },
-      "release:post": {
-        "description": "Executed after all release tasks. Placeholder for customizations",
-        "name": "release:post",
-      },
       "release:pre": {
-        "description": "Executed before any release tasks. Placeholder for customizations",
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release:pre",
+        "steps": [
+          {
+            "spawn": "release:pre:before",
+          },
+          {
+            "spawn": "release:pre:next-tag",
+          },
+          {
+            "spawn": "release:pre:generate",
+          },
+          {
+            "spawn": "release:pre:after",
+          },
+        ],
+      },
+      "release:pre:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:pre:after",
+      },
+      "release:pre:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre:before",
+      },
+      "release:pre:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:pre:generate",
+      },
+      "release:pre:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:pre:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+          },
+        ],
       },
       "test": {
         "description": "Test project",
@@ -408,8 +447,8 @@ release:
 	npx projen release
 
 # Executed before any release tasks. Placeholder for customizations
-release-pre:
-	npx projen release:pre
+release-before:
+	npx projen release:before
 
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
@@ -420,8 +459,12 @@ release-generate:
 	npx projen release:generate
 
 # Executed after all release tasks. Placeholder for customizations
-release-post:
-	npx projen release:post
+release-after:
+	npx projen release:after
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release-pre:
+	npx projen release:pre
 
 # Code type checks (mypy)
 lint-mypy:
@@ -809,7 +852,7 @@ __pycache__
         "name": "release",
         "steps": [
           {
-            "spawn": "release:pre",
+            "spawn": "release:before",
           },
           {
             "spawn": "release:next-tag",
@@ -818,9 +861,17 @@ __pycache__
             "spawn": "release:generate",
           },
           {
-            "spawn": "release:post",
+            "spawn": "release:after",
           },
         ],
+      },
+      "release:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:after",
+      },
+      "release:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:before",
       },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -831,17 +882,48 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 notes ",
+            "exec": "npx -y monotag@1.15.1 notes ",
           },
         ],
       },
-      "release:post": {
-        "description": "Executed after all release tasks. Placeholder for customizations",
-        "name": "release:post",
-      },
       "release:pre": {
-        "description": "Executed before any release tasks. Placeholder for customizations",
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release:pre",
+        "steps": [
+          {
+            "spawn": "release:pre:before",
+          },
+          {
+            "spawn": "release:pre:next-tag",
+          },
+          {
+            "spawn": "release:pre:generate",
+          },
+          {
+            "spawn": "release:pre:after",
+          },
+        ],
+      },
+      "release:pre:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:pre:after",
+      },
+      "release:pre:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre:before",
+      },
+      "release:pre:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:pre:generate",
+      },
+      "release:pre:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:pre:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+          },
+        ],
       },
       "test": {
         "description": "Test project",
@@ -961,8 +1043,8 @@ release:
 	npx projen release
 
 # Executed before any release tasks. Placeholder for customizations
-release-pre:
-	npx projen release:pre
+release-before:
+	npx projen release:before
 
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
@@ -973,8 +1055,12 @@ release-generate:
 	npx projen release:generate
 
 # Executed after all release tasks. Placeholder for customizations
-release-post:
-	npx projen release:post
+release-after:
+	npx projen release:after
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release-pre:
+	npx projen release:pre
 
 # Code type checks (mypy)
 lint-mypy:
@@ -1333,7 +1419,7 @@ __pycache__
         "name": "release",
         "steps": [
           {
-            "spawn": "release:pre",
+            "spawn": "release:before",
           },
           {
             "spawn": "release:next-tag",
@@ -1342,9 +1428,17 @@ __pycache__
             "spawn": "release:generate",
           },
           {
-            "spawn": "release:post",
+            "spawn": "release:after",
           },
         ],
+      },
+      "release:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:after",
+      },
+      "release:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:before",
       },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -1355,17 +1449,48 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.14.0 notes ",
+            "exec": "npx -y monotag@1.15.1 notes ",
           },
         ],
       },
-      "release:post": {
-        "description": "Executed after all release tasks. Placeholder for customizations",
-        "name": "release:post",
-      },
       "release:pre": {
-        "description": "Executed before any release tasks. Placeholder for customizations",
+        "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release:pre",
+        "steps": [
+          {
+            "spawn": "release:pre:before",
+          },
+          {
+            "spawn": "release:pre:next-tag",
+          },
+          {
+            "spawn": "release:pre:generate",
+          },
+          {
+            "spawn": "release:pre:after",
+          },
+        ],
+      },
+      "release:pre:after": {
+        "description": "Executed after all release tasks. Placeholder for customizations",
+        "name": "release:pre:after",
+      },
+      "release:pre:before": {
+        "description": "Executed before any release tasks. Placeholder for customizations",
+        "name": "release:pre:before",
+      },
+      "release:pre:generate": {
+        "description": "Generates documentation, special files etc. Placeholder for customizations",
+        "name": "release:pre:generate",
+      },
+      "release:pre:next-tag": {
+        "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"",
+        "name": "release:pre:next-tag",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+          },
+        ],
       },
       "test": {
         "description": "Test project",
@@ -1465,8 +1590,8 @@ release:
 	npx projen release
 
 # Executed before any release tasks. Placeholder for customizations
-release-pre:
-	npx projen release:pre
+release-before:
+	npx projen release:before
 
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
@@ -1477,8 +1602,12 @@ release-generate:
 	npx projen release:generate
 
 # Executed after all release tasks. Placeholder for customizations
-release-post:
-	npx projen release:post
+release-after:
+	npx projen release:after
+
+# Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
+release-pre:
+	npx projen release:pre
 
 # Code type checks (mypy)
 lint-mypy:

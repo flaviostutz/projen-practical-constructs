@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 /* eslint-disable no-restricted-syntax */
 import { FileBase, IResolver, Project } from 'projen';
 
@@ -43,13 +44,18 @@ prepare-projen:
 
     for (const task of this.project.tasks.all) {
       if (task.name === 'default') {
-        // eslint-disable-next-line no-continue
+        continue;
+      }
+      // replace only the first colon with a dash
+      const taskName = task.name.replace(':', '-');
+      if (taskName.includes(':')) {
+        // multiple task level found. skip it so Makefile has only the root level tasks
         continue;
       }
       const additional =
         targetContents(this.optsWithDefaults.additionalMakefileContentsTargets[task.name]) ?? '';
       contents += `# ${task.description}
-${task.name.replace(':', '-')}:
+${taskName}:
 	npx projen ${task.name}${additional}
 
 `;
