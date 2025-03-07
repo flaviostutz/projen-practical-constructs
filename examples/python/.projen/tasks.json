@@ -169,6 +169,15 @@
       "name": "release:before",
       "description": "Executed before any release tasks. Placeholder for customizations"
     },
+    "release:current": {
+      "name": "release:current",
+      "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 current "
+        }
+      ]
+    },
     "release:generate": {
       "name": "release:generate",
       "description": "Generates documentation, special files etc. Placeholder for customizations"
@@ -178,7 +187,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes --prerelease-identifier=\"rc\""
+          "exec": "npx -y monotag@1.15.1 notes "
         }
       ]
     },
@@ -208,6 +217,15 @@
       "name": "release:pre:before",
       "description": "Executed before any release tasks. Placeholder for customizations"
     },
+    "release:pre:current": {
+      "name": "release:pre:current",
+      "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 current --prerelease=\"true\""
+        }
+      ]
+    },
     "release:pre:generate": {
       "name": "release:pre:generate",
       "description": "Generates documentation, special files etc. Placeholder for customizations"
@@ -217,7 +235,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\" --prerelease-identifier=\"rc\""
+          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\""
         }
       ]
     },

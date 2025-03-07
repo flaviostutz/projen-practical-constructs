@@ -54,6 +54,10 @@ release-before:
 release-next-tag:
 	npx projen release:next-tag
 
+# Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.
+release-current:
+	npx projen release:current
+
 # Generates documentation, special files etc. Placeholder for customizations
 release-generate:
 	npx projen release:generate

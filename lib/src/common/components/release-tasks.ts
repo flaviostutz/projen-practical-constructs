@@ -13,13 +13,14 @@ export const MONOTAG_VERSION = '1.15.1';
  * Uses monotag to calculate the next tag and release notes.
  *
  * Tasks:
- *   - release[:name]: Will execute pre -> next-tag -> generate -> [tag|push] -> post for this release group
- *   - release[:name]:pre: executed before any other tasks in release. Placeholder for any pre-release related tasks
- *   - release[:name]:next-tag: Calculate the next version of the software and output tag and notes to console. Supports complex release tagging in monorepos by using "npx monotag"
+ *   - release[:name]:current: Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.
+ *   - release[:name]: Will execute before -> next-tag -> generate -> [tag|push] -> after for this release group
+ *   - release[:name]:before: executed before any other tasks in release. Placeholder for any pre-release related tasks
+ *   - release[:name]:next-tag: Calculate the next version of the software, output tag and notes to console, write output files, bump files and append changelog. Supports complex release tagging in monorepos by using "npx monotag"
  *   - release[:name]:generate: executed after tag calculation and before git operations. Placeholder for custom tasks, such as doc generation, package build etc
  *   - release[:name]:git-tag: Tag the current commit with the calculated release tag on git repo (if action is 'tag')
  *   - release[:name]:git-push: Push the tagged commit to remote git (if action is 'push')
- *   - release[:name]:post: executed after all other tasks in release. Placeholder for any post-release related tasks
+ *   - release[:name]:after: executed after all other tasks in release. Placeholder for any post-release related tasks
  */
 export class ReleaseTasks extends Component {
   constructor(project: Project, opts?: ReleaseTasksOptions) {
@@ -59,6 +60,16 @@ export class ReleaseTasks extends Component {
       ],
     });
     releaseTask.spawn(nextTagTask);
+
+    project.addTask(`${taskPrefix}:current`, {
+      description:
+        'Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.',
+      steps: [
+        {
+          exec: `${optsWithDefaults.monotagCmd} current ${monotagCliArgs(optsWithDefaults)}`,
+        },
+      ],
+    });
 
     const generateTask = project.addTask(`${taskPrefix}:generate`, {
       description: 'Generates documentation, special files etc. Placeholder for customizations',

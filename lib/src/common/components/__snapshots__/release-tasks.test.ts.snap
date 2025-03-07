@@ -110,6 +110,15 @@ node_modules/
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:custom:before",
       },
+      "release:custom:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:custom:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current --git-email="test@example.com" --git-username="testuser"",
+          },
+        ],
+      },
       "release:custom:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
         "name": "release:custom:generate",
@@ -247,6 +256,15 @@ node_modules/
       "release:before": {
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:before",
+      },
+      "release:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current ",
+          },
+        ],
       },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",

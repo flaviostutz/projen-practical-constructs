@@ -7,7 +7,7 @@ import { Projenrc } from 'projen/lib/python';
 import { NODE_VERSION, PROJEN_VERSION } from '../common/constants';
 import { BaseTooling } from '../common/components/base-tooling';
 import { CommonTargetsTasks } from '../common/components/common-targets';
-import { ReleaseTasksOptions } from '../common/components/release-tasks';
+import { ReleaseTasks, ReleaseTasksOptions } from '../common/components/release-tasks';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
@@ -69,15 +69,11 @@ export class PythonBasicProject extends Project {
     });
 
     // create pre-release task "release:pre"
-    new CommonTargetsTasks(this, {
-      cleanupDefaultTasks: false,
-      releaseEnable: true,
-      releaseOpts: {
-        action: 'console',
-        ...optionsWithDefaults.release,
-        preRelease: true,
-        name: 'pre',
-      },
+    new ReleaseTasks(this, {
+      action: 'console',
+      ...optionsWithDefaults.release,
+      preRelease: true,
+      name: 'pre',
     });
 
     // create README.md

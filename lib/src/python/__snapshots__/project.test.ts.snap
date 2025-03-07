@@ -297,6 +297,15 @@ __pycache__
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:before",
       },
+      "release:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current ",
+          },
+        ],
+      },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
         "name": "release:generate",
@@ -335,6 +344,15 @@ __pycache__
       "release:pre:before": {
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:pre:before",
+      },
+      "release:pre:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:pre:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+          },
+        ],
       },
       "release:pre:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -453,6 +471,10 @@ release-before:
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
 	npx projen release:next-tag
+
+# Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.
+release-current:
+	npx projen release:current
 
 # Generates documentation, special files etc. Placeholder for customizations
 release-generate:
@@ -873,6 +895,15 @@ __pycache__
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:before",
       },
+      "release:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current ",
+          },
+        ],
+      },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
         "name": "release:generate",
@@ -911,6 +942,15 @@ __pycache__
       "release:pre:before": {
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:pre:before",
+      },
+      "release:pre:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:pre:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+          },
+        ],
       },
       "release:pre:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -1049,6 +1089,10 @@ release-before:
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
 	npx projen release:next-tag
+
+# Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.
+release-current:
+	npx projen release:current
 
 # Generates documentation, special files etc. Placeholder for customizations
 release-generate:
@@ -1440,6 +1484,15 @@ __pycache__
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:before",
       },
+      "release:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current ",
+          },
+        ],
+      },
       "release:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
         "name": "release:generate",
@@ -1478,6 +1531,15 @@ __pycache__
       "release:pre:before": {
         "description": "Executed before any release tasks. Placeholder for customizations",
         "name": "release:pre:before",
+      },
+      "release:pre:current": {
+        "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+        "name": "release:pre:current",
+        "steps": [
+          {
+            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+          },
+        ],
       },
       "release:pre:generate": {
         "description": "Generates documentation, special files etc. Placeholder for customizations",
@@ -1596,6 +1658,10 @@ release-before:
 # Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"
 release-next-tag:
 	npx projen release:next-tag
+
+# Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.
+release-current:
+	npx projen release:current
 
 # Generates documentation, special files etc. Placeholder for customizations
 release-generate:
