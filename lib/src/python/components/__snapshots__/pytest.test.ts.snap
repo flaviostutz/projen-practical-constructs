@@ -115,6 +115,11 @@ node_modules/
       "test": {
         "description": "Run tests",
         "name": "test",
+        "steps": [
+          {
+            "spawn": "test-unit",
+          },
+        ],
       },
       "test-unit": {
         "description": "Unit tests (pytest)",
@@ -252,6 +257,11 @@ node_modules/
       "test": {
         "description": "Run tests",
         "name": "test",
+        "steps": [
+          {
+            "spawn": "test-unit",
+          },
+        ],
       },
       "test-unit": {
         "description": "Unit tests (pytest)",
@@ -389,6 +399,11 @@ node_modules/
       "test": {
         "description": "Run tests",
         "name": "test",
+        "steps": [
+          {
+            "spawn": "test-unit",
+          },
+        ],
       },
       "test-unit": {
         "description": "Unit tests (pytest)",

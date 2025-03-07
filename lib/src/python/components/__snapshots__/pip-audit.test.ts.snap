@@ -80,6 +80,14 @@ node_modules/
           },
         ],
       },
+      "lint": {
+        "name": "lint",
+        "steps": [
+          {
+            "spawn": "lint-audit",
+          },
+        ],
+      },
       "lint-audit": {
         "description": "Code type checks (mypy)",
         "name": "lint-audit",
@@ -88,6 +96,9 @@ node_modules/
             "exec": ".venv/bin/pip-audit --cache-dir .cache/.audit_cache",
           },
         ],
+      },
+      "lint-fix": {
+        "name": "lint-fix",
       },
       "package": {
         "description": "Creates the distribution package",

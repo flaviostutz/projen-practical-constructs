@@ -1,11 +1,12 @@
 /* eslint-disable no-new */
 import { Component, DependencyType, Project } from 'projen';
 
-import { addTaskToParent, TaskOptionsWithFix } from '../tasks';
+import { addSpawnTaskToExisting, TaskOptions } from '../tasks';
 import { RuffTomlFile, RuffTomlFileOptions } from '../files/ruff-toml';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 export class Ruff extends Component {
-  constructor(project: Project, taskOpts: TaskOptionsWithFix, opts?: RuffOptions) {
+  constructor(project: Project, taskOpts: TaskOptions, opts?: RuffOptions) {
     super(project);
 
     new RuffTomlFile(project, opts);
@@ -22,7 +23,7 @@ export class Ruff extends Component {
         },
       ],
     });
-    addTaskToParent(project, lintRuffTask, taskOpts.attachTasksTo);
+    addSpawnTaskToExisting(project, lintRuffTask, CommonTargets.LINT);
 
     const lintFixRuffTask = project.tasks.addTask('lint-ruff-fix', {
       description: `Lint fix (RUFF)`,
@@ -35,7 +36,7 @@ export class Ruff extends Component {
         },
       ],
     });
-    addTaskToParent(project, lintFixRuffTask, taskOpts.attachFixTasksTo);
+    addSpawnTaskToExisting(project, lintFixRuffTask, CommonTargets.LINT_FIX);
   }
 }
 

@@ -2,15 +2,25 @@
   "tasks": {
     "build": {
       "name": "build",
-      "description": "Build project (install deps, compile and package)",
+      "description": "Build project (install -> compile -> package)",
       "steps": [
         {
-          "spawn": "prepare-venv"
+          "spawn": "default"
         },
         {
-          "spawn": "install-dev"
+          "spawn": "install"
+        },
+        {
+          "spawn": "compile"
+        },
+        {
+          "spawn": "package"
         }
       ]
+    },
+    "compile": {
+      "name": "compile",
+      "description": "Compile project"
     },
     "default": {
       "name": "default",
@@ -35,16 +45,16 @@
     },
     "install": {
       "name": "install",
-      "description": "Install dependencies from constraints.txt",
+      "description": "Install project dependencies",
       "steps": [
         {
-          "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt"
+          "spawn": "install-dev"
         }
       ]
     },
     "install-dev": {
       "name": "install-dev",
-      "description": "Install dependencies from constraints-dev.txt",
+      "description": "Install dependencies from constraints-dev.txt (including dev deps)",
       "steps": [
         {
           "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints-dev.txt --editable .[dev]"
@@ -53,7 +63,7 @@
     },
     "lint": {
       "name": "lint",
-      "description": "Lint project (format, type check, audit, lint)",
+      "description": "Lint project (code style, formatting, audit, code smells etc)",
       "steps": [
         {
           "spawn": "lint-mypy"
@@ -117,6 +127,10 @@
         }
       ]
     },
+    "package": {
+      "name": "package",
+      "description": "Prepare a distributable package"
+    },
     "prepare-venv": {
       "name": "prepare-venv",
       "description": "Create python virtual environment in .venv",
@@ -125,13 +139,109 @@
           "exec": "python -m venv .venv"
         },
         {
-          "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6"
+          "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13"
+        }
+      ]
+    },
+    "release": {
+      "name": "release",
+      "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+      "steps": [
+        {
+          "spawn": "release:before"
+        },
+        {
+          "spawn": "release:next-tag"
+        },
+        {
+          "spawn": "release:generate"
+        },
+        {
+          "spawn": "release:after"
+        }
+      ]
+    },
+    "release:after": {
+      "name": "release:after",
+      "description": "Executed after all release tasks. Placeholder for customizations"
+    },
+    "release:before": {
+      "name": "release:before",
+      "description": "Executed before any release tasks. Placeholder for customizations"
+    },
+    "release:current": {
+      "name": "release:current",
+      "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 current "
+        }
+      ]
+    },
+    "release:generate": {
+      "name": "release:generate",
+      "description": "Generates documentation, special files etc. Placeholder for customizations"
+    },
+    "release:next-tag": {
+      "name": "release:next-tag",
+      "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 notes "
+        }
+      ]
+    },
+    "release:pre": {
+      "name": "release:pre",
+      "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
+      "steps": [
+        {
+          "spawn": "release:pre:before"
+        },
+        {
+          "spawn": "release:pre:next-tag"
+        },
+        {
+          "spawn": "release:pre:generate"
+        },
+        {
+          "spawn": "release:pre:after"
+        }
+      ]
+    },
+    "release:pre:after": {
+      "name": "release:pre:after",
+      "description": "Executed after all release tasks. Placeholder for customizations"
+    },
+    "release:pre:before": {
+      "name": "release:pre:before",
+      "description": "Executed before any release tasks. Placeholder for customizations"
+    },
+    "release:pre:current": {
+      "name": "release:pre:current",
+      "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 current --prerelease=\"true\""
+        }
+      ]
+    },
+    "release:pre:generate": {
+      "name": "release:pre:generate",
+      "description": "Generates documentation, special files etc. Placeholder for customizations"
+    },
+    "release:pre:next-tag": {
+      "name": "release:pre:next-tag",
+      "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
+      "steps": [
+        {
+          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\""
         }
       ]
     },
     "test": {
       "name": "test",
-      "description": "Test project (unit tests/coverage)",
+      "description": "Test project",
       "steps": [
         {
           "spawn": "test-unit"

@@ -6,6 +6,8 @@ import { Projenrc } from 'projen/lib/python';
 
 import { NODE_VERSION, PROJEN_VERSION } from '../common/constants';
 import { BaseTooling } from '../common/components/base-tooling';
+import { CommonTargetsTasks } from '../common/components/common-targets';
+import { ReleaseTasks, ReleaseTasksOptions } from '../common/components/release-tasks';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
@@ -49,11 +51,30 @@ export class PythonBasicProject extends Project {
 
     const venvPath = optionsWithDefaults.venvPath ?? '.venv';
 
-    // cleanup default tasks
-    cleanupTasks(this);
-
     // create .projenrc.py
     new Projenrc(this, { pythonExec: `${venvPath}/bin/python` });
+
+    // will create tasks such as build, lint, test, release etc
+    // based on common-tasks spec
+    new CommonTargetsTasks(this, {
+      buildEnable: true,
+      lintEnable: true,
+      testEnable: true,
+      releaseEnable: true,
+      releaseOpts: {
+        action: 'console',
+        ...optionsWithDefaults.release,
+        preRelease: false,
+      },
+    });
+
+    // create pre-release task "release:pre"
+    new ReleaseTasks(this, {
+      action: 'console',
+      ...optionsWithDefaults.release,
+      preRelease: true,
+      name: 'pre',
+    });
 
     // create README.md
     new ReadmeFile(this, {
@@ -75,14 +96,6 @@ export class PythonBasicProject extends Project {
 	npx projen prepare-venv
 
 `,
-      additionalMakefileContentsTargets: {
-        prepare: `
-brew install python
-brew install pyenv
-make prepare-venv
-make prepare-projen
-`,
-      },
     });
 
     // LINT
@@ -90,7 +103,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'lint',
       },
       optionsWithDefaults.lint,
     );
@@ -100,7 +112,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'test',
       },
       optionsWithDefaults.test,
     );
@@ -112,7 +123,6 @@ make prepare-projen
       this,
       {
         venvPath,
-        attachTasksTo: 'build',
       },
       {
         pip: optionsWithDefaults.pip,
@@ -170,6 +180,10 @@ export interface PythonBasicOptions extends ProjectOptions, Build0Options, TaskO
    * Test configurations
    */
   readonly test?: TestOptions;
+  /**
+   * Release options for the "release" task
+   */
+  readonly release?: ReleaseTasksOptions;
 }
 
 const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonBasicOptions => {
@@ -177,14 +191,4 @@ const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonB
     sample: true,
     ...options,
   };
-};
-
-const cleanupTasks = (project: Project): void => {
-  // cleanup default tasks
-  project.tasks.removeTask('build');
-  project.tasks.removeTask('pre-compile');
-  project.tasks.removeTask('compile');
-  project.tasks.removeTask('post-compile');
-  project.tasks.removeTask('test');
-  project.tasks.removeTask('package');
 };

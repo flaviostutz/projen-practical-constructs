@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import { Component, DependencyType, Project, TaskRuntime } from 'projen';
 
-import { TaskOptions } from '../tasks';
+import { addSpawnTaskToExisting, TaskOptions } from '../tasks';
 import { PIP_TOOLS_VERSION } from '../constants';
 import { PROJEN_VERSION } from '../../common/constants';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 export class Pip extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: PipOptions) {
@@ -28,17 +29,13 @@ export class Pip extends Component {
     project.tasks.addEnvironment('VENV_PATH', taskOpts.venvPath);
 
     // add build related tasks
-    project.tasks.addTask('install', {
-      description: `Install dependencies from ${optsd.lockFile}`,
-      exec: `$VENV_PATH/bin/pip install --require-virtualenv -c ${optsd.lockFile}`,
-    });
-
     const installDevTask = project.tasks.addTask('install-dev', {
-      description: `Install dependencies from ${optsd.lockFileDev}`,
+      description: `Install dependencies from ${optsd.lockFileDev} (including dev deps)`,
       exec: `$VENV_PATH/bin/pip install --require-virtualenv -c ${optsd.lockFileDev} --editable .[dev]`,
     });
+    addSpawnTaskToExisting(project, installDevTask, CommonTargets.INSTALL);
 
-    const prepareVenvTask = project.tasks.addTask('prepare-venv', {
+    project.tasks.addTask('prepare-venv', {
       description: `Create python virtual environment in ${taskOpts.venvPath}`,
       steps: [
         { exec: `${optsd.pythonExec} -m venv ${taskOpts.venvPath}` },
@@ -67,15 +64,6 @@ export class Pip extends Component {
     });
 
     project.deps.addDependency(`pip-tools@${PIP_TOOLS_VERSION}`, DependencyType.DEVENV);
-
-    if (taskOpts.attachTasksTo) {
-      const attachTask = project.tasks.tryFind(taskOpts.attachTasksTo);
-      if (!attachTask) {
-        throw new Error(`'${taskOpts.attachTasksTo}' task not found`);
-      }
-      attachTask.spawn(prepareVenvTask);
-      attachTask.spawn(installDevTask);
-    }
   }
 
   public postSynthesize(): void {
@@ -85,9 +73,13 @@ export class Pip extends Component {
 
     // run prepare venv, update lockfile and build
     const runtime = new TaskRuntime(this.project.outdir);
+
+    // similar to "build", but without the "default" task
     runtime.runTask('prepare-venv');
     runtime.runTask('update-lockfile');
-    runtime.runTask('build');
+    runtime.runTask('install');
+    runtime.runTask('compile');
+    runtime.runTask('package');
   }
 }
 

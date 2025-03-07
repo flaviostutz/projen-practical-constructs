@@ -4,7 +4,7 @@
 #
 #    pip-compile --all-build-deps --extra=dev --output-file=constraints-dev.txt --strip-extras pyproject.toml
 #
-attrs==24.3.0
+attrs==25.1.0
     # via
     #   cattrs
     #   jsii
@@ -18,7 +18,7 @@ cachecontrol==0.14.2
     #   pip-audit
 cattrs==24.1.2
     # via jsii
-certifi==2024.12.14
+certifi==2025.1.31
     # via requests
 charset-normalizer==3.4.1
     # via requests
@@ -26,23 +26,21 @@ click==8.1.8
     # via pip-tools
 constructs==10.4.2
     # via projen
-coverage==7.6.10
+coverage==7.6.12
     # via pytest-cov
-cyclonedx-python-lib==7.6.2
+cyclonedx-python-lib==8.9.0
     # via pip-audit
 defusedxml==0.7.1
     # via py-serializable
 filelock==3.17.0
     # via cachecontrol
-html5lib==1.1
-    # via pip-audit
 idna==3.10
     # via requests
 importlib-resources==6.5.2
     # via jsii
 iniconfig==2.0.0
     # via pytest
-jsii==1.106.0
+jsii==1.108.0
     # via
     #   constructs
     #   projen
@@ -55,7 +53,7 @@ mdurl==0.1.2
 msgpack==1.1.0
     # via cachecontrol
 mypy==1.14.1
-    # via python2 (pyproject.toml)
+    # via python (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
 packageurl-python==0.16.0
@@ -68,16 +66,18 @@ packaging==24.2
     #   pytest
 pip-api==0.0.34
     # via pip-audit
-pip-audit==2.7.3
-    # via python2 (pyproject.toml)
+pip-audit==2.8.0
+    # via python (pyproject.toml)
 pip-requirements-parser==32.0.1
     # via pip-audit
 pip-tools==7.4.1
-    # via python2 (pyproject.toml)
+    # via python (pyproject.toml)
+platformdirs==4.3.6
+    # via pip-audit
 pluggy==1.5.0
     # via pytest
-projen==0.91.6
-    # via python2 (pyproject.toml)
+projen==0.91.13
+    # via python (pyproject.toml)
 publication==0.0.3
     # via
     #   constructs
@@ -93,12 +93,12 @@ pyproject-hooks==1.2.0
     # via
     #   build
     #   pip-tools
-pytest==8.3.4
+pytest==8.3.5
     # via
     #   pytest-cov
-    #   python2 (pyproject.toml)
+    #   python (pyproject.toml)
 pytest-cov==6.0.0
-    # via python2 (pyproject.toml)
+    # via python (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via jsii
 requests==2.32.3
@@ -108,11 +108,9 @@ requests==2.32.3
 rich==13.9.4
     # via pip-audit
 ruff==0.8.6
-    # via python2 (pyproject.toml)
+    # via python (pyproject.toml)
 six==1.17.0
-    # via
-    #   html5lib
-    #   python-dateutil
+    # via python-dateutil
 sortedcontainers==2.4.0
     # via cyclonedx-python-lib
 toml==0.10.2
@@ -128,8 +126,6 @@ typing-extensions==4.12.2
     #   mypy
 urllib3==2.3.0
     # via requests
-webencodings==0.5.1
-    # via html5lib
 wheel==0.45.1
     # via pip-tools
 

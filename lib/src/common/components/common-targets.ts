@@ -1,5 +1,8 @@
 import { Component, Project } from 'projen';
 
+import { ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
+import { CommonTargets } from './common-target-type';
+
 /**
  * Base tasks for projen projects based on
  * "common-targets" (https://github.com/flaviostutz/common-targets)
@@ -8,42 +11,81 @@ export class CommonTargetsTasks extends Component {
   constructor(project: Project, opts?: BaseTasksOptions) {
     super(project);
 
-    if (opts?.build) {
-      const buildTask = project.tasks.addTask('build', {
+    if (!opts?.buildEnable && !opts?.lintEnable && !opts?.testEnable && !opts?.releaseEnable) {
+      throw new Error('No tasks enabled. At least one task must be enabled');
+    }
+
+    // cleanup existing tasks
+    if (opts?.cleanupDefaultTasks ?? true) {
+      project.tasks.removeTask('build');
+      project.tasks.removeTask('test');
+      project.tasks.removeTask('compile');
+      project.tasks.removeTask('package');
+      project.tasks.removeTask('pre-compile');
+      project.tasks.removeTask('post-compile');
+    }
+
+    if (opts?.buildEnable) {
+      const buildTask = project.tasks.addTask(CommonTargets.BUILD, {
         description: `Build project (install -> compile -> package)`,
       });
 
-      buildTask.spawn(project.tasks.addTask('install'));
-      buildTask.spawn(project.tasks.addTask('pre-compile'));
-      buildTask.spawn(project.tasks.addTask('compile'));
-      buildTask.spawn(project.tasks.addTask('post-compile'));
-      buildTask.spawn(project.tasks.addTask('pre-package'));
-      buildTask.spawn(project.tasks.addTask('package'));
-      buildTask.spawn(project.tasks.addTask('post-package'));
+      // default (runs projen synth)
+      const defaultTask = project.tasks.tryFind('default');
+      if (defaultTask) {
+        buildTask.spawn(defaultTask);
+      }
+
+      // install
+      buildTask.spawn(
+        project.tasks.addTask(CommonTargets.INSTALL, {
+          description: `Install project dependencies`,
+        }),
+      );
+
+      const compileTask = project.tasks.addTask(CommonTargets.COMPILE, {
+        description: `Compile project`,
+      });
+      buildTask.spawn(compileTask);
+
+      // package
+      const packageTask = project.tasks.addTask(CommonTargets.PACKAGE, {
+        description: `Prepare a distributable package`,
+      });
+      buildTask.spawn(packageTask);
     }
 
-    if (opts?.lint) {
-      project.tasks.addTask('lint', {
-        description: `Lint project`,
+    if (opts?.lintEnable) {
+      project.tasks.addTask(CommonTargets.LINT, {
+        description: `Lint project (code style, formatting, audit, code smells etc)`,
+      });
+      project.tasks.addTask(CommonTargets.LINT_FIX, {
+        description: `Fix auto fixable lint issues`,
       });
     }
 
-    if (opts?.test) {
-      project.tasks.addTask('test', {
+    if (opts?.testEnable) {
+      project.tasks.addTask(CommonTargets.TEST, {
         description: `Test project`,
       });
     }
 
-    if (opts?.release) {
-      const releaseTask = project.tasks.addTask('release', {
-        description: `Prepare release`,
+    if (opts?.publishEnable) {
+      project.tasks.addTask(CommonTargets.PUBLISH, {
+        description: `Publish project artifacts to a repository`,
       });
-      releaseTask.spawn(project.tasks.addTask('docgen'));
-      releaseTask.spawn(project.tasks.addTask('version'));
-      const packageTask = project.tasks.tryFind('package');
-      if (packageTask) {
-        releaseTask.spawn(packageTask);
-      }
+    }
+
+    if (opts?.deployEnable) {
+      project.tasks.addTask(CommonTargets.DEPLOY, {
+        description: `Deploy project runtime resources to an environment`,
+        requiredEnv: ['STAGE'],
+      });
+    }
+
+    if (opts?.releaseEnable) {
+      // eslint-disable-next-line no-new
+      new ReleaseTasks(project, opts.releaseOpts);
     }
   }
 }
@@ -52,22 +94,36 @@ export interface BaseTasksOptions {
   /**
    * Whether to include the build task with all its default subtasks
    */
-  build?: boolean;
+  readonly buildEnable?: boolean;
   /**
    * Whether to include the lint tasks
    */
-  lint?: boolean;
+  readonly lintEnable?: boolean;
   /**
    * Whether to include the test tasks
    */
-  test?: boolean;
+  readonly testEnable?: boolean;
   /**
-   * Whether to include the release tasks
+   * Whether to include release tasks
    */
-  release?: boolean;
+  readonly releaseEnable?: boolean;
   /**
-   * Whether to include the developer tasks with common targets
-   * used by developers
+   * Release task options
    */
-  developer?: boolean;
+  readonly releaseOpts?: ReleaseTasksOptions;
+  /**
+   * Whether to include deploy tasks
+   */
+  readonly deployEnable?: boolean;
+  /**
+   * Whether to include publish tasks
+   */
+  readonly publishEnable?: boolean;
+
+  /**
+   * Whether to cleanup default tasks (build, test, compile, package, pre-compile, post-compile)
+   * before adding new ones
+   * @default true
+   */
+  readonly cleanupDefaultTasks?: boolean;
 }

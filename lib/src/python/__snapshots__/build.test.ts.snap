@@ -50,7 +50,6 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
         "name": "build",
       },
       "compile": {
@@ -74,16 +73,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -111,7 +109,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -213,7 +211,6 @@ __pycache__
     },
     "tasks": {
       "build": {
-        "description": "Build project (install deps, compile and package)",
         "name": "build",
       },
       "compile": {
@@ -237,16 +234,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -274,7 +270,7 @@ __pycache__
             "exec": "python3 -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },

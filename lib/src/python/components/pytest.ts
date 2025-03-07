@@ -1,9 +1,10 @@
 /* eslint-disable no-new */
 import { Component, DependencyType, Project } from 'projen';
 
-import { addTaskToParent, TaskOptions } from '../tasks';
+import { addSpawnTaskToExisting, TaskOptions } from '../tasks';
 import { PyTestIniFile, PyTestIniOptions } from '../files/pytest-ini';
 import { CoveragercFile, CoveragercFileOptions } from '../files/coveragerc';
+import { CommonTargets } from '../../common/components/common-target-type';
 
 export class PyTest extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: PyTestOptions) {
@@ -19,7 +20,7 @@ export class PyTest extends Component {
       description: `Unit tests (pytest)`,
       exec: `${taskOpts.venvPath}/bin/pytest`,
     });
-    addTaskToParent(project, lintUnitTask, taskOpts.attachTasksTo);
+    addSpawnTaskToExisting(project, lintUnitTask, CommonTargets.TEST);
   }
 }
 

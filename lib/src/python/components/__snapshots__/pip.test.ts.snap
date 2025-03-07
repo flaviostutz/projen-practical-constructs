@@ -89,16 +89,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from constraints.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c constraints.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -126,7 +125,7 @@ __pycache__
             "exec": "python -m venv .venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -246,16 +245,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from another_requirements.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c another_requirements.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from dev_requirements.txt",
+        "description": "Install dependencies from dev_requirements.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -283,7 +281,7 @@ __pycache__
             "exec": "python -m venv .another_venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },
@@ -403,16 +401,15 @@ __pycache__
         ],
       },
       "install": {
-        "description": "Install dependencies from custom_requirements.txt",
         "name": "install",
         "steps": [
           {
-            "exec": "$VENV_PATH/bin/pip install --require-virtualenv -c custom_requirements.txt",
+            "spawn": "install-dev",
           },
         ],
       },
       "install-dev": {
-        "description": "Install dependencies from constraints-dev.txt",
+        "description": "Install dependencies from constraints-dev.txt (including dev deps)",
         "name": "install-dev",
         "steps": [
           {
@@ -440,7 +437,7 @@ __pycache__
             "exec": "python -m venv .custom_venv",
           },
           {
-            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.6",
+            "exec": "$VENV_PATH/bin/pip install pip-tools==7.4.1 projen==0.91.13",
           },
         ],
       },

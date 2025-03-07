@@ -12,10 +12,6 @@ export class TestTarget extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: TestOptions) {
     super(project);
 
-    project.tasks.addTask('test', {
-      description: `Test project (unit tests/coverage)`,
-    });
-
     new PyTest(project, taskOpts, opts);
   }
 }

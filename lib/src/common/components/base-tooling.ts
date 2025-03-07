@@ -43,5 +43,5 @@ export interface BaseToolingOptions extends MakefileProjenOptions {
    * Additional contents to be added to Makefile, which is a sample
    * and can be edited by devs after the initial generation
    */
-  additionalMakefileContentsUser?: string;
+  readonly additionalMakefileContentsUser?: string;
 }

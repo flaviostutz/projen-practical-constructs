@@ -1,10 +1,12 @@
+/* eslint-disable no-continue */
+/* eslint-disable no-restricted-syntax */
 import { FileBase, IResolver, Project } from 'projen';
 
 import { TS_NODE_VERSION } from '../../python/constants';
 import { NODE_VERSION, PROJEN_VERSION } from '../constants';
 
 export class MakefileProjenFile extends FileBase {
-  optsWithDefaults: Required<MakefileProjenOptions>;
+  private readonly optsWithDefaults: Required<MakefileProjenOptions>;
 
   constructor(project: Project, opts?: MakefileProjenOptions) {
     super(project, 'Makefile-projen');
@@ -21,28 +23,15 @@ export class MakefileProjenFile extends FileBase {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected synthesizeContent(_resolver: IResolver): string | undefined {
-    return `SHELL := /bin/bash
+    // eslint-disable-next-line functional/no-let
+    let contents = `SHELL := /bin/bash
 
 all: build lint test
 
-build:
-	npx projen build${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.build)}
-
-lint:
-	npx projen lint${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.lint)}
-
-lint-fix:
-	npx projen lint-fix${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets['lint-fix'])}
-
-test:
-	npx projen test${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.test)}
-
-clean:
-	npx projen clean${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.clean)}
-
 prepare:
 	brew install nvm
-	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.prepare ?? '')}
+	@echo "Configure your shell following the instructions at https://formulae.brew.sh/formula/nvm"
+  ${targetContents(this.optsWithDefaults.additionalMakefileContentsTargets.prepare)}
 
 prepare-projen:
 	@if [ "$$CI" == "true" ]; then \
@@ -51,12 +40,32 @@ prepare-projen:
 		set -x; npm install --no-save ts-node@${this.optsWithDefaults.tsNodeLibVersion} projen@${this.optsWithDefaults.projenLibVersion}; \
 	fi
 
-${this.optsWithDefaults.additionalMakefileContentsProjen ?? ''}
 `;
+
+    for (const task of this.project.tasks.all) {
+      if (task.name === 'default') {
+        continue;
+      }
+      // replace only the first colon with a dash
+      const taskName = task.name.replace(':', '-');
+      if (taskName.includes(':')) {
+        // multiple task level found. skip it so Makefile has only the root level tasks
+        continue;
+      }
+      const additional =
+        targetContents(this.optsWithDefaults.additionalMakefileContentsTargets[task.name]) ?? '';
+      contents += `# ${task.description}
+${taskName}:
+	npx projen ${task.name}${additional}
+
+`;
+    }
+    return contents;
   }
 }
 
 const targetContents = (contents?: string): string => {
+  if (!contents) return '';
   // add spaces to each line
   const contentWithSpaces = contents?.replace(/\n/g, '\n	');
   return contentWithSpaces ? `\n	${contentWithSpaces}` : '';
@@ -77,7 +86,7 @@ export interface MakefileProjenOptions {
   /**
    * The version of projen lib to be used in "prepare" target of the Makefile
    * to install tooling for Projen to work
-   * @default '0.91.6'
+   * @default '0.91.13'
    */
   readonly projenLibVersion?: string;
   /**

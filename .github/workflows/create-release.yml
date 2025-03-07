@@ -1,4 +1,4 @@
-name: create-next-tag
+name: create-release
 
 on:
   workflow_dispatch:
@@ -21,7 +21,8 @@ jobs:
           node-version: '20.x'
       - name: Create tag and push to repo
         run: |
-          corepack enable
-          git config --global user.email "flaviostutz@gmail.com"
-          git config --global user.name "Flávio Stutz"
-          pnpm dlx monotag@1.6.3 --prefix=v tag-push
+          npx -y monotag@1.17.2 tag-push \
+            --git-username="Flávio Stutz" \
+            --git-email="flaviostutz@gmail.com" \
+            --prefix=v \
+            --changelog-file ../../CHANGELOG.md

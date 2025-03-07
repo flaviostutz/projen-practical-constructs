@@ -14,10 +14,6 @@ export class BuildTarget extends Component {
   constructor(project: Project, taskOpts: TaskOptions, opts?: Build0Options) {
     super(project);
 
-    project.tasks.addTask('build', {
-      description: `Build project (install deps, compile and package)`,
-    });
-
     // create package such as pyproject.toml, LICENSE etc
     new Package(project, opts?.package);
 
