@@ -27,7 +27,7 @@ The basic stack supported by this project is:
 ## Usage
 
 ```sh
-npx projen new --from projen_practical_constructs python_basic
+npx projen new --from projen-practical-constructs python_basic
 ```
 
 The constructs can be used separately to adapt to your specific needs, but you can use the PythonProject construct with a default configuration of the entire stack to easily have a full project structure with build, test and linting capabilities.
