@@ -2,8 +2,9 @@
 import { Testing } from 'projen';
 
 import { TestProject } from '../test-project';
+import { MONOTAG_VERSION } from '../utils/constants';
 
-import { MONOTAG_VERSION, ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
+import { ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
 
 describe('ReleaseTasks', () => {
   it('synthesizes correctly with default options', () => {
@@ -47,7 +48,7 @@ describe('ReleaseTasks', () => {
             {
               exec: `npx -y monotag@${
                 MONOTAG_VERSION
-              } notes --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"`,
+              } tag --bump-action="latest" --git-email="test@example.com" --git-username="testuser" --prerelease="true"`,
             },
           ],
         },

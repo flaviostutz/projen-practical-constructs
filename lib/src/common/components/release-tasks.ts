@@ -3,10 +3,9 @@ import { Component, Project } from 'projen';
 import { NextTagOptions } from '../types/monotag';
 import { WithRequired } from '../types/utils';
 import { monotagCliArgs } from '../utils/monotag';
+import { MONOTAG_VERSION } from '../utils/constants';
 
 import { CommonTargets } from './common-target-type';
-
-export const MONOTAG_VERSION = '1.15.1';
 
 /**
  * Create tasks to support the basics of creating a software release based on git tags.
@@ -55,7 +54,7 @@ export class ReleaseTasks extends Component {
         'Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using "npx monotag"',
       steps: [
         {
-          exec: `${optsWithDefaults.monotagCmd} notes ${monotagCliArgs(optsWithDefaults)}`,
+          exec: `${optsWithDefaults.monotagCmd} tag ${monotagCliArgs(optsWithDefaults)}`,
         },
       ],
     });
@@ -135,7 +134,7 @@ const getOptionsWithDefaults = (
 
 export interface ReleaseTasksOptions extends NextTagOptions {
   /**
-   * Action to be taken after calculating the next tag/notes
+   * Action to be taken after calculating the next tag
    * Options:
    *  - console: Print calculated tag/notes to console
    *  - tag: Calculate tag/notes, commit and tag (git) resources

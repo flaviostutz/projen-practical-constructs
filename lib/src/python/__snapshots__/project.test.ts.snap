@@ -302,7 +302,7 @@ __pycache__
         "name": "release:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current ",
+            "exec": "npx -y monotag@1.23.0 current ",
           },
         ],
       },
@@ -315,7 +315,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes ",
+            "exec": "npx -y monotag@1.23.0 tag ",
           },
         ],
       },
@@ -350,7 +350,7 @@ __pycache__
         "name": "release:pre:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 current --prerelease="true"",
           },
         ],
       },
@@ -363,7 +363,7 @@ __pycache__
         "name": "release:pre:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 tag --prerelease="true"",
           },
         ],
       },
@@ -900,7 +900,7 @@ __pycache__
         "name": "release:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current ",
+            "exec": "npx -y monotag@1.23.0 current ",
           },
         ],
       },
@@ -913,7 +913,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes ",
+            "exec": "npx -y monotag@1.23.0 tag ",
           },
         ],
       },
@@ -948,7 +948,7 @@ __pycache__
         "name": "release:pre:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 current --prerelease="true"",
           },
         ],
       },
@@ -961,7 +961,7 @@ __pycache__
         "name": "release:pre:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 tag --prerelease="true"",
           },
         ],
       },
@@ -1489,7 +1489,7 @@ __pycache__
         "name": "release:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current ",
+            "exec": "npx -y monotag@1.23.0 current ",
           },
         ],
       },
@@ -1502,7 +1502,7 @@ __pycache__
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes ",
+            "exec": "npx -y monotag@1.23.0 tag ",
           },
         ],
       },
@@ -1537,7 +1537,7 @@ __pycache__
         "name": "release:pre:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 current --prerelease="true"",
           },
         ],
       },
@@ -1550,7 +1550,7 @@ __pycache__
         "name": "release:pre:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes --prerelease="true"",
+            "exec": "npx -y monotag@1.23.0 tag --prerelease="true"",
           },
         ],
       },

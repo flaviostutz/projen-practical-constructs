@@ -115,7 +115,7 @@ node_modules/
         "name": "release:custom:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current --git-email="test@example.com" --git-username="testuser"",
+            "exec": "npx -y monotag@1.23.0 current --git-email="test@example.com" --git-username="testuser"",
           },
         ],
       },
@@ -128,7 +128,7 @@ node_modules/
         "name": "release:custom:git-push",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 tag-push --git-email="test@example.com" --git-username="testuser"",
+            "exec": "npx -y monotag@1.23.0 tag-push --git-email="test@example.com" --git-username="testuser"",
           },
         ],
       },
@@ -137,7 +137,7 @@ node_modules/
         "name": "release:custom:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes --git-email="test@example.com" --git-username="testuser"",
+            "exec": "npx -y monotag@1.23.0 tag --git-email="test@example.com" --git-username="testuser"",
           },
         ],
       },
@@ -262,7 +262,7 @@ node_modules/
         "name": "release:current",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 current ",
+            "exec": "npx -y monotag@1.23.0 current ",
           },
         ],
       },
@@ -275,7 +275,7 @@ node_modules/
         "name": "release:next-tag",
         "steps": [
           {
-            "exec": "npx -y monotag@1.15.1 notes ",
+            "exec": "npx -y monotag@1.23.0 tag ",
           },
         ],
       },
