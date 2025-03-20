@@ -3,33 +3,12 @@
 import { Testing } from 'projen';
 
 import { TestProject } from '../../test-project'; // or your local test project setup
+import { MONOTAG_VERSION } from '../../constants';
 
 import { PublishTasks, PublishOptions } from './publish-tasks';
-import { PublishNpmOptions } from './publish-npm-tasks';
 import { PublishPypiOptions } from './publish-pypi-tasks';
 
-// lib/src/common/components/publish/publish-tasks.test.ts
-
 describe('PublishTasks', () => {
-  it('throws an error if neither npm nor pypi is defined', () => {
-    const project = new TestProject();
-    expect(() => new PublishTasks(project, { skipChecks: true })).toThrow(
-      "At least one of 'npm' or 'pypi' options must be defined",
-    );
-  });
-
-  it('throws an error if skipBump or skipChecks is false and no monotagOptions provided', () => {
-    const project = new TestProject();
-    const opts: PublishOptions = {
-      skipBump: false,
-      skipChecks: false,
-      npm: { packagesDir: 'dist/js' } as PublishNpmOptions,
-    };
-    expect(() => new PublishTasks(project, opts)).toThrow(
-      'monotagOptions must be defined if skipBump or skipChecks is false',
-    );
-  });
-
   it('creates a publish task with default name when group is not set', () => {
     const project = new TestProject();
     const opts: PublishOptions = {
@@ -41,6 +20,22 @@ describe('PublishTasks', () => {
     new PublishTasks(project, opts);
     const out = Testing.synth(project);
     expect(out['.projen/tasks.json'].tasks.publish).toBeDefined();
+  });
+
+  it('generate correct options in monotag calls when monotagOptions is not provided', () => {
+    const project = new TestProject();
+    const opts: PublishOptions = {
+      skipChecks: true,
+      skipBump: true,
+      npm: { packagesDir: 'dist/js' },
+    };
+    new PublishTasks(project, opts);
+    const out = Testing.synth(project);
+    expect(out['.projen/tasks.json'].tasks.publish).toBeDefined();
+    const { steps } = out['.projen/tasks.json'].tasks.publish;
+    const cmd = steps.find((s: any) => s.name === 'check-and-unbump').exec;
+    expect(cmd).toContain('tag');
+    expect(cmd).toContain(`TAG_VERSION=$(npx -y monotag@${MONOTAG_VERSION}`);
   });
 
   it('creates a publish task with group name appended', () => {
@@ -96,8 +91,90 @@ describe('PublishTasks', () => {
     new PublishTasks(project, opts);
     const out = Testing.synth(project);
     const { steps } = out['.projen/tasks.json'].tasks.publish;
-    // The script is appended to the check-and-umbump step
-    expect(steps.at(-2).exec).toContain('No file found in');
-    expect(steps.at(-2).exec).toContain("with version '$TAG_VERSION' in the name");
+    // The script is appended to the check-and-unbump step
+    expect(steps.at(-3).exec).toContain('No file found in');
+    expect(steps.at(-3).exec).toContain("with version '$TAG_VERSION' in the name");
+  });
+
+  it('uses "build" as default build task if none is specified and a "build" task exists', () => {
+    const project = new TestProject();
+    // project comes with "build" task by default
+    // project.addTask('build');
+    const opts: PublishOptions = {
+      skipBump: true,
+      skipChecks: true,
+      monotagOptions: { monotagCmd: 'dummy' },
+      npm: { packagesDir: 'dist/js' },
+    };
+    new PublishTasks(project, opts);
+    const out = Testing.synth(project);
+    const publishSteps = out['.projen/tasks.json'].tasks.publish.steps;
+    expect(publishSteps.some((s: any) => s.name === 'build')).toBeTruthy();
+    expect(publishSteps.find((s: any) => s.name === 'build').spawn).toBe('build');
+  });
+
+  it('does not add build step if no "build" task is found and buildTask is not provided', () => {
+    const project = new TestProject();
+    project.removeTask('build');
+    const opts: PublishOptions = {
+      skipChecks: true,
+      skipBump: true,
+      monotagOptions: { monotagCmd: 'dummy' },
+      npm: { packagesDir: 'dist/js' },
+    };
+    new PublishTasks(project, opts);
+    const out = Testing.synth(project);
+    const publishSteps = out['.projen/tasks.json'].tasks.publish.steps;
+    expect(publishSteps.some((s: any) => s.name === 'build')).toBeFalsy();
+  });
+
+  it('throws an error if the specified buildTask is not found in the project', () => {
+    const project = new TestProject();
+    const opts: PublishOptions = {
+      buildTask: 'my-build',
+      skipChecks: true,
+      skipBump: true,
+      monotagOptions: { monotagCmd: 'dummy' },
+      npm: { packagesDir: 'dist/js' },
+    };
+    expect(() => new PublishTasks(project, opts)).toThrow("build task 'my-build' not found");
+  });
+
+  it('uses bumpAction=zero when skipBump is false and buildTask is defined', () => {
+    const project = new TestProject();
+    // project comes with "build" task by default
+    // project.addTask('build');
+    const opts: PublishOptions = {
+      skipBump: false,
+      skipChecks: true,
+      buildTask: 'build',
+      monotagOptions: { monotagCmd: 'dummy' },
+      npm: { packagesDir: 'dist/js' },
+    };
+    new PublishTasks(project, opts);
+    const out = Testing.synth(project);
+    const { steps } = out['.projen/tasks.json'].tasks.publish;
+    const cmd = steps.find((s: any) => s.name === 'check-and-unbump').exec;
+    expect(cmd).toContain('tag');
+    expect(cmd).toContain('--bump-action="zero"');
+  });
+
+  it('uses bumpAction=none when skipBump is true', () => {
+    const project = new TestProject();
+    // project comes with "build" task by default
+    // project.addTask('build');
+    const opts: PublishOptions = {
+      skipBump: true,
+      skipChecks: true,
+      buildTask: 'build',
+      monotagOptions: { monotagCmd: 'dummy' },
+      npm: { packagesDir: 'dist/js' },
+    };
+    new PublishTasks(project, opts);
+    const out = Testing.synth(project);
+    const { steps } = out['.projen/tasks.json'].tasks.publish;
+    const cmd = steps.find((s: any) => s.name === 'check-and-unbump').exec;
+    expect(cmd).toContain('tag');
+    expect(cmd).toContain('--bump-action="none"');
   });
 });

@@ -1,7 +1,7 @@
 /* eslint-disable no-process-env */
 import { Component, Project } from 'projen';
 
-import { BasePublishOptions } from './types';
+import { BasePublishOptions } from './common';
 
 /**
  * Publish JS packages in a directoty to a Npm registry
@@ -51,5 +51,5 @@ export interface PublishNpmOptions extends BasePublishOptions {
    * Fails if no package is found.
    * @default "dist/js"
    */
-  packagesDir: string;
+  readonly packagesDir: string;
 }

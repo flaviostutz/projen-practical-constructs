@@ -70,6 +70,22 @@ release-after:
 release-pre:
 	npx projen release:pre
 
+# Executed before all publish tasks. Placeholder for customizations
+publish-before:
+	npx projen publish:before
+
+# Executed after all publish tasks. Placeholder for customizations
+publish-after:
+	npx projen publish:after
+
+# Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.
+publish-npm:
+	npx projen publish-npm
+
+# Publish packages to npm and/or pypi registries
+publish:
+	npx projen publish
+
 # Code type checks (mypy)
 lint-mypy:
 	npx projen lint-mypy

@@ -1,7 +1,7 @@
 /* eslint-disable no-process-env */
 import { Component, Project } from 'projen';
 
-import { BasePublishOptions } from './types';
+import { BasePublishOptions } from './common';
 
 /**
  * Publish Python packages in a directoty to a Pypi registry
@@ -54,5 +54,5 @@ export interface PublishPypiOptions extends BasePublishOptions {
    * Fails if no package is found.
    * @default "dist/python"
    */
-  packagesDir: string;
+  readonly packagesDir: string;
 }

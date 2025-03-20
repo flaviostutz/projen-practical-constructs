@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+EXAMPLE_PYTHON_PATH := examples/python
 
 all: build lint test
 
@@ -11,12 +12,14 @@ build-lib:
 	cd lib && make build
 
 build-examples:
-	@echo ">>> Build examples..."
-	@if [  ! -f "examples/python/Makefile" ]; then \
+	@echo ">>> Recreate examples..."
+	@if [  ! -f "$(EXAMPLE_PYTHON_PATH)/Makefile" ]; then \
 		make dev-new; \
 	fi
-	EXAMPLE_PATH="examples/python" make install-examples-local
-	cd "examples/python" && make build
+
+	@echo ">>> Build python example..."
+	EXAMPLE_PATH=$(EXAMPLE_PYTHON_PATH) make install-examples-python-local
+	cd $(EXAMPLE_PYTHON_PATH) && make build
 
 test-unit: test-lib test-examples
 
@@ -58,7 +61,7 @@ run-test-integration:
 	@echo ">>> Create a brand new example project with type '$$PROJ_TYPE'"
 	cd "$$EXAMPLE_PATH" && npx projen new --no-git --from ../../lib/dist/js/projen-practical-constructs@0.0.0.jsii.tgz $$PROJ_TYPE
 
-	EXAMPLE_PATH="examples/python" make install-examples-local
+	EXAMPLE_PATH=$$EXAMPLE_PATH make install-examples-python-local
 
 	@echo ">>> Run build, lint-fix, lint and test on the generated example project"
 	cd "$$EXAMPLE_PATH" && make build lint-fix lint test
@@ -69,15 +72,13 @@ publish-npmjs:
 publish-pypi:
 	cd lib && make publish-pypi
 
-example-update: install-examples-local
-	if [ "$$EXAMPLE_PATH" = "" ]; then \
-		echo "EXAMPLE_PATH env is required"; \
-		exit 1; \
-	fi
+examples-update:
 	@echo "Build projen type lib..."
 	cd lib && make build
-	@echo "Update the example project..."
-	cd "$$EXAMPLE_PATH" && make prepare-venv build
+
+	@echo "Update example python with the latest lib contents..."
+	EXAMPLE_PATH=$(EXAMPLE_PYTHON_PATH) make install-examples-python-local
+	cd "$(EXAMPLE_PYTHON_PATH)" && make prepare-venv build
 
 dev-new:
 	make build-lib
@@ -87,13 +88,13 @@ clean:
 	-cd lib && make clean
 	-cd examples/python && make clean
 
-install-examples-local:
+install-examples-python-local:
 	@if [ "$$EXAMPLE_PATH" = "" ]; then \
 		echo "EXAMPLE_PATH env is required"; \
 		exit 1; \
 	fi
+	@echo "Installing local version of projen-practical-constructs in $$EXAMPLE_PATH_PYTHON..."
 	cd $$EXAMPLE_PATH && make prepare-venv
-	@echo "Installing local version of projen-practical-constructs in examples..."
 	$$EXAMPLE_PATH/.venv/bin/pip install $$(ls ./lib/dist/python/projen_practical_constructs-*.tar.gz | head -n 1)
 
 prepare:

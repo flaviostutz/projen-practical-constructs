@@ -143,6 +143,62 @@
         }
       ]
     },
+    "publish": {
+      "name": "publish",
+      "description": "Publish packages to npm and/or pypi registries",
+      "steps": [
+        {
+          "spawn": "publish:before"
+        },
+        {
+          "name": "check-and-bump",
+          "exec": "npx -y monotag@1.23.0 current "
+        },
+        {
+          "name": "build",
+          "spawn": "build"
+        },
+        {
+          "name": "check-and-unbump",
+          "exec": "TAG_VERSION=$(npx -y monotag@1.23.0 tag --bump-action=\"none\" | head -2 | tail -1); \\\n[ ls -A dist/js | grep $TAG_VERSION ] || { echo \"No file found in 'dist/js' with version '$TAG_VERSION' in the name\"; return 1; }"
+        },
+        {
+          "spawn": "publish-npm"
+        },
+        {
+          "spawn": "publish:after"
+        }
+      ]
+    },
+    "publish-npm": {
+      "name": "publish-npm",
+      "description": "Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.",
+      "steps": [
+        {
+          "name": "check-credentials",
+          "exec": "[ -z \"$NPM_TOKEN\" ] && { echo \"ENV var NPM_TOKEN is required\"; return 1 }"
+        },
+        {
+          "name": "check-package-exists",
+          "exec": "[ -z \"$(ls -A dist/js/*.tgz 2>/dev/null)\" ] && { echo \"No packages found in dir dist/js\"; return 1; }"
+        },
+        {
+          "name": "publish-package",
+          "env": {
+            "NPM_REGISTRY": "https://registry.npmjs.org/"
+          },
+          "exec": "npx -y -p publib publib-npm dist/js"
+        }
+      ]
+    },
+    "publish:after": {
+      "name": "publish:after",
+      "description": "Executed after all publish tasks. Placeholder for customizations"
+    },
+    "publish:before": {
+      "name": "publish:before",
+      "description": "Executed before all publish tasks. Placeholder for customizations"
+    },
     "release": {
       "name": "release",
       "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
@@ -174,7 +230,7 @@
       "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 current "
+          "exec": "npx -y monotag@1.23.0 current "
         }
       ]
     },
@@ -187,7 +243,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes "
+          "exec": "npx -y monotag@1.23.0 tag "
         }
       ]
     },
@@ -222,7 +278,7 @@
       "description": "Verifies if the current commit is already tagged with the latest calculated tag. If so, bumps files, saves version/tag/notes in output files/changelogs.",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 current --prerelease=\"true\""
+          "exec": "npx -y monotag@1.23.0 current --prerelease=\"true\""
         }
       ]
     },
@@ -235,7 +291,7 @@
       "description": "Calculate next tag and version of the software and display on console. No git operations are performed, but depending on the configurations, changelog, version, tag an notes might be written to files. Supports complex release tagging in monorepos by using \"npx monotag\"",
       "steps": [
         {
-          "exec": "npx -y monotag@1.15.1 notes --prerelease=\"true\""
+          "exec": "npx -y monotag@1.23.0 tag --prerelease=\"true\""
         }
       ]
     },

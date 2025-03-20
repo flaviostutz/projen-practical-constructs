@@ -2,7 +2,7 @@
 /* eslint-disable no-new */
 import { Component, Project, TaskStep } from 'projen';
 
-import { NextTagOptions } from '../../types';
+import { expandMonotagCmd, NextTagOptions } from '../../types';
 import { monotagCliArgs } from '../../utils/monotag';
 
 import { PublishPypiOptions, PublishPypiTasks } from './publish-pypi-tasks';
@@ -12,21 +12,26 @@ import { PublishNpmOptions, PublishNpmTasks } from './publish-npm-tasks';
  * Defines a set of tasks to publish packages to npm and/or pypi registries.
  */
 export class PublishTasks extends Component {
-  constructor(project: Project, opts: PublishOptions) {
+  constructor(project: Project, opts?: PublishOptions) {
     super(project);
 
-    if (!opts.npm && !opts.pypi) {
+    const optsDef = expandOpts(opts);
+
+    if (!optsDef.npm && !optsDef.pypi) {
       throw new Error("At least one of 'npm' or 'pypi' options must be defined");
     }
 
-    if ((!opts.skipBump || !opts.skipChecks) && !opts.monotagOptions) {
+    if ((!optsDef.skipBump || !optsDef.skipChecks) && !optsDef.monotagOptions) {
       throw new Error('monotagOptions must be defined if skipBump or skipChecks is false');
     }
 
-    const taskName = `publish${opts.group ? `-${opts.group}` : ''}`;
+    const taskName = `publish${optsDef.group ? `-${optsDef.group}` : ''}`;
     project.removeTask(taskName);
     project.addTask(`${taskName}:before`, {
       description: 'Executed before all publish tasks. Placeholder for customizations',
+    });
+    project.addTask(`${taskName}:after`, {
+      description: 'Executed after all publish tasks. Placeholder for customizations',
     });
 
     const publishSteps: TaskStep[] = [];
@@ -34,13 +39,13 @@ export class PublishTasks extends Component {
     let fileVersionCheckPrePublishScript = '';
 
     // add npm publish tasks
-    if (opts.npm) {
-      const npmWithDef = npmWithDefaults(opts.npm);
+    if (optsDef.npm) {
+      const npmWithDef = npmWithDefaults(optsDef.npm);
       const nt = new PublishNpmTasks(project, npmWithDef);
       const checkScript = checkTaskAndFilesScript(
         project,
         nt.taskName,
-        opts,
+        optsDef,
         npmWithDef.packagesDir,
       );
       fileVersionCheckPrePublishScript += checkScript;
@@ -48,27 +53,41 @@ export class PublishTasks extends Component {
     }
 
     // add pypi publish tasks
-    if (opts.pypi) {
-      const pypiWithDef = pypiWithDefaults(opts.pypi);
+    if (optsDef.pypi) {
+      const pypiWithDef = pypiWithDefaults(optsDef.pypi);
       const nt = new PublishPypiTasks(project, pypiWithDef);
       const checkScript = checkTaskAndFilesScript(
         project,
         nt.taskName,
-        opts,
+        optsDef,
         pypiWithDef.packagesDir,
       );
       fileVersionCheckPrePublishScript += checkScript;
       publishSteps.push({ spawn: nt.taskName });
     }
 
-    const preSteps = prePublishSteps(taskName, opts, fileVersionCheckPrePublishScript);
+    const preSteps = prePublishSteps(taskName, optsDef, fileVersionCheckPrePublishScript, project);
+
+    // invoke post-publish tasks. e.g: "notify slack", "send email", "close tickets"
+    const postSteps: TaskStep[] = [{ spawn: `${taskName}:after` }];
 
     project.addTask(taskName, {
       description: 'Publish packages to npm and/or pypi registries',
-      steps: [...preSteps, ...publishSteps],
+      steps: [...preSteps, ...publishSteps, ...postSteps],
     });
   }
 }
+
+export const expandOpts = (opts?: PublishOptions): PublishOptions => {
+  return {
+    npm: {
+      packagesDir: 'dist/js',
+      ...opts?.npm,
+    },
+    monotagOptions: {},
+    ...opts,
+  };
+};
 
 export const npmWithDefaults = (opts: PublishNpmOptions): PublishNpmOptions => {
   return {
@@ -105,11 +124,12 @@ export const prePublishSteps = (
   taskName: string,
   opts: PublishOptions,
   fileVersionChecksScript: string,
+  project: Project,
 ): TaskStep[] => {
   // define steps
   const steps: TaskStep[] = [];
 
-  // invoke pre-publish tasks, such as "release", "lint", "test"
+  // invoke pre-publish tasks. e.g: "release", "lint", "test"
   steps.push({ spawn: `${taskName}:before` });
 
   // invoke monotag to bump and/or check git status/tags
@@ -120,27 +140,42 @@ export const prePublishSteps = (
       // only force bump if build task is defined and skipBump is false, otherwise use the configuration provided
       bumpAction: opts.buildTask && !opts.skipBump ? 'latest' : opts.monotagOptions?.bumpAction,
     };
+    const monotagCmd = expandMonotagCmd(opts.monotagOptions?.monotagCmd);
     steps.push({
       name: 'check-and-bump',
-      exec: `${opts.monotagOptions?.monotagCmd} ${preMonotagAction} ${monotagCliArgs(preMonotagOptions)}`,
+      exec: `${monotagCmd} ${preMonotagAction} ${monotagCliArgs(preMonotagOptions)}`,
     });
   }
 
   // invoke build task after bumping and/or checking
-  if (opts.buildTask) {
-    steps.push({ name: 'build', spawn: opts.buildTask });
+  // if build task not defined, try to use "build" as default
+  // eslint-disable-next-line functional/no-let
+  const { buildTask, monotagOptions, skipBump } = opts;
+  // eslint-disable-next-line functional/no-let
+  let buildTaskSpawn = buildTask;
+  // eslint-disable-next-line no-undefined
+  if (buildTaskSpawn === undefined) {
+    // defaults to "build" task if exists
+    buildTaskSpawn = project.tasks.tryFind('build') ? 'build' : '';
+  }
+  if (buildTaskSpawn) {
+    if (!project.tasks.tryFind(buildTaskSpawn)) {
+      throw new Error(`build task '${buildTaskSpawn}' not found`);
+    }
+    steps.push({ name: 'build', spawn: buildTaskSpawn });
   }
 
   // unbump package descriptors, set TAG_VERSION env to the latest tag and check if package files have version in their names
   const afterBuildMonotagOptions: NextTagOptions = {
-    ...opts.monotagOptions,
-    // only umbump if build task is defined and skipBump is false, otherwise do nothing
-    bumpAction: opts.buildTask && !opts.skipBump ? 'zero' : 'none',
+    ...monotagOptions,
+    // only unbump if build task is defined and skipBump is false, otherwise do nothing
+    bumpAction: buildTask && !skipBump ? 'zero' : 'none',
   };
-  // this is done in one command so we can get the monotag output tag version at the same time that (possibly) it umbumps the package descriptors
+  // this is done in one command so we can get the monotag output tag version at the same time that (possibly) it unbumps the package descriptors
+  const monotagCmd = expandMonotagCmd(monotagOptions?.monotagCmd);
   steps.push({
-    name: 'check-and-umbump',
-    exec: `TAG_VERSION=${opts.monotagOptions?.monotagCmd} tag ${monotagCliArgs(afterBuildMonotagOptions)} | head -2 | tail -1; \\${fileVersionChecksScript}`,
+    name: 'check-and-unbump',
+    exec: `TAG_VERSION=$(${monotagCmd} tag ${monotagCliArgs(afterBuildMonotagOptions)} | head -2 | tail -1); \\${fileVersionChecksScript}`,
   });
 
   return steps;
@@ -149,13 +184,14 @@ export const prePublishSteps = (
 export interface PublishOptions {
   /**
    * The name of the task that will be invoked to generate package files to be published.
+   * @default 'build', if exists in project. If not, no build task will be invoked.
    */
-  buildTask?: string;
+  readonly buildTask?: string;
   /**
    * If true, won't bump the version field of package.json, pyproject.toml etc to the latest tag found before invoking the build task.
    * @default false
    */
-  skipBump?: boolean;
+  readonly skipBump?: boolean;
   /**
    * Disable checks before publishing.
    * By default the following checks are performed:
@@ -166,22 +202,22 @@ export interface PublishOptions {
    * In order to perform some of the checks, monotag will be invoked with action "current". If not, "tag" will be used.
    * @default false
    */
-  skipChecks: boolean;
+  readonly skipChecks?: boolean;
   /**
    * Options for next tag calculation. Used as the base options for monotag invocations during bumping and tagging checks
    */
-  monotagOptions?: NextTagOptions;
+  readonly monotagOptions?: NextTagOptions;
   /**
    * Options for npm publishing.
    */
-  npm?: PublishNpmOptions;
+  readonly npm?: PublishNpmOptions;
   /**
    * Options for pypi publishing.
    */
-  pypi?: PublishPypiOptions;
+  readonly pypi?: PublishPypiOptions;
   /**
    * If defined, will suffix the task name by this name so that multiple
    * publish tasks with different configurations can be defined in the same project.
    */
-  group?: string;
+  readonly group?: string;
 }

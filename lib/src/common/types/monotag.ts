@@ -4,6 +4,8 @@
  * and the lib is not prepared for jsii
  */
 
+import { MONOTAG_VERSION } from '../constants';
+
 /**
  * Options for analyzing and generating a new tag
  */
@@ -166,3 +168,7 @@ export interface NextTagOptions {
    */
   readonly bumpFiles?: string[];
 }
+
+export const expandMonotagCmd = (monotagCmd: string | undefined): string => {
+  return monotagCmd ?? `npx -y monotag@${MONOTAG_VERSION}`;
+};

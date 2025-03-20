@@ -271,6 +271,63 @@ __pycache__
           },
         ],
       },
+      "publish": {
+        "description": "Publish packages to npm and/or pypi registries",
+        "name": "publish",
+        "steps": [
+          {
+            "spawn": "publish:before",
+          },
+          {
+            "exec": "npx -y monotag@1.23.0 current ",
+            "name": "check-and-bump",
+          },
+          {
+            "name": "build",
+            "spawn": "build",
+          },
+          {
+            "exec": "TAG_VERSION=$(npx -y monotag@1.23.0 tag --bump-action="none" | head -2 | tail -1); \\
+[ ls -A dist/js | grep $TAG_VERSION ] || { echo "No file found in 'dist/js' with version '$TAG_VERSION' in the name"; return 1; }",
+            "name": "check-and-unbump",
+          },
+          {
+            "spawn": "publish-npm",
+          },
+          {
+            "spawn": "publish:after",
+          },
+        ],
+      },
+      "publish-npm": {
+        "description": "Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.",
+        "name": "publish-npm",
+        "steps": [
+          {
+            "exec": "[ -z "$NPM_TOKEN" ] && { echo "ENV var NPM_TOKEN is required"; return 1 }",
+            "name": "check-credentials",
+          },
+          {
+            "exec": "[ -z "$(ls -A dist/js/*.tgz 2>/dev/null)" ] && { echo "No packages found in dir dist/js"; return 1; }",
+            "name": "check-package-exists",
+          },
+          {
+            "env": {
+              "NPM_REGISTRY": "https://registry.npmjs.org/",
+            },
+            "exec": "npx -y -p publib publib-npm dist/js",
+            "name": "publish-package",
+          },
+        ],
+      },
+      "publish:after": {
+        "description": "Executed after all publish tasks. Placeholder for customizations",
+        "name": "publish:after",
+      },
+      "publish:before": {
+        "description": "Executed before all publish tasks. Placeholder for customizations",
+        "name": "publish:before",
+      },
       "release": {
         "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release",
@@ -487,6 +544,22 @@ release-after:
 # Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
 release-pre:
 	npx projen release:pre
+
+# Executed before all publish tasks. Placeholder for customizations
+publish-before:
+	npx projen publish:before
+
+# Executed after all publish tasks. Placeholder for customizations
+publish-after:
+	npx projen publish:after
+
+# Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.
+publish-npm:
+	npx projen publish-npm
+
+# Publish packages to npm and/or pypi registries
+publish:
+	npx projen publish
 
 # Code type checks (mypy)
 lint-mypy:
@@ -869,6 +942,63 @@ __pycache__
           },
         ],
       },
+      "publish": {
+        "description": "Publish packages to npm and/or pypi registries",
+        "name": "publish",
+        "steps": [
+          {
+            "spawn": "publish:before",
+          },
+          {
+            "exec": "npx -y monotag@1.23.0 current ",
+            "name": "check-and-bump",
+          },
+          {
+            "name": "build",
+            "spawn": "build",
+          },
+          {
+            "exec": "TAG_VERSION=$(npx -y monotag@1.23.0 tag --bump-action="none" | head -2 | tail -1); \\
+[ ls -A dist/js | grep $TAG_VERSION ] || { echo "No file found in 'dist/js' with version '$TAG_VERSION' in the name"; return 1; }",
+            "name": "check-and-unbump",
+          },
+          {
+            "spawn": "publish-npm",
+          },
+          {
+            "spawn": "publish:after",
+          },
+        ],
+      },
+      "publish-npm": {
+        "description": "Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.",
+        "name": "publish-npm",
+        "steps": [
+          {
+            "exec": "[ -z "$NPM_TOKEN" ] && { echo "ENV var NPM_TOKEN is required"; return 1 }",
+            "name": "check-credentials",
+          },
+          {
+            "exec": "[ -z "$(ls -A dist/js/*.tgz 2>/dev/null)" ] && { echo "No packages found in dir dist/js"; return 1; }",
+            "name": "check-package-exists",
+          },
+          {
+            "env": {
+              "NPM_REGISTRY": "https://registry.npmjs.org/",
+            },
+            "exec": "npx -y -p publib publib-npm dist/js",
+            "name": "publish-package",
+          },
+        ],
+      },
+      "publish:after": {
+        "description": "Executed after all publish tasks. Placeholder for customizations",
+        "name": "publish:after",
+      },
+      "publish:before": {
+        "description": "Executed before all publish tasks. Placeholder for customizations",
+        "name": "publish:before",
+      },
       "release": {
         "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release",
@@ -1105,6 +1235,22 @@ release-after:
 # Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
 release-pre:
 	npx projen release:pre
+
+# Executed before all publish tasks. Placeholder for customizations
+publish-before:
+	npx projen publish:before
+
+# Executed after all publish tasks. Placeholder for customizations
+publish-after:
+	npx projen publish:after
+
+# Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.
+publish-npm:
+	npx projen publish-npm
+
+# Publish packages to npm and/or pypi registries
+publish:
+	npx projen publish
 
 # Code type checks (mypy)
 lint-mypy:
@@ -1458,6 +1604,63 @@ __pycache__
           },
         ],
       },
+      "publish": {
+        "description": "Publish packages to npm and/or pypi registries",
+        "name": "publish",
+        "steps": [
+          {
+            "spawn": "publish:before",
+          },
+          {
+            "exec": "npx -y monotag@1.23.0 current ",
+            "name": "check-and-bump",
+          },
+          {
+            "name": "build",
+            "spawn": "build",
+          },
+          {
+            "exec": "TAG_VERSION=$(npx -y monotag@1.23.0 tag --bump-action="none" | head -2 | tail -1); \\
+[ ls -A dist/js | grep $TAG_VERSION ] || { echo "No file found in 'dist/js' with version '$TAG_VERSION' in the name"; return 1; }",
+            "name": "check-and-unbump",
+          },
+          {
+            "spawn": "publish-npm",
+          },
+          {
+            "spawn": "publish:after",
+          },
+        ],
+      },
+      "publish-npm": {
+        "description": "Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.",
+        "name": "publish-npm",
+        "steps": [
+          {
+            "exec": "[ -z "$NPM_TOKEN" ] && { echo "ENV var NPM_TOKEN is required"; return 1 }",
+            "name": "check-credentials",
+          },
+          {
+            "exec": "[ -z "$(ls -A dist/js/*.tgz 2>/dev/null)" ] && { echo "No packages found in dir dist/js"; return 1; }",
+            "name": "check-package-exists",
+          },
+          {
+            "env": {
+              "NPM_REGISTRY": "https://registry.npmjs.org/",
+            },
+            "exec": "npx -y -p publib publib-npm dist/js",
+            "name": "publish-package",
+          },
+        ],
+      },
+      "publish:after": {
+        "description": "Executed after all publish tasks. Placeholder for customizations",
+        "name": "publish:after",
+      },
+      "publish:before": {
+        "description": "Executed before all publish tasks. Placeholder for customizations",
+        "name": "publish:before",
+      },
       "release": {
         "description": "Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.",
         "name": "release",
@@ -1674,6 +1877,22 @@ release-after:
 # Release a new version by calculating next tag/version, generating changelogs, documentation, commiting, tagging and pushing these changes/tag to the repo.
 release-pre:
 	npx projen release:pre
+
+# Executed before all publish tasks. Placeholder for customizations
+publish-before:
+	npx projen publish:before
+
+# Executed after all publish tasks. Placeholder for customizations
+publish-after:
+	npx projen publish:after
+
+# Publish JS packages to a NPM registry. See https://www.npmjs.com/package/publib for more details about environment variables supported to control publishing configurations.
+publish-npm:
+	npx projen publish-npm
+
+# Publish packages to npm and/or pypi registries
+publish:
+	npx projen publish
 
 # Code type checks (mypy)
 lint-mypy:

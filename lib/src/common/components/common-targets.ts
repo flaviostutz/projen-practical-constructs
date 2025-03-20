@@ -1,6 +1,6 @@
 import { Component, Project } from 'projen';
 
-import { ReleaseTasks, ReleaseTasksOptions } from './release-tasks';
+import { ReleaseTasks, ReleaseOptions } from './release-tasks';
 import { CommonTargets } from './common-target-type';
 
 /**
@@ -110,7 +110,7 @@ export interface BaseTasksOptions {
   /**
    * Release task options
    */
-  readonly releaseOpts?: ReleaseTasksOptions;
+  readonly releaseOpts?: ReleaseOptions;
   /**
    * Whether to include deploy tasks
    */

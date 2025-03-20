@@ -7,7 +7,8 @@ import { Projenrc } from 'projen/lib/python';
 import { NODE_VERSION, PROJEN_VERSION } from '../common/constants';
 import { BaseTooling } from '../common/components/base-tooling';
 import { CommonTargetsTasks } from '../common/components/common-targets';
-import { ReleaseTasks, ReleaseTasksOptions } from '../common/components/release-tasks';
+import { ReleaseTasks, ReleaseOptions } from '../common/components/release-tasks';
+import { PublishOptions, PublishTasks } from '../common/components/publish/publish-tasks';
 
 import { resolvePackageName } from './files/pyproject-toml';
 import { PythonBasicSample } from './components/sample';
@@ -75,6 +76,8 @@ export class PythonBasicProject extends Project {
       preRelease: true,
       name: 'pre',
     });
+
+    new PublishTasks(this, optionsWithDefaults.publish);
 
     // create README.md
     new ReadmeFile(this, {
@@ -174,16 +177,24 @@ export interface PythonBasicOptions extends ProjectOptions, Build0Options, TaskO
   readonly sample?: boolean;
   /**
    * Linting configurations such as rules selected etc
+   * This prepares the project with lint configurations such as rules selected, rules ignored etc
    */
   readonly lint?: LintOptions;
   /**
    * Test configurations
+   * This prepares the project with test configurations such as coverage threshold etc
    */
   readonly test?: TestOptions;
   /**
-   * Release options for the "release" task
+   * Release options for the "release" task.
+   * This prepares the project to execute pre-publish actions such as changelog generation, version tagging in git etc
    */
-  readonly release?: ReleaseTasksOptions;
+  readonly release?: ReleaseOptions;
+  /**
+   * Publish options for the "publish" task
+   * This prepares the project to be published to a package registry such as pypi or npm
+   */
+  readonly publish?: PublishOptions;
 }
 
 const getPythonBasicOptionsWithDefaults = (options: PythonBasicOptions): PythonBasicOptions => {

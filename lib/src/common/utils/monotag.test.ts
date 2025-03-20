@@ -1,4 +1,7 @@
-import { NextTagOptions } from '../types/monotag';
+/* eslint-disable no-undefined */
+/* eslint-disable unicorn/no-useless-undefined */
+import { MONOTAG_VERSION } from '../constants';
+import { expandMonotagCmd, NextTagOptions } from '../types/monotag';
 
 import { monotagCliArgs } from './monotag';
 
@@ -43,5 +46,14 @@ describe('monotagCliArgs', () => {
     const args = monotagCliArgs(options);
     expect(args).toContain('--bump-action="latest"');
     expect(args).toContain('--foo "bar" --baz');
+  });
+});
+describe('expandMonotagCmd', () => {
+  it('returns default command when monotagCmd is undefined', () => {
+    expect(expandMonotagCmd(undefined)).toBe(`npx -y monotag@${MONOTAG_VERSION}`);
+  });
+
+  it('returns the provided command when monotagCmd is set', () => {
+    expect(expandMonotagCmd('my-custom-cli')).toBe('my-custom-cli');
   });
 });

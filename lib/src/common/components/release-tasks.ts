@@ -1,9 +1,8 @@
 import { Component, Project } from 'projen';
 
-import { NextTagOptions } from '../types/monotag';
+import { expandMonotagCmd, NextTagOptions } from '../types/monotag';
 import { WithRequired } from '../types/utils';
 import { monotagCliArgs } from '../utils/monotag';
-import { MONOTAG_VERSION } from '../utils/constants';
 
 import { CommonTargets } from './common-target-type';
 
@@ -22,7 +21,7 @@ import { CommonTargets } from './common-target-type';
  *   - release[:name]:after: executed after all other tasks in release. Placeholder for any post-release related tasks
  */
 export class ReleaseTasks extends Component {
-  constructor(project: Project, opts?: ReleaseTasksOptions) {
+  constructor(project: Project, opts?: ReleaseOptions) {
     super(project);
 
     const optsWithDefaults = getOptionsWithDefaults(opts);
@@ -108,8 +107,8 @@ export class ReleaseTasks extends Component {
 }
 
 const getOptionsWithDefaults = (
-  opts?: ReleaseTasksOptions,
-): WithRequired<ReleaseTasksOptions, 'name' | 'action' | 'monotagCmd'> => {
+  opts?: ReleaseOptions,
+): WithRequired<ReleaseOptions, 'name' | 'action' | 'monotagCmd'> => {
   // check if action is valid
   if (opts?.action && !['console', 'tag', 'push'].includes(opts.action)) {
     throw new Error(
@@ -127,12 +126,12 @@ const getOptionsWithDefaults = (
   return {
     name: '',
     action: 'console',
-    monotagCmd: `npx -y monotag@${MONOTAG_VERSION}`,
+    monotagCmd: expandMonotagCmd(opts?.monotagCmd),
     ...opts,
   };
 };
 
-export interface ReleaseTasksOptions extends NextTagOptions {
+export interface ReleaseOptions extends NextTagOptions {
   /**
    * Action to be taken after calculating the next tag
    * Options:
