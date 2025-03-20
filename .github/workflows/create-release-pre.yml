@@ -1,4 +1,4 @@
-name: create-release
+name: create-release-pre
 
 on:
   workflow_dispatch:
@@ -25,4 +25,5 @@ jobs:
             -v \
             --git-username="Flávio Stutz" \
             --git-email="flaviostutz@gmail.com" \
-            --changelog-file CHANGELOG.md
+            --prefix=v \
+            --prerelease
