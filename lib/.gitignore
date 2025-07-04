@@ -43,3 +43,4 @@ junit.xml
 tsconfig.json
 .npmrc
 !/.projenrc.ts
+!/src/spike-generated.ts

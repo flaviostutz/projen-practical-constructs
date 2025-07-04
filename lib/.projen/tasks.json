@@ -317,7 +317,7 @@
           "exec": "npm install"
         },
         {
-          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @iarna/toml"
+          "exec": "npm update @stutzlab/eslint-config @swc/core @types/jest @types/node @typescript-eslint/eslint-plugin commit-and-tag-version constructs jest jest-junit jsii-diff jsii-pacmak jsii-rosetta jsii projen ts-jest ts-node typescript @iarna/toml @jsii/spec @mrgrain/jsii-struct-builder ts-morph"
         },
         {
           "exec": "npx projen"

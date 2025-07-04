@@ -1,6 +1,8 @@
 import { cdk } from 'projen';
 import { NodePackageManager, UpdateSnapshot } from 'projen/lib/javascript';
 import { ReleaseTrigger } from 'projen/lib/release';
+import { ProjenStruct, Struct } from "@mrgrain/jsii-struct-builder";
+import {tsToJsii} from './src/';
 
 const project = new cdk.JsiiProject({
   name: 'projen-practical-constructs',
@@ -11,6 +13,9 @@ const project = new cdk.JsiiProject({
   jsiiVersion: '~5.7.0',
   deps: [
     '@iarna/toml@^2.2.5',
+    '@jsii/spec@^1.112.0',
+    '@mrgrain/jsii-struct-builder@^0.7.52',
+    'ts-morph@^26.0.0',
   ],
   // every lib that is not jsii needs to be bundled in the final package
   bundledDeps: [
@@ -81,5 +86,9 @@ project.tasks.addTask('package-release', {
 });
 
 project.addGitIgnore('.npmrc');
+
+new ProjenStruct(project, { name: 'SpikeTypeOptional', filePath: 'src/spike-generated.ts' })
+  .mixin(tsToJsii('src/spike.ts', 'SpikeType'))
+  .allOptional();
 
 project.synth();
