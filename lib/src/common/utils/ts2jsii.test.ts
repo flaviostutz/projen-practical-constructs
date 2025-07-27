@@ -133,7 +133,7 @@ export interface Baz { foo: number; }`,
     ]);
   });
 
-  it.only('extracts properties from SpikeType with inheritance', () => {
+  it('extracts properties from SpikeType with inheritance', () => {
     const tmpFile = writeTmp(
       'SpikesMore.ts',
       `
