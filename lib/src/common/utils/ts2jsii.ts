@@ -137,14 +137,11 @@ const resolveJsiiPropertiesFromTypeNodeWithAll = (
   typeNode: TypeNode,
   checker: TypeChecker,
 ): Property[] => {
-  if (Node.isTypeElementMembered(typeNode)) {
-    // console.log(`>>>> Type ElementMembered found: ${typeNode.getText()}`);
-    return typeNode
-      .getMembers()
-      .filter((element) => Node.isPropertySignature(element))
-      .map((prop) => toJsiiProperty(prop));
-  }
-  // if not membered, load properties from the type itself
+  // console.log(`>>> Resolving properties from type node: ${typeNode.getText()}`);
+
+  // LEAF nodes (returns properties directly)
+
+  // inline definition
   const type = checker.getTypeAtLocation(typeNode);
   if (type.isObject()) {
     // console.log(`>>>> Type Object found: ${type.getText()}`);
@@ -153,20 +150,91 @@ const resolveJsiiPropertiesFromTypeNodeWithAll = (
       .map((prop) => toJsiiProperty(prop.getDeclarations()[0] as PropertySignature));
   }
 
-  if (Node.isUnionTypeNode(typeNode)) {
-    //   console.log(`>>>> Union type node found: ${typeNode.getText()}`);
-    return typeNode.getTypeNodes().flatMap((t) => {
-      // console.log(`>>>>>> Processing intersection type node: ${t.getText()}`);
-      return resolveJsiiPropertiesFromTypeNode(t, checker);
-    });
+  if (Node.isTypeElementMembered(typeNode)) {
+    // console.log(`>>>> Type ElementMembered found: ${typeNode.getText()}`);
+    return typeNode
+      .getMembers()
+      .filter((element) => Node.isPropertySignature(element))
+      .map((prop) => toJsiiProperty(prop));
   }
+
+  if (Node.isTypeLiteral(typeNode)) {
+    // console.log(`>>>> Type Literal Node found: ${typeNode.getText()}`);
+    return typeNode
+      .getMembers()
+      .filter((element) => Node.isPropertySignature(element))
+      .map((prop) => toJsiiProperty(prop));
+  }
+
+  // COMPLEX nodes (returns properties from nested types)
 
   if (Node.isIntersectionTypeNode(typeNode)) {
     // console.log(`>>>> Intersection Type found: ${typeNode.getText()}`);
     return typeNode.getTypeNodes().flatMap((t) => {
-      // console.log(`>>>>>> Processing intersection type node: ${t.getText()}`);
       return resolveJsiiPropertiesFromTypeNode(t, checker);
     });
   }
+
+  if (Node.isUnionTypeNode(typeNode)) {
+    // console.log(`>>>> Union type node found: ${typeNode.getText()}`);
+    return typeNode.getTypeNodes().flatMap((t) => {
+      return resolveJsiiPropertiesFromTypeNode(t, checker);
+    });
+  }
+
+  if (Node.isTypeReference(typeNode)) {
+    // console.log(`>>>> Type Reference found: ${typeNode.getText()}`);
+
+    // const typeAlias = sourceFile.getTypeAlias(typeNode.getText());
+    // const typeNode2 = typeAlias?.getTypeNode();
+    // if (typeNode2) {
+    //   return resolveJsiiPropertiesFromTypeNodeWithAll(typeNode2, checker);
+    // }
+
+    const typeRef = checker.getTypeAtLocation(typeNode);
+    const aliasSymbol = typeRef.getAliasSymbol();
+
+    // If it's an alias, we need to resolve the type node from the alias declaration
+    if (aliasSymbol && aliasSymbol.getDeclarations().length > 0) {
+      // console.log(`>>>> Type Reference is an alias: ${aliasSymbol.getName()}`);
+      return resolveJsiiPropertiesFromTypeNodeWithAll(
+        aliasSymbol.getDeclarations()[0] as TypeNode,
+        checker,
+      );
+    }
+
+    // If it's a type reference but not an alias, we can still resolve properties
+    // console.log(`>>>> Type Reference is not an alias: ${typeRef.getText()}`);
+    // return typeRef
+    //   .getProperties()
+    //   .map((prop) => toJsiiProperty(prop.getDeclarations()[0] as PropertySignature));
+  }
+
+  if (Node.isTypeAliasDeclaration(typeNode)) {
+    // console.log(`>>>> Type Alias Declaration found: ${typeNode.getName()}`);
+    const typeAlias = typeNode.getSourceFile().getTypeAlias(typeNode.getName());
+    const typeNode2 = typeAlias?.getTypeNode();
+    if (typeNode2) {
+      return resolveJsiiPropertiesFromTypeNodeWithAll(typeNode2, checker);
+    }
+  }
+
+  if (Node.isArrayTypeNode(typeNode)) {
+    // console.log(`>>>> Array Type Node found: ${typeNode.getText()}`);
+    // For arrays, we can only return the element type
+    const elementType = typeNode.getElementTypeNode();
+    if (elementType) {
+      return resolveJsiiPropertiesFromTypeNodeWithAll(elementType, checker);
+    }
+  }
+
+  if (Node.isTupleTypeNode(typeNode)) {
+    // console.log(`>>>> Tuple Type Node found: ${typeNode.getText()}`);
+    // For tuples, we can return each element type as a property
+    return typeNode.getElements().flatMap((t) => {
+      return resolveJsiiPropertiesFromTypeNodeWithAll(t, checker);
+    });
+  }
+
   throw new Error(`Unsupported type node: ${typeNode.getText()}`);
 };

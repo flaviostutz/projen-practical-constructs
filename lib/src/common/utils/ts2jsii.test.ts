@@ -165,4 +165,44 @@ export interface Baz { foo: number; }`,
       { name: 'prop4', optional: true, type: { fqn: '__type' }, docs: {} },
     ]);
   });
+
+  it('extracts properties from SpikeType with inheritance with Type Reference', () => {
+    const tmpFile = writeTmp(
+      'SpikesMore.ts',
+      `
+      export type SpikeType = SpikeParent & {
+        prop1: string;
+        prop2: number;
+        prop3?: number;
+      };
+
+      export type SpikeParent = {
+        prop1: string;
+        prop2?: number;
+        prop3: string;
+        prop4?: SpikeComplex;
+        prop5?: number;
+      } & SpikeParent2;
+
+      export type SpikeParent2 = {
+        prop3?: boolean;
+        prop5: string;
+      };
+
+      export type SpikeComplex = {
+        propa: string;
+        propb?: number;
+      };
+    `,
+    );
+
+    const spikeType = tsToJsii(tmpFile, 'SpikeType');
+    expect(spikeType.properties).toStrictEqual([
+      { name: 'prop1', optional: false, type: { primitive: 'string' }, docs: {} },
+      { name: 'prop2', optional: false, type: { primitive: 'number' }, docs: {} },
+      { name: 'prop3', optional: true, type: { primitive: 'number' }, docs: {} },
+      { name: 'prop4', optional: true, type: { fqn: '__type' }, docs: {} },
+      { name: 'prop5', optional: false, type: { primitive: 'string' }, docs: {} },
+    ]);
+  });
 });
