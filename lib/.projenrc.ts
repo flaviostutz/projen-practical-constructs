@@ -20,6 +20,9 @@ const project = new cdk.JsiiProject({
   // every lib that is not jsii needs to be bundled in the final package
   bundledDeps: [
     '@iarna/toml@2.2.5',
+    '@jsii/spec@^1.112.0',
+    '@mrgrain/jsii-struct-builder@^0.7.52',
+    'ts-morph@^26.0.0',
   ],
   devDeps: [
     "@stutzlab/eslint-config@^3.2.1",

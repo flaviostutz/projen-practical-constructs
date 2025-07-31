@@ -83,6 +83,21 @@
       "type": "bundled"
     },
     {
+      "name": "@jsii/spec",
+      "version": "^1.112.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@mrgrain/jsii-struct-builder",
+      "version": "^0.7.52",
+      "type": "bundled"
+    },
+    {
+      "name": "ts-morph",
+      "version": "^26.0.0",
+      "type": "bundled"
+    },
+    {
       "name": "constructs",
       "version": "^10.4.2",
       "type": "peer"
