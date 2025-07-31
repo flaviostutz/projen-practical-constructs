@@ -37,6 +37,7 @@ const project = new cdk.JsiiProject({
     module: "projen_practical_constructs",
   },
   releaseTrigger: ReleaseTrigger.manual(),
+  bumpPackage: 'release-please',
   github: false,
   defaultReleaseBranch: 'main',
   projenrcTs: true,
