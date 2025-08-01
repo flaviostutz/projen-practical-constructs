@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "",
+      "type": "build"
+    },
+    {
       "name": "@stutzlab/eslint-config",
       "version": "^3.2.1",
       "type": "build"
@@ -57,10 +61,6 @@
     },
     {
       "name": "projen",
-      "type": "build"
-    },
-    {
-      "name": "release-please",
       "type": "build"
     },
     {
