@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.4.0 (2025-07-04)
+
+### Features
+
+* hierarchical types support [[138c6db](https://github.com/flaviostutz/projen-practical-constructs/commit/138c6dbe52f764086c0e0054dc0db0c69e71609d)]
+* support to alias types [[55b0ee3](https://github.com/flaviostutz/projen-practical-constructs/commit/55b0ee34dd735736a20a9eb9dca9047301e0b144)]
+
+### Maintenance
+
+* adding bundled deps [[6d1f747](https://github.com/flaviostutz/projen-practical-constructs/commit/6d1f74798d4a084874d6e78194b3e640de49ea81)]
+* bump vulnerable package [[1660b9f](https://github.com/flaviostutz/projen-practical-constructs/commit/1660b9f9bfe1a9cb97030fcc9375b01fa5ea4c69)]
+* initial commit with spike contents [[1d4e9e5](https://github.com/flaviostutz/projen-practical-constructs/commit/1d4e9e5168f6c545a527794f66fddcf658b56b7c)]
+* remove only to enable all tests [[86b534d](https://github.com/flaviostutz/projen-practical-constructs/commit/86b534d2e64d5c6ac3eaa3e5b6f20d0d16159479)]
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>
+
+
 ## v0.3.0 (2025-03-20)
 
 ### Maintenance
