@@ -25,5 +25,5 @@ jobs:
             -v \
             --git-username="Flávio Stutz" \
             --git-email="flaviostutz@gmail.com" \
-            --prefix=v \
+            --prefix= \
             --prerelease
