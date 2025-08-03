@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.1 (2025-07-31)
+
+### Maintenance
+
+* release: v0.4.0 [[8e4e1fa](https://github.com/flaviostutz/projen-practical-constructs/commit/8e4e1fa75e18542ad2def282bec2f34862b71da5)]
+* changing bump mechanism [[dd084d1](https://github.com/flaviostutz/projen-practical-constructs/commit/dd084d12a4673d2cf60ecdbf4a6798f3d093dfa1)]
+* remove "v" as tag prefix [[7049a5c](https://github.com/flaviostutz/projen-practical-constructs/commit/7049a5c79dcade13ddbb080974ee74c372331dd2)]
+
+### Misc
+
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>, Flávio Stutz <flaviostutz@gmail.com>
+
+
 ## v0.4.0 (2025-07-04)
 
 ### Features
