@@ -28,6 +28,8 @@ publish-npmjs: prepare-projen
 	# check if tag is current and bump version in package.json to latest tag
 	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
 
+	make build
+
 	echo "" >> .npmrc
 	echo "//registry.npmjs.org/:_authToken=$${NPM_ACCESS_TOKEN}" >> .npmrc
 	NPM_TOKEN="$${NPM_ACCESS_TOKEN}" npx -y -p publib@latest publib-npm
@@ -41,6 +43,8 @@ publish-pypi: prepare-projen
 	# check if tag is current and bump version in package.json to latest tag
 	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
 
+	make build
+	
 	TWINE_USERNAME="__token__" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
 		npx -y -p publib@latest publib-pypi
 
