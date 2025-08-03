@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.2 (2025-08-04)
+
+### Maintenance
+
+* adding build to publish task [[dfc781e](https://github.com/flaviostutz/projen-practical-constructs/commit/dfc781e7f7ee9aae2b04f7916e2e797f507e4970)]
+
+### Misc
+
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>
+
+
 ## 0.4.1 (2025-07-31)
 
 ### Maintenance
