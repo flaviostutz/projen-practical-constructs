@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.3 (2025-08-04)
+
+### Maintenance
+
+* fix release [[b6dd8c8](https://github.com/flaviostutz/projen-practical-constructs/commit/b6dd8c8b0432d2ffad62fab39ebc41d099824658)]
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>
+
+
 ## 0.4.2 (2025-08-04)
 
 ### Maintenance
