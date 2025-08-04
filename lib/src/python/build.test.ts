@@ -26,7 +26,7 @@ describe('BuildTarget', () => {
     project.addTask(CommonTargets.BUILD);
     project.addTask(CommonTargets.INSTALL);
     new BuildTarget(project, taskOpts, {
-      package: {
+      pkg: {
         version: '1.2.3',
       },
       pip: {

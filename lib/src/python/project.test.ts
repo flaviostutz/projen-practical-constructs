@@ -32,7 +32,7 @@ describe('PythonBasicProject', () => {
       test: {
         minCoverage: 11,
       },
-      package: {
+      pkg: {
         license: 'MIT',
       },
       pip: {

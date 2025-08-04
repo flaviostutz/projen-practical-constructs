@@ -31,7 +31,7 @@ export class PythonBasicProject extends Project {
     const optionsWithDefaults = getPythonBasicOptionsWithDefaults(options);
     super({
       ...options,
-      name: resolvePackageName(optionsWithDefaults.name, optionsWithDefaults.package),
+      name: resolvePackageName(optionsWithDefaults.name, optionsWithDefaults.pkg),
     });
 
     // add deps to project
@@ -82,7 +82,7 @@ export class PythonBasicProject extends Project {
     // create README.md
     new ReadmeFile(this, {
       projectName: optionsWithDefaults.name,
-      description: optionsWithDefaults.package?.description,
+      description: optionsWithDefaults.pkg?.description,
     });
 
     // create sample
@@ -129,7 +129,7 @@ export class PythonBasicProject extends Project {
       },
       {
         pip: optionsWithDefaults.pip,
-        package: optionsWithDefaults.package,
+        pkg: optionsWithDefaults.pkg,
       },
     );
   }

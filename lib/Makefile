@@ -1,7 +1,14 @@
 build: prepare-projen
-	# if we use PNPM the jsii packing freezes
 	npx projen
 	npx projen install
+	npx projen compile
+	npx projen package-all
+
+build-release: prepare-projen
+	npx projen
+	npx projen install	
+	# check if tag is current and bump version in package.json to latest tag
+	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
 	npx projen compile
 	npx projen package-all
 
@@ -25,10 +32,7 @@ publish-npmjs: prepare-projen
 		exit 1; \
 	fi
 
-	# check if tag is current and bump version in package.json to latest tag
-	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
-
-	make build
+	make build-release
 
 	echo "" >> .npmrc
 	echo "//registry.npmjs.org/:_authToken=$${NPM_ACCESS_TOKEN}" >> .npmrc
@@ -40,11 +44,8 @@ publish-pypi: prepare-projen
 		exit 1; \
 	fi
 
-	# check if tag is current and bump version in package.json to latest tag
-	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
+	make build-release
 
-	make build
-	
 	TWINE_USERNAME="__token__" TWINE_PASSWORD="$$PYPI_TOKEN_PASSWORD" \
 		npx -y -p publib@latest publib-pypi
 
