@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.5 (2025-08-04)
+
+### Maintenance
+
+* keep folder from being deleted [[7620892](https://github.com/flaviostutz/projen-practical-constructs/commit/7620892fa7e0fc5ce1ec6e8fa03111003f11c6d0)]
+
+### Misc
+
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>
+
+
 ## 0.4.4 (2025-08-04)
 
 ### Maintenance
