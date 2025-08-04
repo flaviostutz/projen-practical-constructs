@@ -7,8 +7,8 @@ build: prepare-projen
 build-release: prepare-projen
 	npx projen
 	npx projen install	
-	# check if tag is current and bump version in package.json to latest tag
-	npx -y monotag@1.25.0 current --bump-action=latest --prefix=
+	# check if tag is current and bump version in package.json to latest tag so jsii packs it correctly
+	npx -y monotag@1.26.0 current --bump-action=latest --prefix=
 	npx projen compile
 	npx projen package-all
 
