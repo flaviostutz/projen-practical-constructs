@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.4 (2025-08-04)
+
+### Maintenance
+
+* updating monotag to show changes [[424b5b3](https://github.com/flaviostutz/projen-practical-constructs/commit/424b5b34c7820ca744cb53b3384da5f768316980)]
+
+### Misc
+
+
+### Info
+
+* Authors: Flavio Stutz <flaviostutz@gmail.com>
+
+
 ## 0.4.3 (2025-08-04)
 
 ### Maintenance
