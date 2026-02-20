@@ -10,27 +10,27 @@ const project = new cdk.JsiiProject({
   author: 'Flavio Stutz',
   authorAddress: 'flaviostutz@gmail.com',
   description: 'Constructs and utilities for managing projects (Python, NodeJS etc) with Projen enforcing solid build, test and linting structures',
-  jsiiVersion: '~5.7.0',
+  jsiiVersion: '^5.9.27',
   deps: [
     '@iarna/toml@^2.2.5',
-    '@jsii/spec@^1.112.0',
-    '@mrgrain/jsii-struct-builder@^0.7.52',
-    'ts-morph@^26.0.0',
+    '@jsii/spec@^1.126.0',
+    '@mrgrain/jsii-struct-builder@^0.7.64',
+    'ts-morph@^27.0.2',
   ],
   // every lib that is not jsii needs to be bundled in the final package
   bundledDeps: [
     '@iarna/toml@2.2.5',
-    '@jsii/spec@^1.112.0',
-    '@mrgrain/jsii-struct-builder@^0.7.52',
-    'ts-morph@^26.0.0',
+    '@jsii/spec@^1.126.0',
+    '@mrgrain/jsii-struct-builder@^0.7.64',
+    'ts-morph@^27.0.2',
   ],
   devDeps: [
     "@stutzlab/eslint-config@^3.2.1",
     "@typescript-eslint/eslint-plugin@^7.15.0",
   ],
   peerDeps: [
-    'projen@^0.91.13',
-    'constructs@^10.4.2',
+    'projen@^0.99.15',
+    'constructs@^10.5.1',
   ],
   publishToPypi: {
     distName: "projen_practical_constructs",
